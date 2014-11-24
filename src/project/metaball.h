@@ -11,9 +11,14 @@
 
 class Metaball : public ImplicitSurface {
   public:
-    Metaball() {}
+    Metaball(int nb, const Point *P, const float *R, const float *B);
     virtual ~Metaball() {}
     bool Inside(const Point& p) const;
+  private:
+    int nbumps;
+    Point *points;
+    float *radius;
+    float *blobbiness;
 };
 
 Metaball* CreateMetaball(const ParamSet &params);

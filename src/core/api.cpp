@@ -359,7 +359,10 @@ Reference<Shape> MakeShape(const string &name,
                              paramSet);
     else if (name == "metaball") {
         Metaball *mb = CreateMetaball(paramSet);
-        s = ImplicitSurfaceToMesh(object2world, world2object, reverseOrientation, mb);
+        Vector space = paramSet.FindOneVector("space", Vector(10.0f, 10.0f, 10.0f));
+        float step = paramSet.FindOneFloat("step", 1.0f/8.0f);
+        s = ImplicitSurfaceToMesh(object2world, world2object,
+                                  reverseOrientation, mb, space, step);
         delete mb;
     }
     else
