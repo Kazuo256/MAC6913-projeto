@@ -16,4 +16,6 @@ class Metaball : public ImplicitSurface {
     bool Inside(const Point& p) const;
 };
 
+Metaball* CreateMetaball(const ParamSet &params);
+
 #endif

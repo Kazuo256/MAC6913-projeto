@@ -10,8 +10,10 @@
 
 class TriangleMesh;
 class ImplicitSurface;
+class Transform;
 
-TriangleMesh* ImplicitSurfaceToMesh(const ImplicitSurface *surface);
+TriangleMesh *ImplicitSurfaceToMesh(const Transform *o2w, const Transform *w2o,
+    bool reverseOrientation, const ImplicitSurface *surface);
 
 #endif
 

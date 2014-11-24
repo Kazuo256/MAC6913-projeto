@@ -88,6 +88,9 @@
 #include "materials/shinymetal.h"
 #include "materials/translucent.h"
 #include "materials/uber.h"
+#include "project/implicitsurface.h"
+#include "project/metaball.h"
+#include "project/marchingcubes.h"
 #include "renderers/aggregatetest.h"
 #include "renderers/createprobes.h"
 #include "renderers/metropolis.h"
@@ -354,6 +357,11 @@ Reference<Shape> MakeShape(const string &name,
     else if (name == "nurbs")
         s = CreateNURBSShape(object2world, world2object, reverseOrientation,
                              paramSet);
+    else if (name == "metaball") {
+        Metaball *mb = CreateMetaball(paramSet);
+        s = ImplicitSurfaceToMesh(object2world, world2object, reverseOrientation, mb);
+        delete mb;
+    }
     else
         Warning("Shape \"%s\" unknown.", name.c_str());
     paramSet.ReportUnused();
