@@ -289,6 +289,14 @@ Vector UniformSampleSphere(float u1, float u2) {
     return Vector(x, y, z);
 }
 
+Vector UniformSampleMetaball(float u1, float u2) {
+    float z = 1.f - 2.f * u1;
+    float r = sqrtf(max(0.f, 1.f - z*z));
+    float phi = 2.f * M_PI * u2;
+    float x = r * cosf(phi);
+    float y = r * sinf(phi);
+    return Vector(x, y, z);
+}
 
 float UniformSpherePdf() {
     return 1.f / (4.f * M_PI);

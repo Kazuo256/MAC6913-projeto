@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		24D91BDE1A2342260076E592 /* metaball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 24D91BDC1A2342260076E592 /* metaball.cpp */; };
 		B130248E1236EE5100206AC7 /* fileutil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B130248C1236EE5100206AC7 /* fileutil.cpp */; };
 		B13B5765161245F5008FFA44 /* targa.c in Sources */ = {isa = PBXBuildFile; fileRef = B13B5763161245F5008FFA44 /* targa.c */; };
 		B19397BB12083210008317C5 /* shinymetal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B19397B912083210008317C5 /* shinymetal.cpp */; };
@@ -168,6 +169,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		24C23AB81A14F47800B9FAF3 /* scenes */ = {isa = PBXFileReference; lastKnownFileType = folder; name = scenes; path = ../scenes; sourceTree = "<group>"; };
+		24D91BDC1A2342260076E592 /* metaball.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = metaball.cpp; sourceTree = "<group>"; };
+		24D91BDD1A2342260076E592 /* metaball.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = metaball.h; sourceTree = "<group>"; };
 		B130248C1236EE5100206AC7 /* fileutil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fileutil.cpp; sourceTree = "<group>"; };
 		B130248D1236EE5100206AC7 /* fileutil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fileutil.h; sourceTree = "<group>"; };
 		B13B5763161245F5008FFA44 /* targa.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = targa.c; sourceTree = "<group>"; };
@@ -433,6 +437,7 @@
 				08FB7795FE84155DC02AAC07 /* Source */,
 				C6859E8C029090F304C91782 /* Documentation */,
 				1AB674ADFE9D54B511CA2CBB /* Products */,
+				24C23AB81A14F47800B9FAF3 /* scenes */,
 			);
 			name = pbrt;
 			sourceTree = "<group>";
@@ -753,6 +758,8 @@
 				B1D8EC521170310E00A8A49E /* hyperboloid.h */,
 				B1D8EC531170310E00A8A49E /* loopsubdiv.cpp */,
 				B1D8EC541170310E00A8A49E /* loopsubdiv.h */,
+				24D91BDC1A2342260076E592 /* metaball.cpp */,
+				24D91BDD1A2342260076E592 /* metaball.h */,
 				B1D8EC551170310E00A8A49E /* nurbs.cpp */,
 				B1D8EC561170310E00A8A49E /* nurbs.h */,
 				B1D8EC571170310E00A8A49E /* paraboloid.cpp */,
@@ -972,6 +979,7 @@
 				B1D8ECB81170310E00A8A49E /* sphere.cpp in Sources */,
 				B1D8ECB91170310E00A8A49E /* trianglemesh.cpp in Sources */,
 				B1D8ECBA1170310E00A8A49E /* bilerp.cpp in Sources */,
+				24D91BDE1A2342260076E592 /* metaball.cpp in Sources */,
 				B1D8ECBB1170310E00A8A49E /* checkerboard.cpp in Sources */,
 				B1D8ECBC1170310E00A8A49E /* constant.cpp in Sources */,
 				B1D8ECBD1170310E00A8A49E /* dots.cpp in Sources */,
@@ -1011,7 +1019,7 @@
 				);
 				INSTALL_PATH = /usr/local/bin;
 				PRODUCT_NAME = pbrt;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -1028,7 +1036,7 @@
 				);
 				INSTALL_PATH = /usr/local/bin;
 				PRODUCT_NAME = pbrt;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
@@ -1100,7 +1108,7 @@
 				);
 				INSTALL_PATH = /usr/local/bin;
 				PRODUCT_NAME = pbrt;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 			};
 			name = dtrace;
 		};

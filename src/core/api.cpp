@@ -105,6 +105,7 @@
 #include "shapes/heightfield.h"
 #include "shapes/hyperboloid.h"
 #include "shapes/loopsubdiv.h"
+#include "shapes/metaball.h"
 #include "shapes/nurbs.h"
 #include "shapes/paraboloid.h"
 #include "shapes/sphere.h"
@@ -326,6 +327,9 @@ Reference<Shape> MakeShape(const string &name,
     else if (name == "cylinder")
         s = CreateCylinderShape(object2world, world2object, reverseOrientation,
                                 paramSet);
+    else if (name == "metaball")
+        s = CreateMetaballShape(object2world, world2object,
+                                reverseOrientation, paramSet);
     else if (name == "disk")
         s = CreateDiskShape(object2world, world2object, reverseOrientation,
                             paramSet);
