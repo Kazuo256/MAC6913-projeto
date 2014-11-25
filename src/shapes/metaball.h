@@ -7,6 +7,7 @@
 
 // shapes/metaball.h*
 #include "shape.h"
+#include "metaballInstance.h"
 
 // Metaball Declarations
 class Metaball : public Shape {
@@ -24,10 +25,7 @@ public:
     float Pdf(const Point &p, const Vector &wi) const;
 private:
     // Metaball Private Data
-    float radius;
-    float phiMax;
-    float zmin, zmax;
-    float thetaMin, thetaMax;
+    std::vector<MetaballInstance *> instances;
 };
 
 

@@ -1,4 +1,4 @@
-LookAt 2 2 2    0 0 0   0 1 0
+LookAt 0 0 2    0 0 0   0 1 0
 Camera "perspective" "float fov" [90]
 
 Sampler "lowdiscrepancy" "integer pixelsamples" [4]
@@ -18,7 +18,7 @@ AttributeEnd
 AttributeBegin
 Translate 0 0 0
 Material "plastic" "color Kd" [1.0 0.6 0.0]
-Shape "metaball" "float radius" [1]
+Shape "metaball" "float radius" [0.5]
 AttributeEnd
 
 Material "measured" "string filename" "brdfs/mystique.brdf"
