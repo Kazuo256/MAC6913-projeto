@@ -46,18 +46,18 @@ AttributeBegin
 AttributeEnd
 
 AttributeBegin
-  Scale .5 .5 .5
-  Rotate -60 0 0 1
-  Translate 0 350 -300
-  Scale .6 .6 .6
-  Material "plastic"
+  Translate 0 0 -100
+  Material "matte"
     "color Kd" [.2 .6 .4]
-    "color Ks" [.4 .4 .4]
-    "float roughness" [.3]
   Shape "metaball"
-    "point P" [.0 .0 .0]
-    "float R" [1.0]
-    "float B" [1.0]
+    "point P" [.0 .0 .0  .0 -1.0 25.0]
+    "float R" [10.0 20.0]
+    "float B" [1.0 3.0]
+  #Shape "trianglemesh"
+  #  "point P" [ -.5 -.5 -.5  .5 -.5 -.5  .5 .5 -.5  -.5 .5 -.5
+  #              -.5 -.5 .5  .5 -.5 .5  .5 .5 .5  -.5 .5 .5 ]
+	#  "integer indices" [ 0 1 2 2 3 0  4 5 2 2 1 4  4 0 3 3 7 4
+  #                      2 1 5 5 6 2  5 4 7 7 6 5  3 2 6 6 7 4 ]
 AttributeEnd
 
 WorldEnd

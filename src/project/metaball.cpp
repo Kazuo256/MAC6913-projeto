@@ -4,14 +4,17 @@
 #include "project/metaball.h"
 #include "paramset.h"
 
+#include <algorithm>
+#include <iostream>
+
 Metaball::Metaball(int nb, const Point *P, const float *R, const float *B)
         : nbumps(nb) {
     points = new Point[nb];
-    memcpy(points, P, nb);
+    std::copy(P, P+nb, points);
     radius = new float[nb];
-    memcpy(radius, R, nb);
+    std::copy(R, R+nb, radius);
     blobbiness = new float[nb];
-    memcpy(blobbiness, B, nb);
+    std::copy(B, B+nb, blobbiness);
 }
 
 bool Metaball::Inside(const Point &p) const {
@@ -19,9 +22,10 @@ bool Metaball::Inside(const Point &p) const {
     for (int i = 0; i < nbumps; ++i) {
         Vector v = points[i] - p;
         float r2 = v.x*v.x + v.y*v.y + v.z*v.z;
-        float B = blobbiness[i];
+        float B = -blobbiness[i];
         float R = radius[i];
-        d += exp(B/(R*R)*r2 - B);
+        float x = B/(R*R)*r2 - B;
+        d += exp(x);
     }
     return d > 1;
 }
