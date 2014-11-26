@@ -117,14 +117,21 @@
         \frametitle{Algoritmo proposto por Blinn}
           Converge para a intersecção usando uma margem de erro
           \begin{itemize}
+            \vspace{1em}
+            \pause
             \item
               Método híbrido
               \begin{itemize}
                 \item Iteração de Newton
                 \item \textit{Regula falsi}
               \end{itemize}
+            \vspace{1em}
+            \pause
             \item
-              Itera até que $| D(ray(t)) - T | < \varepsilon $ 
+              Itera até que $| D(ray(t)) - T | < \varepsilon $, para algum $\varepsilon$ determinado
+            \vspace{1em}
+            \pause
+            \item Adaptado para considerar raios que ``saem'' do objeto também
           \end{itemize}
       \end{frame}
       
@@ -134,6 +141,31 @@
   \section{Gerando uma mesh}
   
     \subsection{}
+    
+      \begin{frame}
+        \frametitle{Algoritmo dos \textit{marching cubes}}
+        Divide o espaço em um cubo de voxels
+        \begin{itemize}
+          \vspace{1em}
+          \item
+            Em cada posição do cubo, verifica quais vértices $v$ satisfazem
+            \vspace{1em}
+            \begin{center}
+              $F(v) > 0$
+            \end{center}
+          \pause
+          \vspace{1em}
+          \item
+            256 casos
+            \begin{itemize}
+              \item Usa uma máscara de 8 bits para indexar uma tabela
+              \item Pode ser reduzido a 15 casos
+            \end{itemize}
+          \vspace{1em}
+          \pause
+          \item Gera uma malha de triângulos que aproxima o objeto
+        \end{itemize}
+      \end{frame}
     
       \begin{frame}
         \frametitle{Resultado parcial}
