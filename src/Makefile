@@ -18,10 +18,10 @@ HAVE_DTRACE=0
 DEFS=-DPBRT_HAS_OPENEXR
 
 # 32 bit
-#MARCH=-m32 -msse2 -mfpmath=sse
+MARCH=-m32 -msse2 -mfpmath=sse
 
 # 64 bit
-MARCH=-m64
+#MARCH=-m64
 
 # change this to -g3 for debug builds
 OPT=-O2
@@ -74,6 +74,7 @@ LIB_CXXSRCS  = $(wildcard core/*.cpp) core/pbrtlex.cpp core/pbrtparse.cpp
 LIB_CXXSRCS += $(wildcard accelerators/*.cpp cameras/*.cpp film/*.cpp filters/*.cpp )
 LIB_CXXSRCS += $(wildcard integrators/*.cpp lights/*.cpp materials/*.cpp renderers/*.cpp )
 LIB_CXXSRCS += $(wildcard samplers/*.cpp shapes/*.cpp textures/*.cpp volumes/*.cpp)
+LIB_CXXSRCS += $(wildcard project/*.cpp)
 
 LIBOBJS  = $(addprefix objs/, $(subst /,_,$(LIB_CSRCS:.c=.o)))
 LIBOBJS += $(addprefix objs/, $(subst /,_,$(LIB_CXXSRCS:.cpp=.o)))
@@ -140,6 +141,10 @@ objs/main_%.o: main/%.cpp
 	@$(CXX) $(CXXFLAGS) -o $@ -c $<
 
 objs/materials_%.o: materials/%.cpp
+	@echo "Building object $@"
+	@$(CXX) $(CXXFLAGS) -o $@ -c $<
+
+objs/project_%.o: project/%.cpp
 	@echo "Building object $@"
 	@$(CXX) $(CXXFLAGS) -o $@ -c $<
 
