@@ -1,13 +1,13 @@
 
 //project/metaball.cpp
 #include "stdafx.h"
-#include "project/metaball.h"
+#include "project/metaballsurface.h"
 #include "paramset.h"
 
 #include <algorithm>
 #include <iostream>
 
-Metaball::Metaball(int nb, const Point *P, const float *R, const float *B)
+MetaballSurface::MetaballSurface(int nb, const Point *P, const float *R, const float *B)
         : nbumps(nb) {
     points = new Point[nb];
     std::copy(P, P+nb, points);
@@ -17,7 +17,7 @@ Metaball::Metaball(int nb, const Point *P, const float *R, const float *B)
     std::copy(B, B+nb, blobbiness);
 }
 
-bool Metaball::Inside(const Point &p) const {
+bool MetaballSurface::Inside(const Point &p) const {
     float d = 0;
     for (int i = 0; i < nbumps; ++i) {
         Vector v = points[i] - p;
@@ -30,7 +30,7 @@ bool Metaball::Inside(const Point &p) const {
     return d > 1;
 }
 
-Metaball* CreateMetaball(const ParamSet &params) {
+MetaballSurface* CreateMetaballSurface(const ParamSet &params) {
     int nbumps, nradius, nblobs;
     const Point *P = params.FindPoint("P", &nbumps); 
     const float *R = params.FindFloat("R", &nradius);
@@ -39,6 +39,6 @@ Metaball* CreateMetaball(const ParamSet &params) {
         Error("Number of points, radius and blobbiness must match");
         return NULL;
     }
-    return new Metaball(nbumps, P, R, B);
+    return new MetaballSurface(nbumps, P, R, B);
 }
 

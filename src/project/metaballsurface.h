@@ -9,10 +9,10 @@
 // project/metaball.h*
 #include "project/implicitsurface.h"
 
-class Metaball : public ImplicitSurface {
+class MetaballSurface : public ImplicitSurface {
   public:
-    Metaball(int nb, const Point *P, const float *R, const float *B);
-    virtual ~Metaball() {}
+    MetaballSurface(int nb, const Point *P, const float *R, const float *B);
+    virtual ~MetaballSurface() {}
     bool Inside(const Point& p) const;
   private:
     int nbumps;
@@ -21,6 +21,6 @@ class Metaball : public ImplicitSurface {
     float *blobbiness;
 };
 
-Metaball* CreateMetaball(const ParamSet &params);
+MetaballSurface* CreateMetaballSurface(const ParamSet &params);
 
 #endif

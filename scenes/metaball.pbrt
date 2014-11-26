@@ -49,7 +49,7 @@ AttributeBegin
   Translate 0 0 -100
   Material "matte"
     "color Kd" [.2 .6 .4]
-  Shape "metaball"
+  Shape "metaballsurface"
     "point P" [.0 .0 .0  .0 -1.0 25.0]
     "float R" [10.0 20.0]
     "float B" [1.0 3.0]
