@@ -18,14 +18,15 @@ int getIndex(int i, int j, int k, int width, int height) {
 
 int CountInside(const vector<bool> &inside, int i, int j, int k, int width, int height) {
   int c = 0;
-  c += inside[getIndex(i, j, k, width, height)];
-  c += inside[getIndex(i+1, j, k, width, height)];
-  c += inside[getIndex(i, j+1, k, width, height)];
-  c += inside[getIndex(i+1, j+1, k, width, height)];
-  c += inside[getIndex(i, j, k+1, width, height)];
-  c += inside[getIndex(i+1, j, k+1, width, height)];
-  c += inside[getIndex(i, j+1, k+1, width, height)];
-  c += inside[getIndex(i+1, j+1, k+1, width, height)];
+  unsigned char mask = 0;
+  int t = 0;
+  for (int dk = 0; dk < 2; ++dk)
+      for (int di = 0; di < 2; ++di)
+          for (int dj = 0; dj < 2; ++dj, ++t) {
+              int check = static_cast<int>(inside[getIndex(i+di, j+dj, k+dk, width, height)]);
+              mask |= check << t;
+              c += check;
+  }
   return c;
 }
 
@@ -51,8 +52,9 @@ TriangleMesh *ImplicitSurfaceToMesh(const Transform *o2w, const Transform *w2o,
     vector<int> inds;
     for (int k = 0; k < depth-1; ++k)
         for (int i = 0; i < height-1; ++i)
-            for (int j = 0; j < width-1; ++j)
-                if (CountInside(inside, i, j, k, width, height) > 0) {
+            for (int j = 0; j < width-1; ++j) {
+                int c = CountInside(inside, i, j, k, width, height);
+                if (c > 0 && c < 8) {
                     // top
                     inds.push_back(getIndex(i, j, k+1, width, height));
                     inds.push_back(getIndex(i, j+1, k+1, width, height));
@@ -95,7 +97,8 @@ TriangleMesh *ImplicitSurfaceToMesh(const Transform *o2w, const Transform *w2o,
                     inds.push_back(getIndex(i, j+1, k, width, height));
                     inds.push_back(getIndex(i+1, j+1, k, width, height));
                     inds.push_back(getIndex(i+1, j, k, width, height));
-    }
+                }
+            }
     std::cout << "TRIANGLES: " << inds.size()/3 << std::endl;
     int *vi = new int[inds.size()];
     std::copy(inds.begin(), inds.end(), vi);
