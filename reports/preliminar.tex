@@ -135,8 +135,36 @@
           \end{itemize}
       \end{frame}
       
-            %Permite calcular as normais
-            %Não é possível parametrizar em duas dimensões $(u,v)$
+      \begin{frame}
+        \frametitle{Dificuldades}
+        Não há uma forma paramétrica geral para metaballs
+        \begin{itemize}
+          \vspace{1em}
+          \pause
+          \item
+            Restrições do PBRT
+            \begin{itemize}
+              \item Intersecção com raio deve fornecer
+                    $\frac{\partial p}{\partial u}$,
+                    $\frac{\partial p}{\partial v}$,
+                    $\frac{\partial n}{\partial u}$ e
+                    $\frac{\partial n}{\partial v}$
+              \item Também precisa implementar os métodos
+                    \textbf{Area()}, \textbf{Pdf()} e \textbf{Sample()}
+            \end{itemize}
+          \vspace{1em}
+          \pause
+          \item
+            Como contornar?
+            \begin{itemize}
+              \item Tangentes: sabemos como fornecer o valor em si, mas não
+                    haveria $u$ e $v$ associados (sempre zero, por exemplo)
+              \item Area, pdf e amostragem: ?
+            \end{itemize}
+        \end{itemize}
+      \end{frame}
+      
+      %Permite calcular as normais
   
   \section{Gerando uma mesh}
   
