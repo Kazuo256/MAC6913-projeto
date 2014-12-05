@@ -6,10 +6,13 @@
 
 // Metaball Method Definitions
 Metaball::Metaball(const Transform *o2w, const Transform *w2o, bool ro,
-               float rad, float z0, float z1, float pm)
+                   int nbumps, const Point *centers, const float *radius,
+                   const float *blobbiness)
     : Shape(o2w, w2o, ro) {
         
-    //instances.push_back(new MetaballInstance(o2w, w2o, ro, rad, z0, z1, pm));
+    for (int i = 0; i < nbumps; ++i)
+        instances.push_back(new MetaballInstance(o2w, w2o, ro, centers[i], radius[i],
+                                                 blobbiness[i]));
         
 //    Transform *o = new Transform();
 //    *o = Translate(Vector(0.1, 0.1, 0.1)) * *o2w;
@@ -23,7 +26,7 @@ BBox Metaball::ObjectBound() const {
 
     BBox box = instances[0]->ObjectBound();
     
-    for (int i = 1; i < instances.size(); i++) {
+    for (size_t i = 1; i < instances.size(); i++) {
         BBox instanceBox = instances[i]->ObjectBound();
         box = Union(box, instanceBox);
     }
@@ -35,7 +38,7 @@ BBox Metaball::ObjectBound() const {
 bool Metaball::Intersect(const Ray &r, float *tHit, float *rayEpsilon,
                        DifferentialGeometry *dg) const {
     
-    for (int i = 0; i < instances.size(); i++) {
+    for (size_t i = 0; i < instances.size(); i++) {
         if (instances[i]->Intersect(r, tHit, rayEpsilon, dg)) {
             return true;
         }
@@ -47,7 +50,7 @@ bool Metaball::Intersect(const Ray &r, float *tHit, float *rayEpsilon,
 
 bool Metaball::IntersectP(const Ray &r) const {
     
-    for (int i = 0; i < instances.size(); i++) {
+    for (size_t i = 0; i < instances.size(); i++) {
         if (instances[i]->IntersectP(r)) {
             return true;
         }
@@ -61,7 +64,7 @@ float Metaball::Area() const {
 
     float area = 0;
     
-    for (int i = 0; i < instances.size(); i++) {
+    for (size_t i = 0; i < instances.size(); i++) {
         area += instances[i]->Area();
     }
     
@@ -71,13 +74,16 @@ float Metaball::Area() const {
 
 Metaball *CreateMetaballShape(const Transform *o2w, const Transform *w2o,
         bool reverseOrientation, const ParamSet &params) {
-    
-    float radius = params.FindOneFloat("radius", 1.f);
-    float zmin = params.FindOneFloat("zmin", -radius);
-    float zmax = params.FindOneFloat("zmax", radius);
-    float phimax = params.FindOneFloat("phimax", 360.f);
-    return new Metaball(o2w, w2o, reverseOrientation, radius,
-                      zmin, zmax, phimax);
+
+    int nbumps, nradius, nblobs;
+    const Point *P = params.FindPoint("P", &nbumps); 
+    const float *R = params.FindFloat("R", &nradius);
+    const float *B = params.FindFloat("B", &nblobs);
+    if (nbumps != nradius || nbumps != nblobs) {
+        Error("Number of points, radius and blobbiness must match");
+        return NULL;
+    }
+    return new Metaball(o2w, w2o, reverseOrientation, nbumps, P, R, B);
 }
 
 

@@ -13,8 +13,8 @@
 class Metaball : public Shape {
 public:
     // Metaball Public Methods
-    Metaball(const Transform *o2w, const Transform *w2o, bool ro, float rad,
-           float zmin, float zmax, float phiMax);
+    Metaball(const Transform *o2w, const Transform *w2o, bool ro, int nbumps,
+             const Point *centers, const float *radius, const float *blobbiness);
     BBox ObjectBound() const;
     bool Intersect(const Ray &ray, float *tHit, float *rayEpsilon,
                    DifferentialGeometry *dg) const;

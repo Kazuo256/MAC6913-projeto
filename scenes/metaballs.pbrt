@@ -18,7 +18,10 @@ AttributeEnd
 AttributeBegin
 Translate 0 0 0
 Material "plastic" "color Kd" [1.0 0.6 0.0]
-Shape "metaball" "float radius" [0.5]
+Shape "metaball"
+  "point P" [0 0 0]
+  "float R" [0.5]
+  "float B" [1.0]
 AttributeEnd
 
 Material "measured" "string filename" "brdfs/mystique.brdf"
