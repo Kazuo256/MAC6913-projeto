@@ -6,25 +6,19 @@
 
 // MetaballInstance Method Definitions
 MetaballInstance::MetaballInstance(const Transform *o2w, const Transform *w2o, bool ro,
-                   float rad, float z0, float z1, float pm)
-: Shape(o2w, w2o, ro) {
-    radius = rad;
-    zmin = Clamp(min(z0, z1), -radius, radius);
-    zmax = Clamp(max(z0, z1), -radius, radius);
-    thetaMin = acosf(Clamp(zmin/radius, -1.f, 1.f));
-    thetaMax = acosf(Clamp(zmax/radius, -1.f, 1.f));
-    phiMax = Radians(Clamp(pm, 0.0f, 360.0f));
-}
+                                   Point cent, float rad, float blob)
+    : Shape(o2w, w2o, ro), center(cent), radius(rad), blobbiness(blob) {}
 
 
 BBox MetaballInstance::ObjectBound() const {
-    return BBox(Point(-radius, -radius, zmin),
-                Point( radius,  radius, zmax));
+    return BBox(Point(-radius, -radius, -radius),
+                Point( radius,  radius, radius));
 }
 
 
 bool MetaballInstance::Intersect(const Ray &r, float *tHit, float *rayEpsilon,
                          DifferentialGeometry *dg) const {
+    /*
     float phi;
     Point phit;
     // Transform _Ray_ to object space
@@ -122,10 +116,13 @@ bool MetaballInstance::Intersect(const Ray &r, float *tHit, float *rayEpsilon,
     // Compute _rayEpsilon_ for quadric intersection
     *rayEpsilon = 5e-4f * *tHit;
     return true;
+    */
+    return false;
 }
 
 
 bool MetaballInstance::IntersectP(const Ray &r) const {
+    /*
     float phi;
     Point phit;
     // Transform _Ray_ to object space
@@ -173,25 +170,14 @@ bool MetaballInstance::IntersectP(const Ray &r) const {
             (zmax <  radius && phit.z > zmax) || phi > phiMax)
             return false;
     }
-    return true;
+    */
+    return false;
 }
 
 
 float MetaballInstance::Area() const {
-    return phiMax * radius * (zmax-zmin);
+    return 4.0f * acos(-1) * radius * radius;
 }
-
-
-MetaballInstance *CreateMetaballInstanceShape(const Transform *o2w, const Transform *w2o,
-                              bool reverseOrientation, const ParamSet &params) {
-    float radius = params.FindOneFloat("radius", 1.f);
-    float zmin = params.FindOneFloat("zmin", -radius);
-    float zmax = params.FindOneFloat("zmax", radius);
-    float phimax = params.FindOneFloat("phimax", 360.f);
-    return new MetaballInstance(o2w, w2o, reverseOrientation, radius,
-                        zmin, zmax, phimax);
-}
-
 
 Point MetaballInstance::Sample(float u1, float u2, Normal *ns) const {
     Point p = Point(0,0,0) + radius * UniformSampleSphere(u1, u2);
