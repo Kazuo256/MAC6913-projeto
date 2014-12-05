@@ -57,9 +57,11 @@ struct CompareOp {
 };
 
 
-bool Metaball::Intersect(const Ray &ray, float *tHit, float *rayEpsilon,
+bool Metaball::Intersect(const Ray &r, float *tHit, float *rayEpsilon,
                        DifferentialGeometry *dg) const {
     
+    Ray ray;
+    (*WorldToObject)(r, &ray);
     vector<int> order(instances.size(), 0);
 
     for (size_t i = 0; i < instances.size(); i++) {
@@ -69,7 +71,34 @@ bool Metaball::Intersect(const Ray &ray, float *tHit, float *rayEpsilon,
         //}
     }
 
+    // Order bumps along the ray direction
     stable_sort(order.begin(), order.end(), CompareOp(instances, ray.d));
+
+    // Let's find out the initial candidates
+    vector<float> candidates;
+    for (size_t i = 0; i < order.size(); ++i) {
+        MetaballInstance *bump = instances[order[i]];
+        // This is the t such that ray(t) is closest to p_i along the ray
+        float t = Dot(bump->GetCenter() - ray.o, ray.d)/ray.d.LengthSquared();
+        // If it is inside, use local solutions. Otherwise, use t itself.
+        // Must be sure the candidates lie within the [mint, maxt] interval.
+        if (Inside(ray(t))) {
+            float t0, t1;
+            if (bump->IntersectAll(ray, &t0, &t1)) {
+                if (t0 > ray.mint && t1 < ray.maxt) {
+                  candidates.push_back(t0);
+                  candidates.push_back(t1);
+                } else {
+                    if (t0 < ray.maxt)
+                        candidates.push_back(t0);
+                    if (t1 > ray.mint)
+                        candidates.push_back(t1);
+                }
+            }
+        } else if (t > ray.mint && t < ray.maxt) {
+            candidates.push_back(t);
+        }
+    }
     
     return false;
 }

@@ -174,6 +174,22 @@ bool MetaballInstance::IntersectP(const Ray &r) const {
     return false;
 }
 
+bool MetaballInstance::IntersectAll(const Ray &r, float *t0, float *t1) const {
+    float phi;
+    Point phit;
+    // Transform _Ray_ to object space
+    Ray ray;
+    (Translate(center-Point()))(r, &ray);
+    
+    // Compute quadratic metaball coefficients
+    float A = ray.d.x*ray.d.x + ray.d.y*ray.d.y + ray.d.z*ray.d.z;
+    float B = 2 * (ray.d.x*ray.o.x + ray.d.y*ray.o.y + ray.d.z*ray.o.z);
+    float C = ray.o.x*ray.o.x + ray.o.y*ray.o.y +
+    ray.o.z*ray.o.z - radius*radius;
+    
+    // Solve quadratic equation for _t_ values
+    return !Quadratic(A, B, C, t0, t1);
+}
 
 float MetaballInstance::Area() const {
     return 4.0f * acos(-1) * radius * radius;
