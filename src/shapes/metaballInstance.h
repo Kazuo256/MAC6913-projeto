@@ -18,7 +18,6 @@ public:
     bool Intersect(const Ray &ray, float *tHit, float *rayEpsilon,
                    DifferentialGeometry *dg) const;
     bool IntersectP(const Ray &ray) const;
-    bool IntersectAll(const Ray &ray, float *t0, float *t1) const;
     float Area() const;
     Point Sample(float u1, float u2, Normal *ns) const;
     Point Sample(const Point &p, float u1, float u2, Normal *ns) const;
@@ -27,6 +26,9 @@ public:
     Point GetCenter() const { return center; }
     float GetRadius() const { return radius; }
     float GetBlobbiness() const { return blobbiness; }
+    float ValueAt(const Point &p) const;
+    bool IntersectAll(const Ray &ray, float *t0, float *t1) const;
+    bool IntersectFirst(const Ray &ray, float *t) const;
 private:
     // MetaballInstance Private Data
     friend class Metaball;

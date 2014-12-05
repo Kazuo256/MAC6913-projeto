@@ -13,8 +13,9 @@
 class Metaball : public Shape {
 public:
     // Metaball Public Methods
-    Metaball(const Transform *o2w, const Transform *w2o, bool ro, int nbumps,
-             const Point *centers, const float *radius, const float *blobbiness);
+    Metaball(const Transform *o2w, const Transform *w2o, bool ro,
+             int nbumps, const Point *centers, const float *radius,
+             const float *blobbiness, float err = .01f);
     ~Metaball();
     BBox ObjectBound() const;
     bool Intersect(const Ray &ray, float *tHit, float *rayEpsilon,
@@ -25,10 +26,12 @@ public:
     Point Sample(const Point &p, float u1, float u2, Normal *ns) const;
     float Pdf(const Point &p, const Vector &wi) const;
 
+    float ValueAt(const Point &p) const;
     bool Inside(const Point &p) const;
 private:
     // Metaball Private Data
     std::vector<MetaballInstance *> instances;
+    float                           error;
 };
 
 
