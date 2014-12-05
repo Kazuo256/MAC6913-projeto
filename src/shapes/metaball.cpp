@@ -117,13 +117,34 @@ bool Metaball::Intersect(const Ray &r, float *tHit, float *rayEpsilon,
 
 bool Metaball::IntersectP(const Ray &r) const {
     
-    for (size_t i = 0; i < instances.size(); i++) {
-        if (instances[i]->IntersectP(r)) {
-            return true;
-        }
+    Ray ray;
+    (*WorldToObject)(r, &ray);
+    vector<int> order(instances.size(), 0);
+
+    for (size_t i = 0; i < instances.size(); i++)
+        order[i] = i;
+
+    // Order bumps along the ray direction
+    stable_sort(order.begin(), order.end(), CompareOp(instances, ray.d));
+
+    // Let's find the initial candidate
+    float tf = .0f;
+    size_t i;
+    for (i = 0; i < order.size(); ++i) {
+        MetaballInstance *bump = instances[order[i]];
+        // This is the t such that ray(t) is closest to p_i along the ray
+        tf = Dot(bump->GetCenter() - ray.o, ray.d)/ray.d.LengthSquared();
+        // Found no intersection
+        if (tf >= ray.maxt) return false;
+        // If t intersects with this specific bump, use the local solution
+        if (bump->ValueAt(ray(tf)) > 1)
+          break;
+        // Otherwise, use this t if it is inside globally
+        if (ValueAt(ray(tf)) > 1) break;
+        // Nothing worked, go to next one
     }
-    
-    return false;
+    // If left loop prematurely, success
+    return i < order.size();
 }
 
 
