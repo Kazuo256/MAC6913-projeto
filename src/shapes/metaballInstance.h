@@ -22,8 +22,13 @@ public:
     Point Sample(float u1, float u2, Normal *ns) const;
     Point Sample(const Point &p, float u1, float u2, Normal *ns) const;
     float Pdf(const Point &p, const Vector &wi) const;
+
+    Point GetCenter() const { return center; }
+    float GetRadius() const { return radius; }
+    float GetBlobbiness() const { return blobbiness; }
 private:
     // MetaballInstance Private Data
+    friend class Metaball;
     Point center;
     float radius;
     float blobbiness;

@@ -24,6 +24,8 @@ public:
     Point Sample(float u1, float u2, Normal *ns) const;
     Point Sample(const Point &p, float u1, float u2, Normal *ns) const;
     float Pdf(const Point &p, const Vector &wi) const;
+
+    bool Inside(const Point &p) const;
 private:
     // Metaball Private Data
     std::vector<MetaballInstance *> instances;

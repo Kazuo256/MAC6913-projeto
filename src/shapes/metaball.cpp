@@ -40,15 +40,36 @@ BBox Metaball::ObjectBound() const {
     return box;
 }
 
+struct CompareOp {
+    CompareOp(const vector<MetaballInstance*> &the_instances, const Vector &the_dir)
+        : instances(the_instances), dir(the_dir) {}
 
-bool Metaball::Intersect(const Ray &r, float *tHit, float *rayEpsilon,
+    bool operator()(int lhs_idx, int rhs_idx) {
+        MetaballInstance *lhs = instances[lhs_idx],
+                         *rhs = instances[rhs_idx];
+        float l = Dot(lhs->GetCenter()-Point(), dir);
+        float r = Dot(rhs->GetCenter()-Point(), dir);
+        return l < r;
+    }
+
+    const vector<MetaballInstance*> &instances;
+    Vector                          dir;
+};
+
+
+bool Metaball::Intersect(const Ray &ray, float *tHit, float *rayEpsilon,
                        DifferentialGeometry *dg) const {
     
+    vector<int> order(instances.size(), 0);
+
     for (size_t i = 0; i < instances.size(); i++) {
-        if (instances[i]->Intersect(r, tHit, rayEpsilon, dg)) {
-            return true;
-        }
+        order[i] = i;
+        //if (instances[i]->Intersect(r, tHit, rayEpsilon, dg)) {
+        //    return true;
+        //}
     }
+
+    stable_sort(order.begin(), order.end(), CompareOp(instances, ray.d));
     
     return false;
 }
@@ -77,6 +98,19 @@ float Metaball::Area() const {
     return area;
 }
 
+bool Metaball::Inside(const Point &p) const {
+    float d = 0;
+    for (size_t i = 0; i < instances.size(); ++i) {
+        MetaballInstance *bump = instances[i];
+        Vector v = bump->GetCenter() - p;
+        float r2 = v.x*v.x + v.y*v.y + v.z*v.z;
+        float B = -bump->GetBlobbiness();
+        float R = bump->GetRadius();
+        float x = B/(R*R)*r2 - B;
+        d += exp(x);
+    }
+    return d > 1;
+}
 
 Metaball *CreateMetaballShape(const Transform *o2w, const Transform *w2o,
         bool reverseOrientation, const ParamSet &params) {
