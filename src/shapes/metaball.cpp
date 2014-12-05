@@ -87,14 +87,14 @@ bool Metaball::Intersect(const Ray &r, float *tHit, float *rayEpsilon,
         // Found no intersection
         if (tf >= ray.maxt) return false;
         // If t intersects with this specific bump, use the local solution
-        if (bump->ValueAt(ray(tf)) > 1) {
+        if (bump->ValueAt(ray(tf)) > 1.f) {
           bump->IntersectFirst(ray, &tf);
           vf = ValueAt(ray(tf));
           break;
         }
         // Otherwise, use this t if it is inside globally
         vf = ValueAt(ray(tf));
-        if (vf > 1) break;
+        if (vf > 1.f) break;
         // Nothing worked, go to next one
         tn = tf;
         vn = vf;
@@ -102,14 +102,27 @@ bool Metaball::Intersect(const Ray &r, float *tHit, float *rayEpsilon,
     if (i >= order.size()) return false;
 
     float t, v;
-    if (fabsf(vn - 1) < fabsf(vf - 1))
+    if (fabsf(vn - 1.f) < fabsf(vf - 1.f))
         t = tn, v = vn; 
     else
         t = tf, v = vf;
 
-    //while (fabsf(v - 1) > error) {
+    // Find the intersection numerically
+    while (fabsf(v - 1.f) > error) {
+        t = (tn*(vf - 1.f) - tf*(vn - 1.f))/(vf - vn);
+        v = ValueAt(ray(t));
+        if (v < 1.f)
+          tn = t, vn = v;
+        else
+          tf = t, vf = v;
+    }
+    
+    *tHit = t;
+    *rayEpsilon = error;
 
-    //}
+    const Transform &o2w = *ObjectToWorld;
+    *dg = DifferentialGeometry(o2w(ray(t)), o2w(Vector()), o2w(Vector()),
+                               o2w(Normal()), o2w(Normal()), 0.f, 0.f, this);
     
     return true;
 }
