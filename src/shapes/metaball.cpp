@@ -21,6 +21,12 @@ Metaball::Metaball(const Transform *o2w, const Transform *w2o, bool ro,
 //    instances.push_back(new MetaballInstance(o, w, ro, rad, z0, z1, pm));
 }
 
+Metaball::~Metaball() {
+    for (size_t i = 0; i < instances.size(); ++i)
+        delete instances[i];
+    instances.clear();
+}
+
 
 BBox Metaball::ObjectBound() const {
 

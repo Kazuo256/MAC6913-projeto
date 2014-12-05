@@ -15,6 +15,7 @@ public:
     // Metaball Public Methods
     Metaball(const Transform *o2w, const Transform *w2o, bool ro, int nbumps,
              const Point *centers, const float *radius, const float *blobbiness);
+    ~Metaball();
     BBox ObjectBound() const;
     bool Intersect(const Ray &ray, float *tHit, float *rayEpsilon,
                    DifferentialGeometry *dg) const;
