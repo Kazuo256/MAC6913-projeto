@@ -12,8 +12,8 @@
 class MetaballInstance : public Shape {
 public:
     // MetaballInstance Public Methods
-    MetaballInstance(const Transform *o2w, const Transform *w2o, bool ro, float rad,
-             float zmin, float zmax, float phiMax);
+    MetaballInstance(const Transform *o2w, const Transform *w2o, bool ro, Point cent,
+                     float rad, float blob);
     BBox ObjectBound() const;
     bool Intersect(const Ray &ray, float *tHit, float *rayEpsilon,
                    DifferentialGeometry *dg) const;
@@ -24,10 +24,9 @@ public:
     float Pdf(const Point &p, const Vector &wi) const;
 private:
     // MetaballInstance Private Data
+    Point center;
     float radius;
-    float phiMax;
-    float zmin, zmax;
-    float thetaMin, thetaMax;
+    float blobbiness;
 };
 
 

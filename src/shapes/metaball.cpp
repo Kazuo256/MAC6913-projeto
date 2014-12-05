@@ -9,7 +9,7 @@ Metaball::Metaball(const Transform *o2w, const Transform *w2o, bool ro,
                float rad, float z0, float z1, float pm)
     : Shape(o2w, w2o, ro) {
         
-    instances.push_back(new MetaballInstance(o2w, w2o, ro, rad, z0, z1, pm));
+    //instances.push_back(new MetaballInstance(o2w, w2o, ro, rad, z0, z1, pm));
         
 //    Transform *o = new Transform();
 //    *o = Translate(Vector(0.1, 0.1, 0.1)) * *o2w;
