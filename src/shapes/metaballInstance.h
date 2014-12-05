@@ -22,8 +22,16 @@ public:
     Point Sample(float u1, float u2, Normal *ns) const;
     Point Sample(const Point &p, float u1, float u2, Normal *ns) const;
     float Pdf(const Point &p, const Vector &wi) const;
+
+    Point GetCenter() const { return center; }
+    float GetRadius() const { return radius; }
+    float GetBlobbiness() const { return blobbiness; }
+    float ValueAt(const Point &p) const;
+    bool IntersectAll(const Ray &ray, float *t0, float *t1) const;
+    bool IntersectFirst(const Ray &ray, float *t) const;
 private:
     // MetaballInstance Private Data
+    friend class Metaball;
     Point center;
     float radius;
     float blobbiness;

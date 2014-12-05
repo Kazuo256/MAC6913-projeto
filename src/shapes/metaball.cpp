@@ -7,8 +7,8 @@
 // Metaball Method Definitions
 Metaball::Metaball(const Transform *o2w, const Transform *w2o, bool ro,
                    int nbumps, const Point *centers, const float *radius,
-                   const float *blobbiness)
-    : Shape(o2w, w2o, ro) {
+                   const float *blobbiness, float err)
+    : Shape(o2w, w2o, ro), error(err) {
         
     for (int i = 0; i < nbumps; ++i)
         instances.push_back(new MetaballInstance(o2w, w2o, ro, centers[i], radius[i],
@@ -40,29 +40,124 @@ BBox Metaball::ObjectBound() const {
     return box;
 }
 
+struct CompareOp {
+    CompareOp(const vector<MetaballInstance*> &the_instances, const Vector &the_dir)
+        : instances(the_instances), dir(the_dir) {}
+
+    bool operator()(int lhs_idx, int rhs_idx) {
+        MetaballInstance *lhs = instances[lhs_idx],
+                         *rhs = instances[rhs_idx];
+        float l = Dot(lhs->GetCenter()-Point(), dir);
+        float r = Dot(rhs->GetCenter()-Point(), dir);
+        return l < r;
+    }
+
+    const vector<MetaballInstance*> &instances;
+    Vector                          dir;
+};
+
 
 bool Metaball::Intersect(const Ray &r, float *tHit, float *rayEpsilon,
                        DifferentialGeometry *dg) const {
     
+    Ray ray;
+    (*WorldToObject)(r, &ray);
+    vector<int> order(instances.size(), 0);
+
     for (size_t i = 0; i < instances.size(); i++) {
-        if (instances[i]->Intersect(r, tHit, rayEpsilon, dg)) {
-            return true;
+        order[i] = i;
+        //if (instances[i]->Intersect(r, tHit, rayEpsilon, dg)) {
+        //    return true;
+        //}
+    }
+
+    // Order bumps along the ray direction
+    stable_sort(order.begin(), order.end(), CompareOp(instances, ray.d));
+
+    // Let's find the initial candidate
+    float tn = ray.mint,
+          tf = .0f;
+    float vn = ValueAt(ray(tn)),
+          vf = .0f;
+    size_t i;
+    for (i = 0; i < order.size(); ++i) {
+        MetaballInstance *bump = instances[order[i]];
+        // This is the t such that ray(t) is closest to p_i along the ray
+        tf = Dot(bump->GetCenter() - ray.o, ray.d)/ray.d.LengthSquared();
+        // Found no intersection
+        if (tf >= ray.maxt) return false;
+        // If t intersects with this specific bump, use the local solution
+        if (bump->ValueAt(ray(tf)) > 1.f) {
+          bump->IntersectFirst(ray, &tf);
+          vf = ValueAt(ray(tf));
+          break;
         }
+        // Otherwise, use this t if it is inside globally
+        vf = ValueAt(ray(tf));
+        if (vf > 1.f) break;
+        // Nothing worked, go to next one
+        tn = tf;
+        vn = vf;
+    }
+    if (i >= order.size()) return false;
+
+    float t, v;
+    if (fabsf(vn - 1.f) < fabsf(vf - 1.f))
+        t = tn, v = vn; 
+    else
+        t = tf, v = vf;
+
+    // Find the intersection numerically
+    while (fabsf(v - 1.f) > error) {
+        t = (tn*(vf - 1.f) - tf*(vn - 1.f))/(vf - vn);
+        v = ValueAt(ray(t));
+        if (v < 1.f)
+          tn = t, vn = v;
+        else
+          tf = t, vf = v;
     }
     
-    return false;
+    *tHit = t;
+    *rayEpsilon = error;
+
+    const Transform &o2w = *ObjectToWorld;
+    *dg = DifferentialGeometry(o2w(ray(t)), o2w(Vector()), o2w(Vector()),
+                               o2w(Normal()), o2w(Normal()), 0.f, 0.f, this);
+    
+    return true;
 }
 
 
 bool Metaball::IntersectP(const Ray &r) const {
     
-    for (size_t i = 0; i < instances.size(); i++) {
-        if (instances[i]->IntersectP(r)) {
-            return true;
-        }
+    Ray ray;
+    (*WorldToObject)(r, &ray);
+    vector<int> order(instances.size(), 0);
+
+    for (size_t i = 0; i < instances.size(); i++)
+        order[i] = i;
+
+    // Order bumps along the ray direction
+    stable_sort(order.begin(), order.end(), CompareOp(instances, ray.d));
+
+    // Let's find the initial candidate
+    float tf = .0f;
+    size_t i;
+    for (i = 0; i < order.size(); ++i) {
+        MetaballInstance *bump = instances[order[i]];
+        // This is the t such that ray(t) is closest to p_i along the ray
+        tf = Dot(bump->GetCenter() - ray.o, ray.d)/ray.d.LengthSquared();
+        // Found no intersection
+        if (tf >= ray.maxt) return false;
+        // If t intersects with this specific bump, use the local solution
+        if (bump->ValueAt(ray(tf)) > 1)
+          break;
+        // Otherwise, use this t if it is inside globally
+        if (ValueAt(ray(tf)) > 1) break;
+        // Nothing worked, go to next one
     }
-    
-    return false;
+    // If left loop prematurely, success
+    return i < order.size();
 }
 
 
@@ -77,6 +172,16 @@ float Metaball::Area() const {
     return area;
 }
 
+float Metaball::ValueAt(const Point &p) const {
+    float d = 0;
+    for (size_t i = 0; i < instances.size(); ++i)
+        d += instances[i]->ValueAt(p);
+    return d;
+}
+
+bool Metaball::Inside(const Point &p) const {
+    return ValueAt(p) > 1;
+}
 
 Metaball *CreateMetaballShape(const Transform *o2w, const Transform *w2o,
         bool reverseOrientation, const ParamSet &params) {

@@ -11,8 +11,9 @@ MetaballInstance::MetaballInstance(const Transform *o2w, const Transform *w2o, b
 
 
 BBox MetaballInstance::ObjectBound() const {
-    return BBox(Point(-radius, -radius, -radius),
-                Point( radius,  radius, radius));
+    return Translate(center-Point())(
+        BBox(Point(-radius, -radius, -radius),
+             Point( radius,  radius, radius)));
 }
 
 
@@ -174,6 +175,34 @@ bool MetaballInstance::IntersectP(const Ray &r) const {
     return false;
 }
 
+float MetaballInstance::ValueAt(const Point &p) const {
+    Vector v = center - p;
+    float r2 = v.x*v.x + v.y*v.y + v.z*v.z;
+    float B = -blobbiness;
+    float R = radius;
+    float x = B/(R*R)*r2 - B;
+    return exp(x);
+}
+
+bool MetaballInstance::IntersectAll(const Ray &r, float *t0, float *t1) const {
+    // Transform _Ray_ to object space
+    Ray ray;
+    (Translate(center-Point()))(r, &ray);
+    
+    // Compute quadratic metaball coefficients
+    float A = ray.d.x*ray.d.x + ray.d.y*ray.d.y + ray.d.z*ray.d.z;
+    float B = 2 * (ray.d.x*ray.o.x + ray.d.y*ray.o.y + ray.d.z*ray.o.z);
+    float C = ray.o.x*ray.o.x + ray.o.y*ray.o.y +
+    ray.o.z*ray.o.z - radius*radius;
+    
+    // Solve quadratic equation for _t_ values
+    return !Quadratic(A, B, C, t0, t1);
+}
+
+bool MetaballInstance::IntersectFirst(const Ray &r, float *t) const {
+    float phony;
+    return IntersectAll(r, t, &phony);
+}
 
 float MetaballInstance::Area() const {
     return 4.0f * acos(-1) * radius * radius;
