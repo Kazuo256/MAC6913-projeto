@@ -78,6 +78,18 @@ class Case0 : public VoxelCase {
     }
 };
 
+class Case1 : public VoxelCase {
+  public:
+    Case1(bool i, bool j, bool k) : di(i), dj(j), dk(k) {}
+    void Generate(vector<int> &inds, const VoxelHelper &helper, int i, int j, int k) {
+        inds.push_back(helper.GetZIndex(i + int(di), j + int(dj), k));
+        inds.push_back(helper.GetYIndex(i, j + int(dj), k + int(dk)));
+        inds.push_back(helper.GetXIndex(i + int(di), j, k + int(dk)));
+    }
+  private:
+    bool di, dj, dk;
+};
+
 class Cases {
   public:
     ~Cases() {
@@ -90,6 +102,16 @@ class Cases {
         if (!cases.empty()) return;
         cases.resize(256, NULL);
         // Cases definition
+        cases[0] = NULL;
+        cases[1] = new Case1(false, false, false);
+        cases[2] = new Case1(false, false, true);
+        cases[4] = new Case1(false, true, false);
+        cases[8] = new Case1(false, true, true);
+        cases[16] = new Case1(true, false, false);
+        cases[32] = new Case1(true, false, true);
+        cases[64] = new Case1(true, true, false);
+        cases[128] = new Case1(true, true, true);
+        cases[255] = NULL;
     }
     VoxelCase *operator[](int mask) const {
         return cases[mask];
