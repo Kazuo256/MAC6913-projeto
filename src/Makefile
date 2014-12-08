@@ -25,6 +25,7 @@ MARCH=-m32 -msse2 -mfpmath=sse
 
 # change this to -g3 for debug builds
 OPT=-O2
+#OPT=-g3 -O0
 # comment out this line to enable assertions at runtime
 DEFS += -DNDEBUG
 
