@@ -68,8 +68,37 @@ int VoxelHelper::CheckCase(const vector<bool> &inside, int i, int j, int k) cons
 class VoxelCase {
   public:
     virtual ~VoxelCase() {}
-    virtual void operator()(const VoxelHelper &helper, int i, int j, int k) = 0;
+    virtual void Generate(vector<int> &inds, const VoxelHelper &helper, int i, int j, int k) = 0;
 };
+
+class Case0 : public VoxelCase {
+  public:
+    void Generate(vector<int> &inds, const VoxelHelper &helper, int i, int j, int k) {
+        // Does nothing =D
+    }
+};
+
+class Cases {
+  public:
+    ~Cases() {
+        for (int i = 0; i < 256; ++i)
+            if (cases[i])
+                delete cases[i];
+        cases.clear();
+    }
+    void Init() {
+        if (!cases.empty()) return;
+        cases.resize(256, NULL);
+        // Cases definition
+    }
+    VoxelCase *operator[](int mask) const {
+        return cases[mask];
+    }
+  private:
+    vector<VoxelCase*> cases;
+};
+
+Cases cases;
 
 } // unnamed namespace
 
@@ -101,20 +130,13 @@ TriangleMesh *ImplicitSurfaceToMesh(const Transform *o2w, const Transform *w2o,
                 int ind = helper.GetVertIndex(i, j, k);
                 inside[ind] = surface->Inside(P[ind]);
     }
+    cases.Init();
     vector<int> inds;
     for (int k = 0; k < depth-1; ++k)
         for (int i = 0; i < height-1; ++i)
             for (int j = 0; j < width-1; ++j) {
-                int c = helper.CheckCase(inside, i, j, k);
-                if (c > 0 && c < 8) {
-                    // top
-                    inds.push_back(helper.GetXIndex(i, j, k));
-                    inds.push_back(helper.GetZIndex(i, j+1, k));
-                    inds.push_back(helper.GetXIndex(i, j, k+1));
-                    inds.push_back(helper.GetXIndex(i, j, k+1));
-                    inds.push_back(helper.GetZIndex(i, j, k));
-                    inds.push_back(helper.GetXIndex(i, j, k));
-                }
+                VoxelCase *which = cases[helper.CheckCase(inside, i, j, k)];
+                if (which) which->Generate(inds, helper, i, j, k);
             }
     std::cout << "TRIANGLES: " << inds.size()/3 << std::endl;
     int *vi = new int[inds.size()];
