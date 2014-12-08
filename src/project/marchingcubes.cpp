@@ -90,6 +90,36 @@ class Case1 : public VoxelCase {
     bool di, dj, dk;
 };
 
+class Case2Y : public VoxelCase {
+  public:
+    Case2Y(bool j, bool k) : dj(j), dk(k) {}
+    void Generate(vector<int> &inds, const VoxelHelper &helper, int i, int j, int k) {
+        inds.push_back(helper.GetXIndex(i, j, k + int(dk)));
+        inds.push_back(helper.GetZIndex(i, j + int(dj), k));
+        inds.push_back(helper.GetXIndex(i + 1, j, k + int(dk)));
+        inds.push_back(helper.GetXIndex(i + 1, j, k + int(dk)));
+        inds.push_back(helper.GetZIndex(i + 1, j + int(dj), k));
+        inds.push_back(helper.GetXIndex(i, j, k + int(dk)));
+    }
+  private:
+    bool dj, dk;
+};
+
+class Case2Z : public VoxelCase {
+  public:
+    Case2Z(bool i, bool j) : di(i), dj(j) {}
+    void Generate(vector<int> &inds, const VoxelHelper &helper, int i, int j, int k) {
+        inds.push_back(helper.GetXIndex(i + int(di), j, k));
+        inds.push_back(helper.GetYIndex(i, j + int(dj), k));
+        inds.push_back(helper.GetXIndex(i + int(di), j, k + 1));
+        inds.push_back(helper.GetXIndex(i + int(di), j, k + 1));
+        inds.push_back(helper.GetYIndex(i, j + int(dj), k + 1));
+        inds.push_back(helper.GetXIndex(i + int(di), j, k));
+    }
+  private:
+    bool di, dj;
+};
+
 class Cases {
   public:
     ~Cases() {
@@ -105,12 +135,20 @@ class Cases {
         cases[0] = NULL;
         cases[1] = new Case1(false, false, false);
         cases[2] = new Case1(false, false, true);
+        cases[3] = new Case2Z(false, false);
         cases[4] = new Case1(false, true, false);
+        cases[5] = new Case2Y(false, false);
         cases[8] = new Case1(false, true, true);
+        cases[10] = new Case2Y(false, true);
+        cases[12] = new Case2Z(false, true);
         cases[16] = new Case1(true, false, false);
         cases[32] = new Case1(true, false, true);
+        cases[48] = new Case2Z(true, false);
         cases[64] = new Case1(true, true, false);
+        cases[80] = new Case2Y(true, false);
         cases[128] = new Case1(true, true, true);
+        cases[160] = new Case2Y(true, true);
+        cases[192] = new Case2Z(true, true);
         cases[255] = NULL;
     }
     VoxelCase *operator[](int mask) const {
