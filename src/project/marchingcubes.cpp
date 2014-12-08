@@ -12,6 +12,7 @@
 
 namespace {
 
+// VoxelHelper definition
 class VoxelHelper {
   public:
     VoxelHelper(int w, int h, int d)
@@ -22,7 +23,7 @@ class VoxelHelper {
     int GetZIndex(int i, int j, int k) const;
     int GetYIndex(int i, int j, int k) const;
     int GetXIndex(int i, int j, int k) const;
-    int CountInside(const vector<bool> &inside, int i, int j, int k) const;
+    int CheckCase(const vector<bool> &inside, int i, int j, int k) const;
   private:
     int width, height, depth;
 };
@@ -51,19 +52,24 @@ int VoxelHelper::GetXIndex(int i, int j, int k) const {
     return GetYIndex(height-2, width-1, depth-1) + j*height*depth + i*depth + k;
 }
 
-int VoxelHelper::CountInside(const vector<bool> &inside, int i, int j, int k) const {
-    int c = 0;
-    unsigned char mask = 0;
+int VoxelHelper::CheckCase(const vector<bool> &inside, int i, int j, int k) const {
+    int mask = 0;
     int t = 0;
     for (int dk = 0; dk < 2; ++dk)
         for (int di = 0; di < 2; ++di)
             for (int dj = 0; dj < 2; ++dj, ++t) {
                 int check = static_cast<int>(inside[GetVertIndex(i+di, j+dj, k+dk)]);
                 mask |= check << t;
-                c += check;
     }
-    return c;
+    return mask;
 }
+
+// VoxelCase definition
+class VoxelCase {
+  public:
+    virtual ~VoxelCase() {}
+    virtual void operator()(const VoxelHelper &helper, int i, int j, int k) = 0;
+};
 
 } // unnamed namespace
 
@@ -86,7 +92,7 @@ TriangleMesh *ImplicitSurfaceToMesh(const Transform *o2w, const Transform *w2o,
                 }
                 if (i+1 < height) {
                     int ind = helper.GetYIndex(i, j, k);
-                    P[ind] = o + step*(Vector(j, i, k) + Vector(j+1, i+1, k))/2.f;
+                    P[ind] = o + step*(Vector(j, i, k) + Vector(j, i+1, k))/2.f;
                 }
                 if (j+1 < width) {
                     int ind = helper.GetXIndex(i, j, k);
@@ -99,7 +105,7 @@ TriangleMesh *ImplicitSurfaceToMesh(const Transform *o2w, const Transform *w2o,
     for (int k = 0; k < depth-1; ++k)
         for (int i = 0; i < height-1; ++i)
             for (int j = 0; j < width-1; ++j) {
-                int c = helper.CountInside(inside, i, j, k);
+                int c = helper.CheckCase(inside, i, j, k);
                 if (c > 0 && c < 8) {
                     // top
                     inds.push_back(helper.GetXIndex(i, j, k));
