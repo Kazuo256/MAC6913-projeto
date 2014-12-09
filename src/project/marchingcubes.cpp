@@ -82,9 +82,9 @@ class Case1 : public VoxelCase {
   public:
     Case1(bool i, bool j, bool k) : di(i), dj(j), dk(k) {}
     void Generate(vector<int> &inds, const VoxelHelper &helper, int i, int j, int k) {
-        //inds.push_back(helper.GetZIndex(i + int(di), j + int(dj), k));
-        //inds.push_back(helper.GetYIndex(i, j + int(dj), k + int(dk)));
-        //inds.push_back(helper.GetXIndex(i + int(di), j, k + int(dk)));
+        inds.push_back(helper.GetZIndex(i + int(di), j + int(dj), k));
+        inds.push_back(helper.GetYIndex(i, j + int(dj), k + int(dk)));
+        inds.push_back(helper.GetXIndex(i + int(di), j, k + int(dk)));
     }
   private:
     bool di, dj, dk;
@@ -94,12 +94,12 @@ class Case2X : public VoxelCase {
   public:
     Case2X(bool i, bool k) : di(i), dk(k) {}
     void Generate(vector<int> &inds, const VoxelHelper &helper, int i, int j, int k) {
-        //inds.push_back(helper.GetYIndex(i, j, k + int(dk)));
-        //inds.push_back(helper.GetZIndex(i + int(di), j, k));
-        //inds.push_back(helper.GetZIndex(i + int(di), j + 1, k));
-        //inds.push_back(helper.GetZIndex(i + int(di), j + 1, k));
-        //inds.push_back(helper.GetYIndex(i, j + 1, k + int(dk)));
-        //inds.push_back(helper.GetYIndex(i, j, k + int(dk)));
+        inds.push_back(helper.GetYIndex(i, j, k + int(dk)));
+        inds.push_back(helper.GetZIndex(i + int(di), j, k));
+        inds.push_back(helper.GetZIndex(i + int(di), j + 1, k));
+        inds.push_back(helper.GetZIndex(i + int(di), j + 1, k));
+        inds.push_back(helper.GetYIndex(i, j + 1, k + int(dk)));
+        inds.push_back(helper.GetYIndex(i, j, k + int(dk)));
     }
   private:
     bool di, dk;
@@ -109,12 +109,12 @@ class Case2Y : public VoxelCase {
   public:
     Case2Y(bool j, bool k) : dj(j), dk(k) {}
     void Generate(vector<int> &inds, const VoxelHelper &helper, int i, int j, int k) {
-        //inds.push_back(helper.GetXIndex(i, j, k + int(dk)));
-        //inds.push_back(helper.GetZIndex(i, j + int(dj), k));
-        //inds.push_back(helper.GetZIndex(i + 1, j + int(dj), k));
-        //inds.push_back(helper.GetZIndex(i + 1, j + int(dj), k));
-        //inds.push_back(helper.GetXIndex(i + 1, j, k + int(dk)));
-        //inds.push_back(helper.GetXIndex(i, j, k + int(dk)));
+        inds.push_back(helper.GetXIndex(i, j, k + int(dk)));
+        inds.push_back(helper.GetZIndex(i, j + int(dj), k));
+        inds.push_back(helper.GetZIndex(i + 1, j + int(dj), k));
+        inds.push_back(helper.GetZIndex(i + 1, j + int(dj), k));
+        inds.push_back(helper.GetXIndex(i + 1, j, k + int(dk)));
+        inds.push_back(helper.GetXIndex(i, j, k + int(dk)));
     }
   private:
     bool dj, dk;
@@ -124,12 +124,12 @@ class Case2Z : public VoxelCase {
   public:
     Case2Z(bool i, bool j) : di(i), dj(j) {}
     void Generate(vector<int> &inds, const VoxelHelper &helper, int i, int j, int k) {
-        //inds.push_back(helper.GetXIndex(i + int(di), j, k));
-        //inds.push_back(helper.GetYIndex(i, j + int(dj), k));
-        //inds.push_back(helper.GetYIndex(i, j + int(dj), k + 1));
-        //inds.push_back(helper.GetYIndex(i, j + int(dj), k + 1));
-        //inds.push_back(helper.GetXIndex(i + int(di), j, k + 1));
-        //inds.push_back(helper.GetXIndex(i + int(di), j, k));
+        inds.push_back(helper.GetXIndex(i + int(di), j, k));
+        inds.push_back(helper.GetYIndex(i, j + int(dj), k));
+        inds.push_back(helper.GetYIndex(i, j + int(dj), k + 1));
+        inds.push_back(helper.GetYIndex(i, j + int(dj), k + 1));
+        inds.push_back(helper.GetXIndex(i + int(di), j, k + 1));
+        inds.push_back(helper.GetXIndex(i + int(di), j, k));
     }
   private:
     bool di, dj;
@@ -264,7 +264,7 @@ class Cases {
         cases[48]   = new Case2Z(true, false);            // 16+32
         cases[49]   = new Case5X(true, false, false);     // 1+16+32
         cases[50]   = new Case5X(true, false, true);      // 16+32+2
-        cases[63]   = new Case2Z(true, true);             // 255-192
+        //cases[63]   = new Case2Z(true, true);             // 255-192
         cases[64]   = new Case1(true, true, false);
         cases[65]   = new Case3(2, false, false, false);  // 1+64
         cases[66]   = new Case4(false, false, true);      // 2+64
@@ -275,15 +275,15 @@ class Cases {
         cases[80]   = new Case2Y(true, false);            // 16+64
         cases[81]   = new Case5Z(true, false, false);     // 64+16+1
         cases[84]   = new Case5Z(true, true, false);      // 4+64+16
-        cases[95]   = new Case2Y(true, true);             // 255-160
+        //cases[95]   = new Case2Y(true, true);             // 255-160
         cases[96]   = new Case3(0, true, false, true);    // 32+64
-        cases[111]  = new Case3(0, true, false, false);   // 255-144
+        //cases[111]  = new Case3(0, true, false, false);   // 255-144
         cases[112]  = new Case5Y(true, false, false);     // 32+16+64
-        cases[119]  = new Case2X(true, true);             // 255-136
-        cases[123]  = new Case3(1, false, true, false);   // 255-132
-        cases[125]  = new Case3(2, false, false, true);   // 255-130
-        cases[126]  = new Case4(false, false, false);     // 255-129
-        cases[127]  = new Case1(true, true, true);        // 255-128
+        //cases[119]  = new Case2X(true, true);             // 255-136
+        //cases[123]  = new Case3(1, false, true, false);   // 255-132
+        //cases[125]  = new Case3(2, false, false, true);   // 255-130
+        //cases[126]  = new Case4(false, false, false);     // 255-129
+        //cases[127]  = new Case1(true, true, true);        // 255-128
         cases[128]  = new Case1(true, true, true);
         cases[129]  = new Case4(false, false, false);     // 1+128
         cases[130]  = new Case3(2, false, false, true);   // 2+128
@@ -292,44 +292,43 @@ class Cases {
         cases[138]  = new Case5Z(false, true, true);      // 2+8+128
         cases[140]  = new Case5X(false, true, true);      // 128+8+4
         cases[144]  = new Case3(0, true, false, false);   // 16+128
-        cases[159]  = new Case3(0, true, false, true);    // 255-96
+        //cases[159]  = new Case3(0, true, false, true);    // 255-96
         cases[160]  = new Case2Y(true, true);             // 32+128
         cases[162]  = new Case5Z(true, false, true);      // 128+32+2
         cases[168]  = new Case5Z(true, true, true);       // 8+128+32
-        cases[175]  = new Case2Y(true, false);            // 255-80
+        //cases[175]  = new Case2Y(true, false);            // 255-80
         cases[176]  = new Case5Y(true, false, true);      // 128+32+16
-        cases[183]  = new Case3(1, false, true, true);    // 255-72
-        cases[187]  = new Case2X(true, false);            // 255-68
-        cases[189]  = new Case4(false, false, true);      // 255-66
-        cases[190]  = new Case3(2, false, false, false);  // 255-65
-        cases[191]  = new Case1(true, true, false);       // 255-64
+        //cases[183]  = new Case3(1, false, true, true);    // 255-72
+        //cases[187]  = new Case2X(true, false);            // 255-68
+        //cases[189]  = new Case4(false, false, true);      // 255-66
+        //cases[190]  = new Case3(2, false, false, false);  // 255-65
+        //cases[191]  = new Case1(true, true, false);       // 255-64
         cases[192]  = new Case2Z(true, true);             // 64+128
         cases[196]  = new Case5X(true, true, false);      // 4+64+128
         cases[200]  = new Case5X(true, true, true);       // 64+128+8
-        cases[207]  = new Case2Z(true, false);            // 255-48
+        //cases[207]  = new Case2Z(true, false);            // 255-48
         cases[208]  = new Case5Y(true, true, false);      // 16+64+128
-        cases[215]  = new Case3(2, false, true, true);    // 255-40
-        cases[219]  = new Case4(false, true, false);      // 255-36
-        cases[221]  = new Case2X(false, true);            // 255-34
-        cases[222]  = new Case3(1, false, false, false);  // 255-33
-        cases[223]  = new Case1(true, false, true);       // 255-32
+        //cases[215]  = new Case3(2, false, true, true);    // 255-40
+        //cases[219]  = new Case4(false, true, false);      // 255-36
+        //cases[221]  = new Case2X(false, true);            // 255-34
+        //cases[222]  = new Case3(1, false, false, false);  // 255-33
+        //cases[223]  = new Case1(true, false, true);       // 255-32
         cases[224]  = new Case5Y(true, true, true);       // 64+128+32
-        cases[231]  = new Case4(false, true, true);       // 255-24
-        cases[235]  = new Case3(2, false, true, false);   // 255-20
-        cases[237]  = new Case3(1, false, false, true);   // 255-18
-        cases[238]  = new Case2X(false, false);           // 255-17
-        cases[239]  = new Case1(true, false, false);      // 255-16
-        cases[243]  = new Case2Z(false, true);            // 255-12
-        cases[245]  = new Case2Y(false, true);            // 255-10
-        cases[246]  = new Case3(0, false, false, false);  // 255-9
-        cases[247]  = new Case1(false, true, true);       // 255-8
-        cases[258]  = new Case5Y(false, false, false);    // 255-7
-        cases[249]  = new Case3(0, false, false, true);   // 255-6
-        cases[250]  = new Case2Y(false, false);           // 255-5
-        cases[251]  = new Case1(false, true, false);      // 255-4
-        cases[252]  = new Case2Z(false, false);           // 255-3
-        cases[253]  = new Case1(false, false, true);      // 255-2
-        cases[254]  = new Case1(false, false, false);     // 255-1
+        //cases[231]  = new Case4(false, true, true);       // 255-24
+        //cases[235]  = new Case3(2, false, true, false);   // 255-20
+        //cases[237]  = new Case3(1, false, false, true);   // 255-18
+        //cases[238]  = new Case2X(false, false);           // 255-17
+        //cases[239]  = new Case1(true, false, false);      // 255-16
+        //cases[243]  = new Case2Z(false, true);            // 255-12
+        //cases[245]  = new Case2Y(false, true);            // 255-10
+        //cases[246]  = new Case3(0, false, false, false);  // 255-9
+        //cases[247]  = new Case1(false, true, true);       // 255-8
+        //cases[249]  = new Case3(0, false, false, true);   // 255-6
+        //cases[250]  = new Case2Y(false, false);           // 255-5
+        //cases[251]  = new Case1(false, true, false);      // 255-4
+        //cases[252]  = new Case2Z(false, false);           // 255-3
+        //cases[253]  = new Case1(false, false, true);      // 255-2
+        //cases[254]  = new Case1(false, false, false);     // 255-1
         cases[255]  = NULL;
     }
     VoxelCase *operator[](int mask) const {
@@ -377,7 +376,7 @@ TriangleMesh *ImplicitSurfaceToMesh(const Transform *o2w, const Transform *w2o,
         for (int i = 0; i < height-1; ++i)
             for (int j = 0; j < width-1; ++j) {
                 int c = helper.CheckCase(inside, i, j, k);
-                VoxelCase *which = cases[c] ? cases[c] : cases[256-c];
+                VoxelCase *which = cases[c] ? cases[c] : cases[255-c];
                 if (which) which->Generate(inds, helper, i, j, k);
             }
     std::cout << "TRIANGLES: " << inds.size()/3 << std::endl;
