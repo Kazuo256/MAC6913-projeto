@@ -50,9 +50,9 @@ AttributeBegin
   Material "matte"
     "color Kd" [.2 .6 .4]
   Shape "metaballsurface"
-    "point P" [.0 .0 .0  .0 -1.0 25.0]
-    "float R" [10.0 20.0]
-    "float B" [1.0 3.0]
+    "point P" [.0 .0 .0  .0 -1.0 25.0 -15.0 3.0 10.0]
+    "float R" [10.0 20.0 15.0]
+    "float B" [1.0 3.0 5.0]
   #Shape "trianglemesh"
   #  "point P" [ -.5 -.5 -.5  .5 -.5 -.5  .5 .5 -.5  -.5 .5 -.5
   #              -.5 -.5 .5  .5 -.5 .5  .5 .5 .5  -.5 .5 .5 ]
