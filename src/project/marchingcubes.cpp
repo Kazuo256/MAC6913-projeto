@@ -147,28 +147,36 @@ class Cases {
         if (!cases.empty()) return;
         cases.resize(256, NULL);
         // Cases definition
-        cases[0] = NULL;
-        cases[1] = new Case1(false, false, false);
-        cases[2] = new Case1(false, false, true);
-        cases[3] = new Case2Z(false, false);
-        cases[4] = new Case1(false, true, false);
-        cases[5] = new Case2Y(false, false);
-        cases[8] = new Case1(false, true, true);
-        cases[10] = new Case2Y(false, true);
-        cases[12] = new Case2Z(false, true);
-        cases[16] = new Case1(true, false, false);
-        cases[17] = new Case2X(false, false);
-        cases[32] = new Case1(true, false, true);
-        cases[34] = new Case2X(false, true);
-        cases[48] = new Case2Z(true, false);
-        cases[64] = new Case1(true, true, false);
-        cases[68] = new Case2X(true, false);
-        cases[80] = new Case2Y(true, false);
-        cases[128] = new Case1(true, true, true);
-        cases[136] = new Case2X(true, true);
-        cases[160] = new Case2Y(true, true);
-        cases[192] = new Case2Z(true, true);
-        cases[255] = NULL;
+        cases[0]    = NULL;
+        cases[1]    = new Case1(false, false, false);
+        cases[2]    = new Case1(false, false, true);
+        cases[3]    = new Case2Z(false, false);
+        cases[4]    = new Case1(false, true, false);
+        cases[5]    = new Case2Y(false, false);
+        cases[8]    = new Case1(false, true, true);
+        cases[10]   = new Case2Y(false, true);
+        cases[12]   = new Case2Z(false, true);
+        cases[16]   = new Case1(true, false, false);
+        cases[17]   = new Case2X(false, false);
+        cases[32]   = new Case1(true, false, true);
+        cases[34]   = new Case2X(false, true);
+        cases[48]   = new Case2Z(true, false);
+        cases[64]   = new Case1(true, true, false);
+        cases[68]   = new Case2X(true, false);
+        cases[80]   = new Case2Y(true, false);
+        cases[127]  = new Case1(true, true, true);    //255-128
+        cases[128]  = new Case1(true, true, true);
+        cases[136]  = new Case2X(true, true);
+        cases[160]  = new Case2Y(true, true);
+        cases[191]  = new Case1(true, true, false);   // 255-64
+        cases[192]  = new Case2Z(true, true);
+        cases[223]  = new Case1(true, false, true);   // 255-32
+        cases[239]  = new Case1(true, false, false);  // 255-16
+        cases[277]  = new Case1(false, true, true);   // 255-8
+        cases[251]  = new Case1(false, true, false);  // 255-4
+        cases[253]  = new Case1(false, false, true);  // 255-2
+        cases[254]  = new Case1(false, false, false); // 255-1
+        cases[255]  = NULL;
     }
     VoxelCase *operator[](int mask) const {
         return cases[mask];
