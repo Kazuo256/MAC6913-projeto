@@ -135,6 +135,26 @@ class Case2Z : public VoxelCase {
     bool di, dj;
 };
 
+class Case3 : public VoxelCase {
+  public:
+    Case3(int t, bool i, bool j, bool k) : trans(t), di(i), dj(j), dk(k) {}
+    void Generate(vector<int> &inds, const VoxelHelper &helper, int i, int j, int k) {
+        Case1(di, dj, dk).Generate(inds, helper, i, j, k);
+        bool c[3];
+        for (int t = 0; t < 3; ++t)
+            c[t] = ((t == trans) ? b[t] : !b[t]);
+        Case1(c[0], c[1], c[2]).Generate(inds, helper, i, j, k);
+    }
+  private:
+    int trans;
+    union {
+      struct {
+        bool di, dj, dk;
+      };
+      bool b[3];
+    };
+};
+
 class Cases {
   public:
     ~Cases() {
@@ -153,41 +173,53 @@ class Cases {
         cases[3]    = new Case2Z(false, false);
         cases[4]    = new Case1(false, true, false);
         cases[5]    = new Case2Y(false, false);
+        cases[6]    = new Case3(0, false, false, true);   // 2+4
         cases[8]    = new Case1(false, true, true);
+        cases[9]    = new Case3(0, false, false, false);  // 1+8
         cases[10]   = new Case2Y(false, true);
         cases[12]   = new Case2Z(false, true);
         cases[16]   = new Case1(true, false, false);
         cases[17]   = new Case2X(false, false);
+        cases[18]   = new Case3(1, false, false, true);   // 2+16
+        cases[20]   = new Case3(2, false, true, false);   // 4+16
         cases[32]   = new Case1(true, false, true);
+        cases[33]   = new Case3(1, false, false, false);  // 1+32
         cases[34]   = new Case2X(false, true);
+        cases[40]   = new Case3(2, false, true, true);    // 8+32
         cases[48]   = new Case2Z(true, false);
-        cases[63]   = new Case2Z(true, true);         // 255-192
+        cases[63]   = new Case2Z(true, true);             // 255-192
         cases[64]   = new Case1(true, true, false);
+        cases[65]   = new Case3(2, false, false, false);  // 1+64
         cases[68]   = new Case2X(true, false);
+        cases[72]   = new Case3(1, false, true, true);    // 8+64
         cases[80]   = new Case2Y(true, false);
-        cases[95]   = new Case2Y(true, true);         // 255-160
-        cases[119]  = new Case2X(true, true);         // 255-136
-        cases[127]  = new Case1(true, true, true);    // 255-128
+        cases[95]   = new Case2Y(true, true);             // 255-160
+        cases[96]   = new Case3(0, true, false, true);    // 32+64
+        cases[119]  = new Case2X(true, true);             // 255-136
+        cases[127]  = new Case1(true, true, true);        // 255-128
         cases[128]  = new Case1(true, true, true);
+        cases[130]  = new Case3(2, false, false, true);   // 2+128
+        cases[132]  = new Case3(1, false, true, false);   // 4+128
         cases[136]  = new Case2X(true, true);
+        cases[144]  = new Case3(0, true, false, false);   // 16+128
         cases[160]  = new Case2Y(true, true);
-        cases[175]  = new Case2Y(true, false);        // 255-80
-        cases[187]  = new Case2X(true, false);        // 255-68
-        cases[191]  = new Case1(true, true, false);   // 255-64
+        cases[175]  = new Case2Y(true, false);            // 255-80
+        cases[187]  = new Case2X(true, false);            // 255-68
+        cases[191]  = new Case1(true, true, false);       // 255-64
         cases[192]  = new Case2Z(true, true);
-        cases[207]  = new Case2Z(true, false);        // 255-48
-        cases[221]  = new Case2X(false, true);        // 255-34
-        cases[223]  = new Case1(true, false, true);   // 255-32
-        cases[238]  = new Case2X(false, false);       // 255-17
-        cases[239]  = new Case1(true, false, false);  // 255-16
-        cases[243]  = new Case2Z(false, true);        // 255-12
-        cases[245]  = new Case2Y(false, true);        // 255-10
-        cases[247]  = new Case1(false, true, true);   // 255-8
-        cases[250]  = new Case2Y(false, false);       // 255-5
-        cases[251]  = new Case1(false, true, false);  // 255-4
-        cases[252]  = new Case2Z(false, false);       // 255-3
-        cases[253]  = new Case1(false, false, true);  // 255-2
-        cases[254]  = new Case1(false, false, false); // 255-1
+        cases[207]  = new Case2Z(true, false);            // 255-48
+        cases[221]  = new Case2X(false, true);            // 255-34
+        cases[223]  = new Case1(true, false, true);       // 255-32
+        cases[238]  = new Case2X(false, false);           // 255-17
+        cases[239]  = new Case1(true, false, false);      // 255-16
+        cases[243]  = new Case2Z(false, true);            // 255-12
+        cases[245]  = new Case2Y(false, true);            // 255-10
+        cases[247]  = new Case1(false, true, true);       // 255-8
+        cases[250]  = new Case2Y(false, false);           // 255-5
+        cases[251]  = new Case1(false, true, false);      // 255-4
+        cases[252]  = new Case2Z(false, false);           // 255-3
+        cases[253]  = new Case1(false, false, true);      // 255-2
+        cases[254]  = new Case1(false, false, false);     // 255-1
         cases[255]  = NULL;
     }
     VoxelCase *operator[](int mask) const {
