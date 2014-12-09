@@ -213,6 +213,7 @@ class Cases {
         cases[119]  = new Case2X(true, true);             // 255-136
         cases[123]  = new Case3(1, false, true, false);   // 255-132
         cases[125]  = new Case3(2, false, false, true);   // 255-130
+        cases[126]  = new Case4(false, false, false);     // 255-129
         cases[127]  = new Case1(true, true, true);        // 255-128
         cases[128]  = new Case1(true, true, true);
         cases[129]  = new Case4(false, false, false);     // 1+128
@@ -225,14 +226,17 @@ class Cases {
         cases[175]  = new Case2Y(true, false);            // 255-80
         cases[183]  = new Case3(1, false, true, true);    // 255-72
         cases[187]  = new Case2X(true, false);            // 255-68
+        cases[189]  = new Case4(false, false, true);      // 255-66
         cases[190]  = new Case3(2, false, false, false);  // 255-65
         cases[191]  = new Case1(true, true, false);       // 255-64
         cases[192]  = new Case2Z(true, true);
         cases[207]  = new Case2Z(true, false);            // 255-48
         cases[215]  = new Case3(2, false, true, true);    // 255-40
+        cases[219]  = new Case4(false, true, false);      // 255-36
         cases[221]  = new Case2X(false, true);            // 255-34
         cases[222]  = new Case3(1, false, false, false);  // 255-33
         cases[223]  = new Case1(true, false, true);       // 255-32
+        cases[231]  = new Case4(false, true, true);       // 255-24
         cases[235]  = new Case3(2, false, true, false);   // 255-20
         cases[237]  = new Case3(1, false, false, true);   // 255-18
         cases[238]  = new Case2X(false, false);           // 255-17
