@@ -209,6 +209,36 @@ MAKECASE_3PARAMS(Case5Z, bool, di, dj, dk) {
     inds.push_back(helper.GetZIndex(i + int(di), j + int(!dj), k));
 }
 
+MAKECASE_NOPARAMS(Case8X) {
+    log("Case 8X\n");
+    inds.push_back(helper.GetXIndex(i, j, k));
+    inds.push_back(helper.GetXIndex(i, j, k + 1));
+    inds.push_back(helper.GetXIndex(i + 1, j, k + 1));
+    inds.push_back(helper.GetXIndex(i + 1, j, k + 1));
+    inds.push_back(helper.GetXIndex(i + 1, j, k));
+    inds.push_back(helper.GetXIndex(i, j, k));
+}
+
+MAKECASE_NOPARAMS(Case8Y) {
+    log("Case 8Y\n");
+    inds.push_back(helper.GetYIndex(i, j, k));
+    inds.push_back(helper.GetYIndex(i, j, k + 1));
+    inds.push_back(helper.GetYIndex(i, j + 1, k + 1));
+    inds.push_back(helper.GetYIndex(i, j + 1, k + 1));
+    inds.push_back(helper.GetYIndex(i, j + 1, k));
+    inds.push_back(helper.GetYIndex(i, j, k));
+}
+
+MAKECASE_NOPARAMS(Case8Z) {
+    log("Case 8Z\n");
+    inds.push_back(helper.GetZIndex(i, j, k));
+    inds.push_back(helper.GetZIndex(i, j + 1, k));
+    inds.push_back(helper.GetZIndex(i + 1, j + 1, k));
+    inds.push_back(helper.GetZIndex(i + 1, j + 1, k));
+    inds.push_back(helper.GetZIndex(i + 1, j, k));
+    inds.push_back(helper.GetZIndex(i, j, k));
+}
+
 class Cases {
   public:
     ~Cases() {
@@ -236,6 +266,7 @@ class Cases {
         cases[12]   = new Case2Z(false, true);            // 4+8
         cases[13]   = new Case5Y(false, true, false);     // 1+4+8
         cases[14]   = new Case5Y(false, true, true);      // 4+8+2
+        cases[15]   = new Case8Y;                         // 1+2+4+8
         cases[16]   = new Case1(true, false, false);
         cases[17]   = new Case2Y(false, false);           // 1+16
         cases[18]   = new Case3(1, false, false, true);   // 2+16
@@ -253,6 +284,7 @@ class Cases {
         cases[48]   = new Case2Z(true, false);            // 16+32
         cases[49]   = new Case5X(true, false, false);     // 1+16+32
         cases[50]   = new Case5X(true, false, true);      // 16+32+2
+        cases[51]   = new Case8X;                         // 1+2+16+32
         cases[64]   = new Case1(true, true, false);
         cases[65]   = new Case3(2, false, false, false);  // 1+64
         cases[66]   = new Case4(false, false, true);      // 2+64
@@ -263,6 +295,7 @@ class Cases {
         cases[80]   = new Case2X(true, false);            // 16+64
         cases[81]   = new Case5Z(true, false, false);     // 64+16+1
         cases[84]   = new Case5Z(true, true, false);      // 4+64+16
+        cases[85]   = new Case8Z;                         // 1+4+16+64
         cases[96]   = new Case3(0, true, false, true);    // 32+64
         cases[112]  = new Case5Y(true, false, false);     // 32+16+64
         cases[128]  = new Case1(true, true, true);
