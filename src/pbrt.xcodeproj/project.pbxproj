@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		24BB06F51A387B2100D0ACF3 /* implicitsurface.h in Sources */ = {isa = PBXBuildFile; fileRef = 24BB06F41A387B2100D0ACF3 /* implicitsurface.h */; };
+		24BB06F71A387B2800D0ACF3 /* marchingcubes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 24BB06F61A387B2800D0ACF3 /* marchingcubes.cpp */; };
+		24BB06F91A387B2B00D0ACF3 /* marchingcubes.h in Sources */ = {isa = PBXBuildFile; fileRef = 24BB06F81A387B2B00D0ACF3 /* marchingcubes.h */; };
+		24BB06FB1A387B2D00D0ACF3 /* metaballsurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 24BB06FA1A387B2D00D0ACF3 /* metaballsurface.cpp */; };
+		24BB06FD1A387B3100D0ACF3 /* metaballsurface.h in Sources */ = {isa = PBXBuildFile; fileRef = 24BB06FC1A387B3100D0ACF3 /* metaballsurface.h */; };
 		24D91BDE1A2342260076E592 /* metaball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 24D91BDC1A2342260076E592 /* metaball.cpp */; };
 		24D91BE41A2369900076E592 /* metaballInstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 24D91BE21A2369900076E592 /* metaballInstance.cpp */; };
 		B130248E1236EE5100206AC7 /* fileutil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B130248C1236EE5100206AC7 /* fileutil.cpp */; };
@@ -170,6 +175,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		24A48A8E1A35E79C00FF40DF /* project */ = {isa = PBXFileReference; lastKnownFileType = folder; path = project; sourceTree = "<group>"; };
+		24BB06F41A387B2100D0ACF3 /* implicitsurface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = implicitsurface.h; path = project/implicitsurface.h; sourceTree = "<group>"; };
+		24BB06F61A387B2800D0ACF3 /* marchingcubes.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = marchingcubes.cpp; path = project/marchingcubes.cpp; sourceTree = "<group>"; };
+		24BB06F81A387B2B00D0ACF3 /* marchingcubes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = marchingcubes.h; path = project/marchingcubes.h; sourceTree = "<group>"; };
+		24BB06FA1A387B2D00D0ACF3 /* metaballsurface.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = metaballsurface.cpp; path = project/metaballsurface.cpp; sourceTree = "<group>"; };
+		24BB06FC1A387B3100D0ACF3 /* metaballsurface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = metaballsurface.h; path = project/metaballsurface.h; sourceTree = "<group>"; };
 		24C23AB81A14F47800B9FAF3 /* scenes */ = {isa = PBXFileReference; lastKnownFileType = folder; name = scenes; path = ../scenes; sourceTree = "<group>"; };
 		24D91BDC1A2342260076E592 /* metaball.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = metaball.cpp; sourceTree = "<group>"; };
 		24D91BDD1A2342260076E592 /* metaball.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = metaball.h; sourceTree = "<group>"; };
@@ -437,10 +448,16 @@
 		08FB7794FE84155DC02AAC07 /* pbrt */ = {
 			isa = PBXGroup;
 			children = (
+				24BB06FC1A387B3100D0ACF3 /* metaballsurface.h */,
+				24BB06FA1A387B2D00D0ACF3 /* metaballsurface.cpp */,
+				24BB06F81A387B2B00D0ACF3 /* marchingcubes.h */,
+				24BB06F61A387B2800D0ACF3 /* marchingcubes.cpp */,
+				24BB06F41A387B2100D0ACF3 /* implicitsurface.h */,
 				08FB7795FE84155DC02AAC07 /* Source */,
 				C6859E8C029090F304C91782 /* Documentation */,
 				1AB674ADFE9D54B511CA2CBB /* Products */,
 				24C23AB81A14F47800B9FAF3 /* scenes */,
+				24A48A8E1A35E79C00FF40DF /* project */,
 			);
 			name = pbrt;
 			sourceTree = "<group>";
@@ -880,6 +897,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				24BB06F51A387B2100D0ACF3 /* implicitsurface.h in Sources */,
+				24BB06F71A387B2800D0ACF3 /* marchingcubes.cpp in Sources */,
+				24BB06FD1A387B3100D0ACF3 /* metaballsurface.h in Sources */,
+				24BB06F91A387B2B00D0ACF3 /* marchingcubes.h in Sources */,
+				24BB06FB1A387B2D00D0ACF3 /* metaballsurface.cpp in Sources */,
 				B1D8EB5A117030DE00A8A49E /* bvh.cpp in Sources */,
 				B1D8EB5B117030DE00A8A49E /* grid.cpp in Sources */,
 				B1D8EB5C117030DE00A8A49E /* kdtreeaccel.cpp in Sources */,
@@ -1018,12 +1040,31 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = PBRT_PROBES_NONE;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					PBRT_PROBES_NONE,
+					PBRT_HAS_OPENEXR,
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(DERIVED_FILES_DIR)/Yacc",
 					.,
+					/usr/local/include/OpenEXR,
+					/opt/local/include/OpenEXR,
+					/usr/include/OpenEXR,
 				);
 				INSTALL_PATH = /usr/local/bin;
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/lib,
+					/opt/local/lib,
+				);
+				OTHER_LDFLAGS = (
+					"-lIex",
+					"-lIlmImf",
+					"-lIlmThread",
+					"-lImath",
+					"-lIex",
+					"-lHalf",
+					"-lz",
+				);
 				PRODUCT_NAME = pbrt;
 				SDKROOT = macosx;
 			};
@@ -1035,12 +1076,31 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
-				GCC_PREPROCESSOR_DEFINITIONS = PBRT_PROBES_NONE;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					PBRT_PROBES_NONE,
+					PBRT_HAS_OPENEXR,
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(DERIVED_FILES_DIR)/Yacc",
 					.,
+					/usr/local/include/OpenEXR,
+					/opt/local/include/OpenEXR,
+					/usr/include/OpenEXR,
 				);
 				INSTALL_PATH = /usr/local/bin;
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/lib,
+					/opt/local/lib,
+				);
+				OTHER_LDFLAGS = (
+					"-lIex",
+					"-lIlmImf",
+					"-lIlmThread",
+					"-lImath",
+					"-lIex",
+					"-lHalf",
+					"-lz",
+				);
 				PRODUCT_NAME = pbrt;
 				SDKROOT = macosx;
 			};
@@ -1107,12 +1167,31 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
-				GCC_PREPROCESSOR_DEFINITIONS = PBRT_PROBES_NONE;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					PBRT_PROBES_NONE,
+					PBRT_HAS_OPENEXR,
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(DERIVED_FILES_DIR)/Yacc",
 					.,
+					/usr/local/include/OpenEXR,
+					/opt/local/include/OpenEXR,
+					/usr/include/OpenEXR,
 				);
 				INSTALL_PATH = /usr/local/bin;
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/lib,
+					/opt/local/lib,
+				);
+				OTHER_LDFLAGS = (
+					"-lIex",
+					"-lIlmImf",
+					"-lIlmThread",
+					"-lImath",
+					"-lIex",
+					"-lHalf",
+					"-lz",
+				);
 				PRODUCT_NAME = pbrt;
 				SDKROOT = macosx;
 			};
