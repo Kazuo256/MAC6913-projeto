@@ -6,6 +6,7 @@
 #include "project/marchingcubes.h"
 #include "project/implicitsurface.h"
 #include "shapes/trianglemesh.h"
+#include "progressreporter.h"
 
 #include <algorithm>
 #include <iostream>
@@ -331,6 +332,24 @@ MAKECASE_NOPARAMS(Case8Z) {
     inds.push_back(helper.GetZIndex(i, j, k));
 }
 
+MAKECASE_2PARAMS(Case9, bool, di, dj) {
+    log("Case 9\n");
+    // Upper part
+    inds.push_back(helper.GetXIndex(i + int(di), j, k + 1));
+    inds.push_back(helper.GetYIndex(i, j + int(dj), k + 1));
+    inds.push_back(helper.GetZIndex(i + int(!di), j + int(dj), k));
+    inds.push_back(helper.GetZIndex(i + int(!di), j + int(dj), k));
+    inds.push_back(helper.GetZIndex(i + int(di), j + int(!dj), k));
+    inds.push_back(helper.GetXIndex(i + int(di), j, k + 1));
+    // Lower part
+    inds.push_back(helper.GetXIndex(i + int(!di), j, k));
+    inds.push_back(helper.GetYIndex(i, j + int(!dj), k));
+    inds.push_back(helper.GetZIndex(i + int(di), j + int(!dj), k));
+    inds.push_back(helper.GetZIndex(i + int(di), j + int(!dj), k));
+    inds.push_back(helper.GetZIndex(i + int(!di), j + int(dj), k));
+    inds.push_back(helper.GetXIndex(i + int(!di), j, k));
+}
+
 class Cases {
   public:
     ~Cases() {
@@ -366,6 +385,7 @@ class Cases {
         cases[20]   = new Case3(2, false, true, false);   // 4+16
         cases[21]   = new Case5Z(false, false, false);    // 16+1+4
         cases[22]   = new Case7(false, false, false);     // 2+4+16
+        cases[23]   = new Case9(false, false);            // 1+2+4+16
         cases[24]   = new Case4(false, true, true);       // 8+16
         cases[32]   = new Case1(true, false, true);
         cases[33]   = new Case3(1, false, false, false);  // 1+32
@@ -387,6 +407,7 @@ class Cases {
         cases[72]   = new Case3(1, false, true, true);    // 8+64
         cases[73]   = new Case7(true, false, false);      // 1+8+64
         cases[76]   = new Case5X(false, true, false);     // 8+4+64
+        cases[77]   = new Case9(false, true);             // 4+1+8+64
         cases[80]   = new Case2X(true, false);            // 16+64
         cases[81]   = new Case5Z(true, false, false);     // 64+16+1
         cases[84]   = new Case5Z(true, true, false);      // 4+64+16
@@ -395,6 +416,7 @@ class Cases {
         cases[97]   = new Case7(false, true, false);      // 1+32+64
         cases[104]  = new Case7(true, true, true);        // 8+32+64
         cases[112]  = new Case5Y(true, false, false);     // 32+16+64
+        cases[113]  = new Case9(true, false);             // 16+1+32+64
         cases[128]  = new Case1(true, true, true);
         cases[129]  = new Case4(false, false, false);     // 1+128
         cases[130]  = new Case3(2, false, false, true);   // 2+128
@@ -414,6 +436,7 @@ class Cases {
         cases[196]  = new Case5X(true, true, false);      // 4+64+128
         cases[200]  = new Case5X(true, true, true);       // 64+128+8
         cases[208]  = new Case5Y(true, true, false);      // 16+64+128
+        cases[212]  = new Case9(true, true);              // 64+4+16+128
         cases[224]  = new Case5Y(true, true, true);       // 64+128+32
         cases[255]  = NULL;
         // Special complementary cases
@@ -471,6 +494,7 @@ TriangleMesh *ImplicitSurfaceToMesh(const Transform *o2w, const Transform *w2o,
     }
     cases.Init();
     vector<int> inds;
+    //ProgressReporter reporter((width-1)*(height-1)*(depth-1), "Marching cubes");
     for (int k = 0; k < depth-1; ++k)
         for (int i = 0; i < height-1; ++i)
             for (int j = 0; j < width-1; ++j) {
@@ -482,7 +506,9 @@ TriangleMesh *ImplicitSurfaceToMesh(const Transform *o2w, const Transform *w2o,
                     log("(%.2f, %.2f, %.2f): ", p.x, p.y, p.z);
                     which->Generate(inds, helper, i, j, k);
                 }
+                //reporter.Update();
             }
+    //reporter.Done();
     std::cout << "TRIANGLES: " << inds.size()/3 << std::endl;
     int *vi = new int[inds.size()];
     std::copy(inds.begin(), inds.end(), vi);
