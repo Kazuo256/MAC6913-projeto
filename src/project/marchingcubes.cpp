@@ -29,6 +29,7 @@ class VoxelHelper {
     int GetZIndex(int i, int j, int k) const;
     int GetYIndex(int i, int j, int k) const;
     int GetXIndex(int i, int j, int k) const;
+    int GetIndex(int t, int a, int b, int c) const;
     int CheckCase(const vector<bool> &inside, int i, int j, int k) const;
   private:
     int width, height, depth;
@@ -56,6 +57,20 @@ int VoxelHelper::GetYIndex(int i, int j, int k) const {
 
 int VoxelHelper::GetXIndex(int i, int j, int k) const {
     return GetYIndex(height-2, width-1, depth-1) + j*height*depth + i*depth + k;
+}
+
+int VoxelHelper::GetIndex(int t, int a, int b, int c) const {
+    switch(t) {
+      case 0:
+        return GetYIndex(a, b, c);
+      case 1:
+        return GetXIndex(b, a, c);
+      case 2:
+        return GetXIndex(b, c, a);
+      default:
+        Error("Bad index!\n");
+        return -1;
+    }
 }
 
 int VoxelHelper::CheckCase(const vector<bool> &inside, int i, int j, int k) const {
@@ -152,6 +167,76 @@ class Case3 : public VoxelCase {
         bool b[3] = { !di, !dj, !dk };
         b[trans] = !b[trans];
         Case1(b[0], b[1], b[2]).Generate(inds, helper, i, j, k);
+    }
+  private:
+    int trans;
+    bool di, dj, dk;
+};
+
+class Case3e : public VoxelCase {
+  public:
+    Case3e(int t, bool i, bool j, bool k) : trans(t), di(i), dj(j), dk(k) {}
+    void Generate(vector<int> &inds, const VoxelHelper &helper, int i, int j, int k) {
+        log("Case 3e\n");
+        bool b[3] = { !di, !dj, !dk };
+        b[trans] = !b[trans];
+        int t = trans;
+        // There must be a better way to do this
+        if (t == 0) {
+            // 2 -> 0
+            inds.push_back(helper.GetZIndex(i + int(di), j + int(dj), k));
+            inds.push_back(helper.GetYIndex(i, j + int(dj), k + int(dk)));
+            inds.push_back(helper.GetYIndex(i, j + int(b[1]), k + int(b[2])));
+            // 0 -> 1 -> 2
+            inds.push_back(helper.GetYIndex(i, j + int(b[1]), k + int(b[2])));
+            inds.push_back(helper.GetXIndex(i + int(b[0]), j, k + int(b[2])));
+            inds.push_back(helper.GetZIndex(i + int(di), j + int(dj), k));
+            // other side
+            // 1 -> 0
+            inds.push_back(helper.GetXIndex(i + int(di), j, k + int(dk)));
+            inds.push_back(helper.GetYIndex(i, j + int(dj), k + int(dk)));
+            inds.push_back(helper.GetYIndex(i, j + int(b[1]), k + int(b[2])));
+            // 0 -> 2 -> 1
+            inds.push_back(helper.GetYIndex(i, j + int(b[1]), k + int(b[2])));
+            inds.push_back(helper.GetZIndex(i + int(b[0]), j + int(b[1]), k));
+            inds.push_back(helper.GetXIndex(i + int(di), j, k + int(dk)));
+        } else if (t == 1) {
+            // 0 -> 1
+            inds.push_back(helper.GetYIndex(i, j + int(dj), k + int(dk)));
+            inds.push_back(helper.GetXIndex(i + int(di), j, k + int(dk)));
+            inds.push_back(helper.GetXIndex(i + int(b[0]), j, k + int(b[2])));
+            // 1 -> 2 -> 0
+            inds.push_back(helper.GetXIndex(i + int(b[0]), j, k + int(b[2])));
+            inds.push_back(helper.GetZIndex(i + int(b[0]), j + int(b[1]), k));
+            inds.push_back(helper.GetYIndex(i, j + int(dj), k + int(dk)));
+            // other side
+            // 2 -> 1
+            inds.push_back(helper.GetZIndex(i + int(di), j + int(dj), k));
+            inds.push_back(helper.GetXIndex(i + int(di), j, k + int(dk)));
+            inds.push_back(helper.GetXIndex(i + int(b[0]), j, k + int(b[2])));
+            // 1 -> 0 -> 2
+            inds.push_back(helper.GetXIndex(i + int(b[0]), j, k + int(b[2])));
+            inds.push_back(helper.GetXIndex(i + int(b[0]), j, k + int(b[2])));
+            inds.push_back(helper.GetZIndex(i + int(di), j + int(dj), k));
+        } else if (t == 2) {
+            // 0 -> 2
+            inds.push_back(helper.GetYIndex(i, j + int(dj), k + int(dk)));
+            inds.push_back(helper.GetZIndex(i + int(di), j + int(dj), k));
+            inds.push_back(helper.GetZIndex(i + int(b[0]), j + int(b[1]), k));
+            // 2 -> 1 -> 0
+            inds.push_back(helper.GetZIndex(i + int(b[0]), j + int(b[1]), k));
+            inds.push_back(helper.GetXIndex(i + int(b[0]), j, k + int(b[2])));
+            inds.push_back(helper.GetYIndex(i, j + int(dj), k + int(dk)));
+            // other side
+            // 1 -> 2
+            inds.push_back(helper.GetXIndex(i + int(di), j, k + int(dk)));
+            inds.push_back(helper.GetZIndex(i + int(di), j + int(dj), k));
+            inds.push_back(helper.GetZIndex(i + int(b[0]), j + int(b[1]), k));
+            // 2 -> 0 -> 1
+            inds.push_back(helper.GetZIndex(i + int(b[0]), j + int(b[1]), k));
+            inds.push_back(helper.GetYIndex(i, j + int(b[1]), k + int(b[2])));
+            inds.push_back(helper.GetXIndex(i + int(di), j, k + int(dk)));
+        } else Warning("Bad case 3e\n");
     }
   private:
     int trans;
@@ -331,6 +416,19 @@ class Cases {
         cases[208]  = new Case5Y(true, true, false);      // 16+64+128
         cases[224]  = new Case5Y(true, true, true);       // 64+128+32
         cases[255]  = NULL;
+        // Special complementary cases
+        cases[255-6]    = new Case3e(0, false, false, true);
+        cases[255-9]    = new Case3e(0, false, false, false);
+        cases[255-18]   = new Case3e(1, false, false, true);
+        cases[255-20]   = new Case3e(2, false, true, false);
+        cases[255-33]   = new Case3e(1, false, false, false);
+        cases[255-40]   = new Case3e(2, false, true, true);
+        cases[255-65]   = new Case3e(2, false, false, false);
+        cases[255-72]   = new Case3e(1, false, true, true);
+        cases[255-96]   = new Case3e(0, true, false, true);
+        cases[255-130]  = new Case3e(2, false, false, true);
+        cases[255-132]  = new Case3e(1, false, true, false);
+        cases[255-144]  = new Case3e(0, true, false, false);
     }
     VoxelCase *operator[](int mask) const {
         return cases[mask];
