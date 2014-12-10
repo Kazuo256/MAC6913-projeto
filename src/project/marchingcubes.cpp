@@ -181,6 +181,7 @@ class Case3e : public VoxelCase {
         bool b[3] = { !di, !dj, !dk };
         b[trans] = !b[trans];
         int t = trans;
+        // There must be a better way to do this
         if (t == 0) {
             // 2 -> 0
             inds.push_back(helper.GetZIndex(i + int(di), j + int(dj), k));
