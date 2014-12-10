@@ -84,6 +84,16 @@ class VoxelCase {
   }; \
   void name::Generate(vector<int> &inds, const VoxelHelper &helper, int i, int j, int k)
 
+#define MAKECASE_1PARAM(name, type, param) \
+  class name : public VoxelCase { \
+    public: \
+      name(type p) : param(p) {} \
+      void Generate(vector<int> &inds, const VoxelHelper &helper, int i, int j, int k); \
+    private: \
+      type param; \
+  }; \
+  void name::Generate(vector<int> &inds, const VoxelHelper &helper, int i, int j, int k)
+    
 #define MAKECASE_2PARAMS(name, type, param1, param2) \
   class name : public VoxelCase { \
     public: \
@@ -245,7 +255,26 @@ MAKECASE_NOPARAMS(Case8Z) {
     inds.push_back(helper.GetZIndex(i + 1, j, k));
     inds.push_back(helper.GetZIndex(i, j, k));
 }
+    
+MAKECASE_1PARAM(Case10X, bool, di) {
+    log("Case 10X\n");
+    Case2X( di, false).Generate(inds, helper, i, j, k);
+    Case2X(!di, true ).Generate(inds, helper, i, j, k);
+}
 
+MAKECASE_1PARAM(Case10Y, bool, dj) {
+    log("Case 10Y\n");
+    Case2Y( dj, false).Generate(inds, helper, i, j, k);
+    Case2Y(!dj, true ).Generate(inds, helper, i, j, k);
+}
+
+MAKECASE_1PARAM(Case10Z, bool, di) {
+    log("Case 10Z\n");
+    Case2Z( di, false).Generate(inds, helper, i, j, k);
+    Case2Z(!di, true ).Generate(inds, helper, i, j, k);
+}
+    
+    
 class Cases {
   public:
     ~Cases() {
@@ -294,6 +323,7 @@ class Cases {
         cases[49]   = new Case5X(true, false, false);     // 1+16+32
         cases[50]   = new Case5X(true, false, true);      // 16+32+2
         cases[51]   = new Case8X;                         // 1+2+16+32
+        cases[60]   = new Case10Z(false);                 // 4+8+16+32
         cases[64]   = new Case1(true, true, false);
         cases[65]   = new Case3(2, false, false, false);  // 1+64
         cases[66]   = new Case4(false, false, true);      // 2+64
@@ -306,8 +336,10 @@ class Cases {
         cases[81]   = new Case5Z(true, false, false);     // 64+16+1
         cases[84]   = new Case5Z(true, true, false);      // 4+64+16
         cases[85]   = new Case8Z;                         // 1+4+16+64
+        cases[90]   = new Case10X(false);                 // 2+8+16+64
         cases[96]   = new Case3(0, true, false, true);    // 32+64
         cases[97]   = new Case7(false, true, false);      // 1+32+64
+        cases[102]  = new Case10Y(false);                 // 2+4+32+64
         cases[104]  = new Case7(true, true, true);        // 8+32+64
         cases[112]  = new Case5Y(true, false, false);     // 32+16+64
         cases[128]  = new Case1(true, true, true);
@@ -321,11 +353,14 @@ class Cases {
         cases[144]  = new Case3(0, true, false, false);   // 16+128
         cases[146]  = new Case7(false, true, true);       // 2+16+128
         cases[148]  = new Case7(true, true, false);       // 4+16+128
+        cases[153]  = new Case10Y(true);                  // 1+16+8+128
         cases[160]  = new Case2X(true, true);             // 32+128
         cases[162]  = new Case5Z(true, false, true);      // 128+32+2
+        cases[165]  = new Case10X(true);                  // 1+4+32+128
         cases[168]  = new Case5Z(true, true, true);       // 8+128+32
         cases[176]  = new Case5Y(true, false, true);      // 128+32+16
         cases[192]  = new Case2Z(true, true);             // 64+128
+        cases[195]  = new Case10Z(false);                 // 1+2+64+128
         cases[196]  = new Case5X(true, true, false);      // 4+64+128
         cases[200]  = new Case5X(true, true, true);       // 64+128+8
         cases[208]  = new Case5Y(true, true, false);      // 16+64+128
