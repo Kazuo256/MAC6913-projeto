@@ -82,6 +82,9 @@ class Case1 : public VoxelCase {
   public:
     Case1(bool i, bool j, bool k) : di(i), dj(j), dk(k) {}
     void Generate(vector<int> &inds, const VoxelHelper &helper, int i, int j, int k) {
+#ifndef NDEBUG
+        std::cout << "Case 1" << std::endl;
+#endif
         inds.push_back(helper.GetZIndex(i + int(di), j + int(dj), k));
         inds.push_back(helper.GetYIndex(i, j + int(dj), k + int(dk)));
         inds.push_back(helper.GetXIndex(i + int(di), j, k + int(dk)));
@@ -94,6 +97,9 @@ class Case2X : public VoxelCase {
   public:
     Case2X(bool i, bool k) : di(i), dk(k) {}
     void Generate(vector<int> &inds, const VoxelHelper &helper, int i, int j, int k) {
+#ifndef NDEBUG
+        std::cout << "Case 2X" << std::endl;
+#endif
         inds.push_back(helper.GetYIndex(i, j, k + int(dk)));
         inds.push_back(helper.GetZIndex(i + int(di), j, k));
         inds.push_back(helper.GetZIndex(i + int(di), j + 1, k));
@@ -109,6 +115,9 @@ class Case2Y : public VoxelCase {
   public:
     Case2Y(bool j, bool k) : dj(j), dk(k) {}
     void Generate(vector<int> &inds, const VoxelHelper &helper, int i, int j, int k) {
+#ifndef NDEBUG
+        std::cout << "Case 2Y" << std::endl;
+#endif
         inds.push_back(helper.GetXIndex(i, j, k + int(dk)));
         inds.push_back(helper.GetZIndex(i, j + int(dj), k));
         inds.push_back(helper.GetZIndex(i + 1, j + int(dj), k));
@@ -124,6 +133,9 @@ class Case2Z : public VoxelCase {
   public:
     Case2Z(bool i, bool j) : di(i), dj(j) {}
     void Generate(vector<int> &inds, const VoxelHelper &helper, int i, int j, int k) {
+#ifndef NDEBUG
+        std::cout << "Case 2Z" << std::endl;
+#endif
         inds.push_back(helper.GetXIndex(i + int(di), j, k));
         inds.push_back(helper.GetYIndex(i, j + int(dj), k));
         inds.push_back(helper.GetYIndex(i, j + int(dj), k + 1));
@@ -139,6 +151,9 @@ class Case3 : public VoxelCase {
   public:
     Case3(int t, bool i, bool j, bool k) : trans(t), di(i), dj(j), dk(k) {}
     void Generate(vector<int> &inds, const VoxelHelper &helper, int i, int j, int k) {
+#ifndef NDEBUG
+        std::cout << "Case 3" << std::endl;
+#endif
         Case1(di, dj, dk).Generate(inds, helper, i, j, k);
         bool b[3] = { !di, !dj, !dk };
         b[trans] = !b[trans];
@@ -153,6 +168,9 @@ class Case4 : public VoxelCase {
   public:
     Case4(bool i, bool j, bool k) : di(i), dj(j), dk(k) {}
     void Generate(vector<int> &inds, const VoxelHelper &helper, int i, int j, int k) {
+#ifndef NDEBUG
+        std::cout << "Case 4" << std::endl;
+#endif
         Case1(di, dj, dk).Generate(inds, helper, i, j, k);
         Case1(!di, !dj, !dk).Generate(inds, helper, i, j, k);
     }
@@ -164,15 +182,18 @@ class Case5X : public VoxelCase {
   public:
     Case5X(bool i, bool j, bool k) : di(i), dj(j), dk(k) {}
     void Generate(vector<int> &inds, const VoxelHelper &helper, int i, int j, int k) {
+#ifndef NDEBUG
+        std::cout << "Case 5X" << std::endl;
+#endif
         // Middle triangle
         inds.push_back(helper.GetXIndex(i + int(di), j, k + int(dk)));
         inds.push_back(helper.GetXIndex(i + int(di), j, k + int(!dk)));
         inds.push_back(helper.GetXIndex(i + int(!di), j, k + int(dk)));
         // Ramp
         inds.push_back(helper.GetXIndex(i + int(di), j, k + int(!dk)));
-        inds.push_back(helper.GetYIndex(i, j + int(dj), k + int(dk)));
-        inds.push_back(helper.GetZIndex(i + int(di), j + int(dj), k));
-        inds.push_back(helper.GetZIndex(i + int(di), j + int(dj), k));
+        inds.push_back(helper.GetYIndex(i, j + int(dj), k + int(!dk)));
+        inds.push_back(helper.GetZIndex(i + int(!di), j + int(dj), k));
+        inds.push_back(helper.GetZIndex(i + int(!di), j + int(dj), k));
         inds.push_back(helper.GetXIndex(i + int(!di), j, k + int(dk)));
         inds.push_back(helper.GetXIndex(i + int(di), j, k + int(!dk)));
     }
@@ -184,15 +205,18 @@ class Case5Y : public VoxelCase {
   public:
     Case5Y(bool i, bool j, bool k) : di(i), dj(j), dk(k) {}
     void Generate(vector<int> &inds, const VoxelHelper &helper, int i, int j, int k) {
+#ifndef NDEBUG
+        std::cout << "Case 5Y" << std::endl;
+#endif
         // Middle triangle
         inds.push_back(helper.GetYIndex(i, j + int(dj), k + int(dk)));
         inds.push_back(helper.GetYIndex(i, j + int(!dj), k + int(dk)));
         inds.push_back(helper.GetYIndex(i, j + int(dj), k + int(!dk)));
         // Ramp
         inds.push_back(helper.GetYIndex(i, j + int(!dj), k + int(dk)));
-        inds.push_back(helper.GetZIndex(i + int(di), j + int(dj), k));
-        inds.push_back(helper.GetXIndex(i + int(di), j, k + int(dk)));
-        inds.push_back(helper.GetXIndex(i + int(di), j, k + int(dk)));
+        inds.push_back(helper.GetZIndex(i + int(di), j + int(!dj), k));
+        inds.push_back(helper.GetXIndex(i + int(di), j, k + int(!dk)));
+        inds.push_back(helper.GetXIndex(i + int(di), j, k + int(!dk)));
         inds.push_back(helper.GetYIndex(i, j + int(dj), k + int(!dk)));
         inds.push_back(helper.GetYIndex(i, j + int(!dj), k + int(dk)));
     }
@@ -204,15 +228,18 @@ class Case5Z : public VoxelCase {
   public:
     Case5Z(bool i, bool j, bool k) : di(i), dj(j), dk(k) {}
     void Generate(vector<int> &inds, const VoxelHelper &helper, int i, int j, int k) {
+#ifndef NDEBUG
+        std::cout << "Case 5Z" << std::endl;
+#endif
         // Middle triangle
         inds.push_back(helper.GetZIndex(i + int(di), j + int(dj), k));
         inds.push_back(helper.GetZIndex(i + int(di), j + int(!dj), k));
         inds.push_back(helper.GetZIndex(i + int(!di), j + int(dj), k));
         // Ramp
         inds.push_back(helper.GetZIndex(i + int(di), j + int(!dj), k));
-        inds.push_back(helper.GetXIndex(i + int(di), j, k + int(dk)));
-        inds.push_back(helper.GetYIndex(i, j + int(dj), k + int(dk)));
-        inds.push_back(helper.GetYIndex(i, j + int(dj), k + int(dk)));
+        inds.push_back(helper.GetYIndex(i, j + int(!dj), k + int(dk)));
+        inds.push_back(helper.GetXIndex(i + int(!di), j, k + int(dk)));
+        inds.push_back(helper.GetXIndex(i + int(!di), j, k + int(dk)));
         inds.push_back(helper.GetZIndex(i + int(!di), j + int(dj), k));
         inds.push_back(helper.GetZIndex(i + int(di), j + int(!dj), k));
     }
@@ -237,18 +264,18 @@ class Cases {
         cases[2]    = new Case1(false, false, true);
         cases[3]    = new Case2Z(false, false);           // 1+2
         cases[4]    = new Case1(false, true, false);
-        cases[5]    = new Case2Y(false, false);           // 1+4
+        cases[5]    = new Case2X(false, false);           // 1+4
         cases[6]    = new Case3(0, false, false, true);   // 2+4
         cases[7]    = new Case5Y(false, false, false);    // 2+1+4
         cases[8]    = new Case1(false, true, true);
         cases[9]    = new Case3(0, false, false, false);  // 1+8
-        cases[10]   = new Case2Y(false, true);            // 2+8
+        cases[10]   = new Case2X(false, true);            // 2+8
         cases[11]   = new Case5Y(false, false, true);     // 8+2+1
         cases[12]   = new Case2Z(false, true);            // 4+8
         cases[13]   = new Case5Y(false, true, false);     // 1+4+8
         cases[14]   = new Case5Y(false, true, true);      // 4+8+2
         cases[16]   = new Case1(true, false, false);
-        cases[17]   = new Case2X(false, false);           // 1+16
+        cases[17]   = new Case2Y(false, false);           // 1+16
         cases[18]   = new Case3(1, false, false, true);   // 2+16
         cases[19]   = new Case5X(false, false, false);    // 2+1+16
         cases[20]   = new Case3(2, false, true, false);   // 4+16
@@ -256,7 +283,7 @@ class Cases {
         cases[24]   = new Case4(false, true, true);       // 8+16
         cases[32]   = new Case1(true, false, true);
         cases[33]   = new Case3(1, false, false, false);  // 1+32
-        cases[34]   = new Case2X(false, true);            // 2+32
+        cases[34]   = new Case2Y(false, true);            // 2+32
         cases[35]   = new Case5X(false, false, true);     // 32+2+1
         cases[36]   = new Case4(false, true, false);      // 4+32
         cases[40]   = new Case3(2, false, true, true);    // 8+32
@@ -268,11 +295,11 @@ class Cases {
         cases[64]   = new Case1(true, true, false);
         cases[65]   = new Case3(2, false, false, false);  // 1+64
         cases[66]   = new Case4(false, false, true);      // 2+64
-        cases[68]   = new Case2X(true, false);            // 4+64
+        cases[68]   = new Case2Y(true, false);            // 4+64
         cases[69]   = new Case5Z(false, true, false);     // 1+4+64
         cases[72]   = new Case3(1, false, true, true);    // 8+64
         cases[76]   = new Case5X(false, true, false);     // 8+4+64
-        cases[80]   = new Case2Y(true, false);            // 16+64
+        cases[80]   = new Case2X(true, false);            // 16+64
         cases[81]   = new Case5Z(true, false, false);     // 64+16+1
         cases[84]   = new Case5Z(true, true, false);      // 4+64+16
         //cases[95]   = new Case2Y(true, true);             // 255-160
@@ -288,12 +315,12 @@ class Cases {
         cases[129]  = new Case4(false, false, false);     // 1+128
         cases[130]  = new Case3(2, false, false, true);   // 2+128
         cases[132]  = new Case3(1, false, true, false);   // 4+128
-        cases[136]  = new Case2X(true, true);             // 8+128
+        cases[136]  = new Case2Y(true, true);             // 8+128
         cases[138]  = new Case5Z(false, true, true);      // 2+8+128
         cases[140]  = new Case5X(false, true, true);      // 128+8+4
         cases[144]  = new Case3(0, true, false, false);   // 16+128
         //cases[159]  = new Case3(0, true, false, true);    // 255-96
-        cases[160]  = new Case2Y(true, true);             // 32+128
+        cases[160]  = new Case2X(true, true);             // 32+128
         cases[162]  = new Case5Z(true, false, true);      // 128+32+2
         cases[168]  = new Case5Z(true, true, true);       // 8+128+32
         //cases[175]  = new Case2Y(true, false);            // 255-80
@@ -368,7 +395,7 @@ TriangleMesh *ImplicitSurfaceToMesh(const Transform *o2w, const Transform *w2o,
                     P[ind] = o + step*(Vector(j, i, k) + Vector(j+1, i, k))/2.f;
                 }
                 int ind = helper.GetVertIndex(i, j, k);
-                inside[ind] = surface->Inside(P[ind]);
+                inside[ind] = surface->Inside(o + step*Vector(j, i, k));
     }
     cases.Init();
     vector<int> inds;
@@ -377,7 +404,14 @@ TriangleMesh *ImplicitSurfaceToMesh(const Transform *o2w, const Transform *w2o,
             for (int j = 0; j < width-1; ++j) {
                 int c = helper.CheckCase(inside, i, j, k);
                 VoxelCase *which = cases[c] ? cases[c] : cases[255-c];
-                if (which) which->Generate(inds, helper, i, j, k);
+                if (which) {
+#ifndef NDEBUG
+                    printf("Check %d (%d, %d, %d)/", c, i, j, k);
+                    Point p = o + step*Vector(j, i, k);
+                    printf("(%.2f, %.2f, %.2f): ", p.x, p.y, p.z);
+#endif
+                    which->Generate(inds, helper, i, j, k);
+                }
             }
     std::cout << "TRIANGLES: " << inds.size()/3 << std::endl;
     int *vi = new int[inds.size()];
