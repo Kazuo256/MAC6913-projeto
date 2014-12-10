@@ -14,6 +14,7 @@ class MetaballSurface : public ImplicitSurface {
     MetaballSurface(int nb, const Point *P, const float *R, const float *B);
     virtual ~MetaballSurface() {}
     bool Inside(const Point& p) const;
+    float Distance(const Point& p) const;
   private:
     int nbumps;
     Point *points;

@@ -30,6 +30,19 @@ bool MetaballSurface::Inside(const Point &p) const {
     return d > 1;
 }
 
+float MetaballSurface::Distance(const Point &p) const {
+    float d = 0;
+    for (int i = 0; i < nbumps; ++i) {
+        Vector v = points[i] - p;
+        float r2 = v.x*v.x + v.y*v.y + v.z*v.z;
+        float B = -blobbiness[i];
+        float R = radius[i];
+        float x = B/(R*R)*r2 - B;
+        d += exp(x);
+    }
+    return fabsf(d - 1);
+}
+
 MetaballSurface* CreateMetaballSurface(const ParamSet &params) {
     int nbumps, nradius, nblobs;
     const Point *P = params.FindPoint("P", &nbumps); 
