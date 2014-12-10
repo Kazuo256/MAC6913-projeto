@@ -47,13 +47,17 @@ AttributeEnd
 
 AttributeBegin
   Translate 0 0 -10
+  #Material "glass"
+  #  "color Kr" [.2 .6 .4]
+  #  "color Kt" [.2 .6 .4]
   Material "matte"
     "color Kd" [.2 .6 .4]
   Shape "metaballsurface"
     "point P" [-1.5 1.5 .0  1.5 -1.5 .0]
     "float R" [2.0 2.0]
     "float B" [2.0 2.0]
-    "float step" [.5]
+    "float step" [.05]
+    "vector space" [8.0 8.0 8.0]
   #Shape "trianglemesh"
   #  "point P" [ -.5 -.5 -.5  .5 -.5 -.5  .5 .5 -.5  -.5 .5 -.5
   #              -.5 -.5 .5  .5 -.5 .5  .5 .5 .5  -.5 .5 .5 ]

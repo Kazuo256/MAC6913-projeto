@@ -474,28 +474,36 @@ TriangleMesh *ImplicitSurfaceToMesh(const Transform *o2w, const Transform *w2o,
     Point *P = new Point[helper.GetNEdges()];
     vector<bool> inside(helper.GetNVerts(), false);
     Point o = Point(0,0,0) - space/2;
-    for (int k = 0; k < depth; ++k)
+    ProgressReporter reporter(2*depth-1, "Marching cubes");
+    for (int k = 0; k < depth; ++k, reporter.Update())
         for (int i = 0; i < height; ++i)
             for (int j = 0; j < width; ++j) {
+                Point p = o + step*Vector(j, i, k);
+                float dist = surface->Distance(p);
                 if (k+1 < depth) {
                     int ind = helper.GetZIndex(i, j, k);
-                    P[ind] = o + step*(Vector(j, i, k) + Vector(j, i, k+1))/2.f;
+                    Point q = p + step*Vector(0.f, 0.f, 1.f);
+                    float l = dist/(dist + surface->Distance(q));
+                    P[ind] = (1.f - l)*p + l*q;
                 }
                 if (i+1 < height) {
                     int ind = helper.GetYIndex(i, j, k);
-                    P[ind] = o + step*(Vector(j, i, k) + Vector(j, i+1, k))/2.f;
+                    Point q = p + step*Vector(0.f, 1.f, 0.f);
+                    float l = dist/(dist + surface->Distance(q));
+                    P[ind] = (1.f - l)*p + l*q;
                 }
                 if (j+1 < width) {
                     int ind = helper.GetXIndex(i, j, k);
-                    P[ind] = o + step*(Vector(j, i, k) + Vector(j+1, i, k))/2.f;
+                    Point q = p + step*Vector(1.f, 0.f, 0.f);
+                    float l = dist/(dist + surface->Distance(q));
+                    P[ind] = (1.f - l)*p + l*q;
                 }
                 int ind = helper.GetVertIndex(i, j, k);
                 inside[ind] = surface->Inside(o + step*Vector(j, i, k));
     }
     cases.Init();
     vector<int> inds;
-    //ProgressReporter reporter((width-1)*(height-1)*(depth-1), "Marching cubes");
-    for (int k = 0; k < depth-1; ++k)
+    for (int k = 0; k < depth-1; ++k, reporter.Update())
         for (int i = 0; i < height-1; ++i)
             for (int j = 0; j < width-1; ++j) {
                 int c = helper.CheckCase(inside, i, j, k);
@@ -506,9 +514,8 @@ TriangleMesh *ImplicitSurfaceToMesh(const Transform *o2w, const Transform *w2o,
                     log("(%.2f, %.2f, %.2f): ", p.x, p.y, p.z);
                     which->Generate(inds, helper, i, j, k);
                 }
-                //reporter.Update();
             }
-    //reporter.Done();
+    reporter.Done();
     std::cout << "TRIANGLES: " << inds.size()/3 << std::endl;
     int *vi = new int[inds.size()];
     std::copy(inds.begin(), inds.end(), vi);
