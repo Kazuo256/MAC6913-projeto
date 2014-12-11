@@ -382,7 +382,7 @@ MAKECASE_1PARAM(Case10Z, bool, di) {
 class Cases {
   public:
     ~Cases() {
-        for (int i = 0; i < 256; ++i)
+        for (int i = 0; i < cases.size(); ++i)
             if (cases[i])
                 delete cases[i];
         cases.clear();
