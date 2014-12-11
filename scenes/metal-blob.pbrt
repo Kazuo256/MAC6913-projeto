@@ -1,0 +1,67 @@
+
+LookAt 10 10 -5   0 0 -10   0 0 1
+# Zoom in
+#LookAt 2 2 -2   0 0 -10   0 0 1
+Rotate -5 0 0 1
+Camera "perspective"
+  "float fov" [39]
+Film "image"
+  "integer xresolution" [700]
+  "integer yresolution" [700]
+  "string filename"     "metaball.exr"
+
+# zoom in by feet
+# "integer xresolution" [1500] "integer yresolution" [1500]
+#	"float cropwindow" [ .34 .49  .67 .8 ]
+
+Renderer "metropolis"
+  "integer samplesperpixel" [128]
+
+Sampler "lowdiscrepancy"
+  "integer pixelsamples" [16]
+
+PixelFilter "gaussian"
+
+#SurfaceIntegrator "igi"
+#  "integer nsets" [16]
+#  "integer nlights" [32]
+#  "float glimit" [.1]
+
+WorldBegin
+
+AttributeBegin
+  Material "matte"
+    "color Kd" [0 0 0]
+  Translate 15 0   2
+  Translate 0   12 0
+  AreaLightSource "area"
+    "color L" [20 20 20]
+    "integer nsamples" [8]
+  Shape "sphere"
+    "float radius" [3]
+AttributeEnd
+
+
+AttributeBegin
+  Material "matte" "color Kd" [.5 .5 .8]
+  Translate 0 0 -14
+  Shape "trianglemesh"
+    "point P" [ -100 -100 0 100 -100 0 100 100 0 -100 100 0 ]
+    "float uv" [ 0 0 5 0 5 5 0 5 ]
+	  "integer indices" [ 0 1 2 2 3 0]
+  Shape "trianglemesh"
+    "point P" [ -40 -100 -100   -40 100 -100   -40 100 100 -40 -100 100 ]
+    "float uv" [ 0 0 5 0 5 5 0 5 ]
+    "integer indices" [ 0 1 2 2 3 0]
+AttributeEnd
+
+AttributeBegin
+  Translate 0 0 -10
+  Material "metal"
+    "spectrum eta" "spds/metals/Ag.eta.spd"
+    "spectrum k"   "spds/metals/Ag.k.spd"
+  Include "geometry/metaball-generated-2.pbrt"
+AttributeEnd
+
+WorldEnd
+
