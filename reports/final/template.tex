@@ -213,17 +213,101 @@ x & \ll & y_{1} + \cdots + y_{n} \\
 \section{Analytic intersection}
 
 
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=1.5in]{images/samplefigure}
-  \caption{Sample illustration.}
-\end{figure}
+\subsection{PBRT limitations}
 
 \section{Implmentation}
 
-\subsection{Marching cubes}
+In our project, we implemented both metaball rendering using both Blinn's
+intersection algorithm (which is intersectable) and the marching cubes
+approximation (which generates a triangle mesh, which is not intersectable).
+They were named \texttt{MetaBall} and \texttt{MetaBallSurface} in code,
+respectively, and they use the same parameters:
 
-\subsection{Intersection}
+\begin{itemize}
+  \item \textbf{\texttt{P}}: a list of the bumps center points
+  \item \textbf{\texttt{R}}: a list of the bumps' radiuses
+  \item \textbf{\texttt{B}}: a list of the bumps' blobbiness factors
+\end{itemize}
+
+The intersectable version's implementation provides an intersection algorithm
+using the \textit{regula falsi} numerical method from
+\cite{Blinn:1982:GAS:965145.801290}, but, as described in the last section, does
+not provide the differential geometry informations that PBRT demands. This
+results in a correct detection of the surface, but otherwise invalid shading, as
+seen in Figure \ref{img:regula-falsi}.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=1in]{images/intersection-black.png}
+  \caption{Metaball intersection using \textit{regula falsi}, but no differential geometry.}
+  \label{img:regula-falsi}
+\end{figure}
+
+The non-intersectable version avoids all these problems using the marching cubes
+algorithm, at the cost of memory space, which only approximates the original
+surface, but does it very satisfactorily. A simple result can be seen in Figure
+\ref{img:marching-cubes}.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=1.5in]{images/metaball-good1.png}
+  \caption{Mesh generated from metaball using the \textit{marching cubes} algorithm.}
+  \label{img:marching-cubes}
+\end{figure}
+
+\subsection{Marching cubes implementation}
+
+As seen before, the \textit{marching cubes} algorithm consists of dividing the
+space in imaginary cubes, and then generating triangles in them considering
+which of their vertices are within the surface. This demands two extra
+parameters:
+
+\begin{itemize}
+  \item \texttt{space}: a vector defining the space analyzed by the algorithm
+  \item \texttt{step}: the size of the cubes used in the algorithm
+\end{itemize}
+
+If the space is not big enough, part of the metaball may be cut out. On the
+other hand, if it is too big, there will be too much wasted memory. The smaller
+the step, the more precise the approzimated mesh will be, but also the more
+memory and time the algorithm will consume. The overall time complexity of
+applying our \textit{marching cubes} implementation to a metaball is
+$O(\|\frac{space}{step}\|_\infty^3)$. That is also the memory space complexity.
+
+For code simplicity, we chose not to optimize the vertices calculations. That
+is, we actually generate \textit{all} possible mesh vertices, and them construct
+the index list (which defines the mesh's triangles) using it, practically always
+leaving unused vertices. If the volume grid is $1000 \times 1000 \times 1000$,
+this means that more or less three billion mesh vertices will be created. If
+each vertex uses three floating-point numbers, that is roughly 12GB of memory
+space.
+
+A final note about this part of the implemantation is that we actually did not
+cover all of the original \textit{marching cubes}' cases. Regardless, we still
+achieved very good results for basic metaballs, which means that the remaining
+cases are rare.
+
+\subsection{Intersection implementation}
+
+For the intersection, there are two major diffences comparing to the original
+algorithm proposed by Blinn. The first is that PBRT does not requires
+\texttt{Shape} implementations to find an intersection along a ray, but only
+along a part of it. Thus, we needed to restrict the numerical methods iteration
+to an interval of the ray's parameter.
+
+The second difference is that, instead of using the hybrid method combining
+Newton iterarion with \textit{regula falsi} iteration, we only used the second.
+Blinn's reasoning for joining them is that Newton may diverge, while
+\textit{regula falsi} slowly but surely converges. We tested with simple scenes
+and found out that \textit{regula falsi}'s slowness was not enough to jeopardize
+the render time considerably, thus being accetable for our project.
+
+And that is all our implementation of this method does: find the intersection.
+Since we could not find a global and generic parametrization for metaballs, we
+could not provide PBRT with the proper differential geometry information. Since
+the rendered images correctly show the metaballs' silhouette, it was enough to
+show that Blinn's method implemention for calculating the intersection was
+successful.
 
 \section{Conclusion}
 
@@ -235,6 +319,7 @@ reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
 pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
 culpa qui officia deserunt mollit anim id est laborum.
 
+\subsection{Results}
 \subsection{Future works}
 
 \section*{Acknowledgements}
