@@ -44,13 +44,17 @@ either modeling skills or data extraction from real bodies. This is specially
 difficult for more organic or fluid structures, like creatures, liquids or
 gases. Blinn \shortcite{Blinn:1982:GAS:965145.801290} proposes a way of defining
 geometry through a particular type of isosurface that provides a simple
-way of representing such geometries. These surfaces are also known as
-\textit{metaballs}). In this work we strive for a thourough renderization of
+way of representing such geometries. These surfaces are known as
+\textit{metaballs}. In this work we strive for a thourough renderization of
 these geometries using the highly awarded PBRT
 \shortcite{Pharr:2010:PBR:1854996} render system. There are two methods covered:
 one based on Blinn's original intersection algorithm, and another using the
 marching cubes algorithm \cite{Lorensen:1987:MCH:37402.37422} to generate a mesh
-that approximates the surface.
+that approximates the surface. A few constraints on PBRT's architecture prevents
+us from properly shading the metaballs materials, but nevertheless correctly
+detects ray intersections. The \textit{marching cubes}, on the other hand, work
+perfectly well, even without implementing all of its cases. It comes with a
+rather high memory space cost though.
 
 \end{abstract}
 
