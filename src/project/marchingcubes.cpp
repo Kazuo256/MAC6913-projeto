@@ -382,7 +382,7 @@ MAKECASE_1PARAM(Case10Z, bool, di) {
 class Cases {
   public:
     ~Cases() {
-        for (int i = 0; i < cases.size(); ++i)
+        for (size_t i = 0; i < cases.size(); ++i)
             if (cases[i])
                 delete cases[i];
         cases.clear();
@@ -507,6 +507,7 @@ TriangleMesh *ImplicitSurfaceToMesh(const Transform *o2w, const Transform *w2o,
     int depth = space.z/step;
     VoxelHelper helper(width, height, depth);
     Point *P = new Point[helper.GetNEdges()];
+    Normal *N = new Normal[helper.GetNEdges()];
     vector<bool> inside(helper.GetNVerts(), false);
     Point o = Point(0,0,0) - space/2;
     ProgressReporter reporter(2*depth-1, "Marching cubes");
@@ -520,18 +521,21 @@ TriangleMesh *ImplicitSurfaceToMesh(const Transform *o2w, const Transform *w2o,
                     Point q = p + step*Vector(0.f, 0.f, 1.f);
                     float l = dist/(dist + surface->Distance(q));
                     P[ind] = (1.f - l)*p + l*q;
+                    N[ind] = surface->Gradient(P[ind]);
                 }
                 if (i+1 < height) {
                     int ind = helper.GetYIndex(i, j, k);
                     Point q = p + step*Vector(0.f, 1.f, 0.f);
                     float l = dist/(dist + surface->Distance(q));
                     P[ind] = (1.f - l)*p + l*q;
+                    N[ind] = surface->Gradient(P[ind]);
                 }
                 if (j+1 < width) {
                     int ind = helper.GetXIndex(i, j, k);
                     Point q = p + step*Vector(1.f, 0.f, 0.f);
                     float l = dist/(dist + surface->Distance(q));
                     P[ind] = (1.f - l)*p + l*q;
+                    N[ind] = surface->Gradient(P[ind]);
                 }
                 int ind = helper.GetVertIndex(i, j, k);
                 inside[ind] = surface->Inside(o + step*Vector(j, i, k));
@@ -556,6 +560,7 @@ TriangleMesh *ImplicitSurfaceToMesh(const Transform *o2w, const Transform *w2o,
     std::copy(inds.begin(), inds.end(), vi);
     ParamSet params;
     params.AddPoint("P", P, helper.GetNEdges());
+    params.AddNormal("N", N, helper.GetNEdges());
     params.AddInt("indices", vi, inds.size());
     TriangleMesh *mesh = CreateTriangleMeshShape(o2w, w2o, reverseOrientation,
                                                  params, NULL);
