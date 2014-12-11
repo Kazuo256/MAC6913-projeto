@@ -6,6 +6,7 @@
 #include "project/marchingcubes.h"
 #include "project/implicitsurface.h"
 #include "shapes/trianglemesh.h"
+#include "progressreporter.h"
 
 #include <algorithm>
 #include <iostream>
@@ -29,6 +30,7 @@ class VoxelHelper {
     int GetZIndex(int i, int j, int k) const;
     int GetYIndex(int i, int j, int k) const;
     int GetXIndex(int i, int j, int k) const;
+    int GetIndex(int t, int a, int b, int c) const;
     int CheckCase(const vector<bool> &inside, int i, int j, int k) const;
   private:
     int width, height, depth;
@@ -56,6 +58,20 @@ int VoxelHelper::GetYIndex(int i, int j, int k) const {
 
 int VoxelHelper::GetXIndex(int i, int j, int k) const {
     return GetYIndex(height-2, width-1, depth-1) + j*height*depth + i*depth + k;
+}
+
+int VoxelHelper::GetIndex(int t, int a, int b, int c) const {
+    switch(t) {
+      case 0:
+        return GetYIndex(a, b, c);
+      case 1:
+        return GetXIndex(b, a, c);
+      case 2:
+        return GetXIndex(b, c, a);
+      default:
+        Error("Bad index!\n");
+        return -1;
+    }
 }
 
 int VoxelHelper::CheckCase(const vector<bool> &inside, int i, int j, int k) const {
@@ -162,6 +178,76 @@ class Case3 : public VoxelCase {
         bool b[3] = { !di, !dj, !dk };
         b[trans] = !b[trans];
         Case1(b[0], b[1], b[2]).Generate(inds, helper, i, j, k);
+    }
+  private:
+    int trans;
+    bool di, dj, dk;
+};
+
+class Case3e : public VoxelCase {
+  public:
+    Case3e(int t, bool i, bool j, bool k) : trans(t), di(i), dj(j), dk(k) {}
+    void Generate(vector<int> &inds, const VoxelHelper &helper, int i, int j, int k) {
+        log("Case 3e\n");
+        bool b[3] = { !di, !dj, !dk };
+        b[trans] = !b[trans];
+        int t = trans;
+        // There must be a better way to do this
+        if (t == 0) {
+            // 2 -> 0
+            inds.push_back(helper.GetZIndex(i + int(di), j + int(dj), k));
+            inds.push_back(helper.GetYIndex(i, j + int(dj), k + int(dk)));
+            inds.push_back(helper.GetYIndex(i, j + int(b[1]), k + int(b[2])));
+            // 0 -> 1 -> 2
+            inds.push_back(helper.GetYIndex(i, j + int(b[1]), k + int(b[2])));
+            inds.push_back(helper.GetXIndex(i + int(b[0]), j, k + int(b[2])));
+            inds.push_back(helper.GetZIndex(i + int(di), j + int(dj), k));
+            // other side
+            // 1 -> 0
+            inds.push_back(helper.GetXIndex(i + int(di), j, k + int(dk)));
+            inds.push_back(helper.GetYIndex(i, j + int(dj), k + int(dk)));
+            inds.push_back(helper.GetYIndex(i, j + int(b[1]), k + int(b[2])));
+            // 0 -> 2 -> 1
+            inds.push_back(helper.GetYIndex(i, j + int(b[1]), k + int(b[2])));
+            inds.push_back(helper.GetZIndex(i + int(b[0]), j + int(b[1]), k));
+            inds.push_back(helper.GetXIndex(i + int(di), j, k + int(dk)));
+        } else if (t == 1) {
+            // 0 -> 1
+            inds.push_back(helper.GetYIndex(i, j + int(dj), k + int(dk)));
+            inds.push_back(helper.GetXIndex(i + int(di), j, k + int(dk)));
+            inds.push_back(helper.GetXIndex(i + int(b[0]), j, k + int(b[2])));
+            // 1 -> 2 -> 0
+            inds.push_back(helper.GetXIndex(i + int(b[0]), j, k + int(b[2])));
+            inds.push_back(helper.GetZIndex(i + int(b[0]), j + int(b[1]), k));
+            inds.push_back(helper.GetYIndex(i, j + int(dj), k + int(dk)));
+            // other side
+            // 2 -> 1
+            inds.push_back(helper.GetZIndex(i + int(di), j + int(dj), k));
+            inds.push_back(helper.GetXIndex(i + int(di), j, k + int(dk)));
+            inds.push_back(helper.GetXIndex(i + int(b[0]), j, k + int(b[2])));
+            // 1 -> 0 -> 2
+            inds.push_back(helper.GetXIndex(i + int(b[0]), j, k + int(b[2])));
+            inds.push_back(helper.GetXIndex(i + int(b[0]), j, k + int(b[2])));
+            inds.push_back(helper.GetZIndex(i + int(di), j + int(dj), k));
+        } else if (t == 2) {
+            // 0 -> 2
+            inds.push_back(helper.GetYIndex(i, j + int(dj), k + int(dk)));
+            inds.push_back(helper.GetZIndex(i + int(di), j + int(dj), k));
+            inds.push_back(helper.GetZIndex(i + int(b[0]), j + int(b[1]), k));
+            // 2 -> 1 -> 0
+            inds.push_back(helper.GetZIndex(i + int(b[0]), j + int(b[1]), k));
+            inds.push_back(helper.GetXIndex(i + int(b[0]), j, k + int(b[2])));
+            inds.push_back(helper.GetYIndex(i, j + int(dj), k + int(dk)));
+            // other side
+            // 1 -> 2
+            inds.push_back(helper.GetXIndex(i + int(di), j, k + int(dk)));
+            inds.push_back(helper.GetZIndex(i + int(di), j + int(dj), k));
+            inds.push_back(helper.GetZIndex(i + int(b[0]), j + int(b[1]), k));
+            // 2 -> 0 -> 1
+            inds.push_back(helper.GetZIndex(i + int(b[0]), j + int(b[1]), k));
+            inds.push_back(helper.GetYIndex(i, j + int(b[1]), k + int(b[2])));
+            inds.push_back(helper.GetXIndex(i + int(di), j, k + int(dk)));
+        } else Warning("Bad case 3e\n");
     }
   private:
     int trans;
@@ -310,6 +396,7 @@ class Cases {
         cases[20]   = new Case3(2, false, true, false);   // 4+16
         cases[21]   = new Case5Z(false, false, false);    // 16+1+4
         cases[22]   = new Case7(false, false, false);     // 2+4+16
+        cases[23]   = new Case9(false, false);            // 1+2+4+16
         cases[24]   = new Case4(false, true, true);       // 8+16
         cases[32]   = new Case1(true, false, true);
         cases[33]   = new Case3(1, false, false, false);  // 1+32
@@ -332,6 +419,7 @@ class Cases {
         cases[72]   = new Case3(1, false, true, true);    // 8+64
         cases[73]   = new Case7(true, false, false);      // 1+8+64
         cases[76]   = new Case5X(false, true, false);     // 8+4+64
+        cases[77]   = new Case9(false, true);             // 4+1+8+64
         cases[80]   = new Case2X(true, false);            // 16+64
         cases[81]   = new Case5Z(true, false, false);     // 64+16+1
         cases[84]   = new Case5Z(true, true, false);      // 4+64+16
@@ -342,6 +430,7 @@ class Cases {
         cases[102]  = new Case10Y(false);                 // 2+4+32+64
         cases[104]  = new Case7(true, true, true);        // 8+32+64
         cases[112]  = new Case5Y(true, false, false);     // 32+16+64
+        cases[113]  = new Case9(true, false);             // 16+1+32+64
         cases[128]  = new Case1(true, true, true);
         cases[129]  = new Case4(false, false, false);     // 1+128
         cases[130]  = new Case3(2, false, false, true);   // 2+128
@@ -364,8 +453,22 @@ class Cases {
         cases[196]  = new Case5X(true, true, false);      // 4+64+128
         cases[200]  = new Case5X(true, true, true);       // 64+128+8
         cases[208]  = new Case5Y(true, true, false);      // 16+64+128
+        cases[212]  = new Case9(true, true);              // 64+4+16+128
         cases[224]  = new Case5Y(true, true, true);       // 64+128+32
         cases[255]  = NULL;
+        // Special complementary cases
+        cases[255-6]    = new Case3e(0, false, false, true);
+        cases[255-9]    = new Case3e(0, false, false, false);
+        cases[255-18]   = new Case3e(1, false, false, true);
+        cases[255-20]   = new Case3e(2, false, true, false);
+        cases[255-33]   = new Case3e(1, false, false, false);
+        cases[255-40]   = new Case3e(2, false, true, true);
+        cases[255-65]   = new Case3e(2, false, false, false);
+        cases[255-72]   = new Case3e(1, false, true, true);
+        cases[255-96]   = new Case3e(0, true, false, true);
+        cases[255-130]  = new Case3e(2, false, false, true);
+        cases[255-132]  = new Case3e(1, false, true, false);
+        cases[255-144]  = new Case3e(0, true, false, false);
     }
     VoxelCase *operator[](int mask) const {
         return cases[mask];
@@ -388,27 +491,36 @@ TriangleMesh *ImplicitSurfaceToMesh(const Transform *o2w, const Transform *w2o,
     Point *P = new Point[helper.GetNEdges()];
     vector<bool> inside(helper.GetNVerts(), false);
     Point o = Point(0,0,0) - space/2;
-    for (int k = 0; k < depth; ++k)
+    ProgressReporter reporter(2*depth-1, "Marching cubes");
+    for (int k = 0; k < depth; ++k, reporter.Update())
         for (int i = 0; i < height; ++i)
             for (int j = 0; j < width; ++j) {
+                Point p = o + step*Vector(j, i, k);
+                float dist = surface->Distance(p);
                 if (k+1 < depth) {
                     int ind = helper.GetZIndex(i, j, k);
-                    P[ind] = o + step*(Vector(j, i, k) + Vector(j, i, k+1))/2.f;
+                    Point q = p + step*Vector(0.f, 0.f, 1.f);
+                    float l = dist/(dist + surface->Distance(q));
+                    P[ind] = (1.f - l)*p + l*q;
                 }
                 if (i+1 < height) {
                     int ind = helper.GetYIndex(i, j, k);
-                    P[ind] = o + step*(Vector(j, i, k) + Vector(j, i+1, k))/2.f;
+                    Point q = p + step*Vector(0.f, 1.f, 0.f);
+                    float l = dist/(dist + surface->Distance(q));
+                    P[ind] = (1.f - l)*p + l*q;
                 }
                 if (j+1 < width) {
                     int ind = helper.GetXIndex(i, j, k);
-                    P[ind] = o + step*(Vector(j, i, k) + Vector(j+1, i, k))/2.f;
+                    Point q = p + step*Vector(1.f, 0.f, 0.f);
+                    float l = dist/(dist + surface->Distance(q));
+                    P[ind] = (1.f - l)*p + l*q;
                 }
                 int ind = helper.GetVertIndex(i, j, k);
                 inside[ind] = surface->Inside(o + step*Vector(j, i, k));
     }
     cases.Init();
     vector<int> inds;
-    for (int k = 0; k < depth-1; ++k)
+    for (int k = 0; k < depth-1; ++k, reporter.Update())
         for (int i = 0; i < height-1; ++i)
             for (int j = 0; j < width-1; ++j) {
                 int c = helper.CheckCase(inside, i, j, k);
@@ -420,6 +532,7 @@ TriangleMesh *ImplicitSurfaceToMesh(const Transform *o2w, const Transform *w2o,
                     which->Generate(inds, helper, i, j, k);
                 }
             }
+    reporter.Done();
     std::cout << "TRIANGLES: " << inds.size()/3 << std::endl;
     int *vi = new int[inds.size()];
     std::copy(inds.begin(), inds.end(), vi);
