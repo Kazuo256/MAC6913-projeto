@@ -1,4 +1,4 @@
-%%% template.tex
+%%% final.tex
 %%%
 %%% This LaTeX source document can be used as the basis for your technical
 %%% paper or abstract. Intentionally stripped of annotation, the parameters
@@ -68,7 +68,12 @@ way~\shortcite{Jobs95}, depending upon the application.
 
 \section{Marching cubes algorithm}
 
-%% Explicar algoritmo
+The marching cubes algorithm was introduced by Lorensen and Cline in 87 as an efficient way to render isosurfaces. The algorithm uses a divide-and-conquer approach by dividing the space that contains the surface into several much smaller cubes and then analysing the way the surface intersects with each cube. The nature of isosurfaces makes it easy to determine if each vertex is on one side or the other of any given cube. Based on the set of vertices that are on one side (ie the inside), the algorithm uses a preprocessed table containing several possible triangulations of the cubes to find the better triangular approximation to the piece of the isosurface contained within that cube. The way the triagulations are chosen guarantees the resulting surface will be topologically correct, even in the complicated ambiguous cases. 
+
+
+
+
+
 
 \subsection{Ambiguous cases}
 
