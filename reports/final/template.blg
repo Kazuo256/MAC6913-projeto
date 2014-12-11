@@ -3,44 +3,44 @@ Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: template.aux
 The style file: acmsiggraph.bst
 Database file #1: template.bib
-You've used 4 entries,
+You've used 5 entries,
             2748 wiz_defined-function locations,
-            624 strings with 5008 characters,
-and the built_in function-call counts, 1382 in all, are:
-= -- 141
-> -- 48
+            630 strings with 5079 characters,
+and the built_in function-call counts, 1654 in all, are:
+= -- 167
+> -- 57
 < -- 0
-+ -- 15
-- -- 18
-* -- 109
-:= -- 238
-add.period$ -- 15
-call.type$ -- 4
-change.case$ -- 22
-chr.to.int$ -- 4
-cite$ -- 4
-duplicate$ -- 51
-empty$ -- 114
-format.name$ -- 20
-if$ -- 279
++ -- 17
+- -- 21
+* -- 124
+:= -- 282
+add.period$ -- 18
+call.type$ -- 5
+change.case$ -- 27
+chr.to.int$ -- 5
+cite$ -- 5
+duplicate$ -- 62
+empty$ -- 141
+format.name$ -- 23
+if$ -- 337
 int.to.chr$ -- 1
 int.to.str$ -- 0
 missing$ -- 4
-newline$ -- 26
-num.names$ -- 12
-pop$ -- 22
+newline$ -- 31
+num.names$ -- 15
+pop$ -- 31
 preamble$ -- 1
-purify$ -- 18
+purify$ -- 22
 quote$ -- 0
-skip$ -- 35
+skip$ -- 45
 stack$ -- 0
-substring$ -- 62
-swap$ -- 12
+substring$ -- 67
+swap$ -- 15
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 28
+type$ -- 36
 warning$ -- 0
-while$ -- 16
-width$ -- 6
-write$ -- 57
+while$ -- 19
+width$ -- 7
+write$ -- 69

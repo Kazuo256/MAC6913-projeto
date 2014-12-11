@@ -1,4 +1,4 @@
-\begin{thebibliography}{\protect\citename{Blender-Foundation }2002--2014}
+\begin{thebibliography}{\protect\citename{Industrial-Light-\&-Magic }2014}
 
 \bibitem[\protect\citename{Blender-Foundation }2002--2014]{Blender}
 {\sc Blender-Foundation}, 2002--2014.
@@ -10,6 +10,11 @@
 \newblock 1982.
 \newblock A generalization of algebraic surface drawing.
 \newblock {\em SIGGRAPH Comput. Graph. 16}, 3 (July), 273--.
+
+\bibitem[\protect\citename{Industrial-Light-\&-Magic }2014]{EXR}
+{\sc Industrial-Light-\&-Magic}, 2014.
+\newblock Openexr.
+\newblock \url{http://www.openexr.com/}.
 
 \bibitem[\protect\citename{Lorensen and Cline
   }1987]{Lorensen:1987:MCH:37402.37422}

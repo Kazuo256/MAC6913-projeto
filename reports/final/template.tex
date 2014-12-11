@@ -26,7 +26,7 @@
 \author{Vinícius Vendramini\thanks{e-mail:todo@email.com}\\IME-USP \and Wilson K. Mizutani\thanks{e-mail:kazuo@ime.usp.br}\\IME-USP}
 \pdfauthor{Vinícius Vendramini, Wilson K. Mizutani}
 
-\keywords{implicit surface, metaball, mesh generation, ray tracing}
+\keywords{isosurface, metaball, mesh generation, ray tracing}
 
 \begin{document}
 
@@ -43,7 +43,7 @@ Three dimensional geometry is often made through meshes, which requires
 either modeling skills or data extraction from real bodies. This is specially
 difficult for more organic or fluid structures, like creatures, liquids or
 gases. Blinn \shortcite{Blinn:1982:GAS:965145.801290} proposes a way of defining
-geometry through a particular type of implicit surface that provides a simple
+geometry through a particular type of isosurface that provides a simple
 way of representing such geometries. These surfaces are also known as
 \textit{metaballs}). In this work we strive for a thourough renderization of
 these geometries using the highly awarded PBRT
@@ -86,12 +86,12 @@ from the bones). One way of defining this representation is through the use of
 \subsection{Metaballs}
 
 Blinn \shortcite{Blinn:1982:GAS:965145.801290} defines a particular type of
-implicit surface that is a composition of simpler implicit surfaces. An implicit
-surface is the set of points in $\mathbb{R}^n$ that solves the equation
+isosurface that is a composition of simpler isosurfaces. An isosurface is the
+set of points in $\mathbb{R}^n$ that solves the implicit equation
 $F(x) = 0$ for a given function $F:\mathbb{R}^n \rightarrow \mathbb{R}$. For
-example, the function $F(x) = \|x\|^{-1} - 1$ gives an implicit surface
-consisting of a hypersphere of radius $1$. The surface Blinn presents defines
-this $F$ in $\mathbb{R}^3$ as follows:
+example, the function $F(x) = \|x\|^{-1} - 1$ gives an isosurface
+consisting of the unit hypersphere in $\mathbb{R}^n$. The surface Blinn presents
+defines this $F$ in $\mathbb{R}^3$ as follows:
 
 \begin{equation}
   F(x) = D(x) - T
@@ -126,7 +126,7 @@ geometries by simply placing various bumps (with possibly varying radiuses and
 blobbiness) and using an aproppriate material, as seen in Figure
 \ref{img:metaball-liquid}\footnotemark{}.
 
-Another very important property of implicit surfaces in general, is that if
+Another very important property of isosurfaces in general, is that if
 $F(x)$ is differentiable, then a nonzero gradient $\nabla F$ at a point $x$ is
 the surface normal at that point, towards the growing size. In the case of
 Blinn's metaballs, the gradient gives an inwards normal, so for shading
@@ -146,8 +146,49 @@ purposes, $-\nabla F(x)$ is used.
 
 \subsection{PBRT}
 
+The \textit{Physically Based Ray-Tracer} is a tool developed together with a
+text book \cite{Pharr:2010:PBR:1854996} for teaching global illumination methods
+to graduate and post-graduate students. It is written in plain \texttt{C++},
+using its own scene description file format for input and generating EXR images
+\cite{EXR} as output. It provides a series of interfaces for extending the
+system's features, so that students are able to develop new algorithms as CG
+course projects.
+
+As it names states, the PBRT system is centered on ray tracing algorithms that
+try to render three-dimensional scenes while being as physically real as
+acceptable by modern standards. Simply speaking, many rays are shot from a
+virtual camera, bouncing off or going through the scene objects like real light
+does upon reaching different kinds of materials. This achieves global
+illumination better than classic CG architectures, like OpenGL's pipeline, but
+is otherwise not as fast.
+
+We are particularly interested in PBRT's \texttt{Shape} interface, because
+through it we can provide an implementation for metaball rendering in PBRT.
+There are mainly two types of shapes in it: intersectable and non-intersectable.
+The first ones are able to determine whether a ray (from the ray tracing
+algorithm) intersects with it, and the properties of the point of intersection,
+i.e. its differential geometry information. The second type, not being able to
+do the same, must be instead capable of refining itself into simpler shapes,
+which can either be intersectable or not. This refination process goes on
+recursevely until only intersectable shapes remain.
+
 \subsection{Rendering methods}
 
+Blinn's original work \shortcite{Blinn:1982:GAS:965145.801290} provides a way
+for directly calculating a ray's intersection with a metaball. As we show
+later, though, it does not work well with PBRT's architecture. We can only
+achieve a partial result, mainly due to it not being possible to formulate a
+global and generic parametrization for metaball surfaces.
+
+An alternative we found was to use the marching cubes algorithm
+\cite{Lorensen:1987:MCH:37402.37422}, also explained in further sections. With
+it, we can derive triangle meshes from implicit functions using a
+divide-and-conquer approach. The mesh approximates the original surface, its
+error depending on the size of the \textit{cubes} used in the algorithm. In a
+way, this is not actually rendering a metaball, but rather a procedure to
+easily transform it into a very acceptable mesh. After that, PBRT can use its
+own default shape \texttt{TriangleMesh} to properly render the resulting
+geometry.
 
 \section{Marching cubes algorithm}
 
