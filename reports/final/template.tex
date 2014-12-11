@@ -198,20 +198,22 @@ geometry.
 
 The marching cubes algorithm was introduced as an efficient way to render isosurfaces. Its divide-and-conquer approach sections the space that contains the surface into several much smaller cubes, which are then considered individually. As shown earlier, the nature of isosurfaces makes it easy to determine whether a point $x$ is on one side of the surface or the other by simply analysing whether the value of $D(x)$ is smaller or greater than the threshold $T$. Using that fact, the algorithm considers each cube and determines on which side of the isosurface lies each of the cube's 8 vertices.
 
-This information is then used to determine which of several possible triangulations would best suit that particular cube. Since each of the 8 vertices has two possible states (one side on the other), there are $2^8 = 256$ possible triangulations, which are stored in a preprocessed table for easy access. Because many triangulations are simply rotated versions of other possibilities, they can be separated into \textit{families} or \textit{cases}, which gives a better understanding of their workings. These cases are divided into fifteen base cases and six complementary cases [http://users.polytech.unice.fr/~lingrand/MarchingCubes/algo.html], which we show later. The way the cases are chosen guarantees that there will be no topological artifacts such as accidental holes in the resulting mesh.
+This information is then used to determine which of several possible triangulations would best suit that particular cube. Since each of the 8 vertices has two possible states (one side on the other), there are $2^8 = 256$ possible triangulations, which are stored in a preprocessed table for easy access. Because many triangulations are simply rotated versions of other possibilities, they can be separated into \textit{families} or \textit{cases}, which gives a better understanding of their workings. These cases are divided into fifteen base cases (Figure \ref{img:base-cases}) and six complementary cases (Figure \ref{img:ambiguous-cases}), which we show later. The way the cases are constructed guarantees that there will be no topological artifacts such as accidental holes in the resulting mesh.
 
 \begin{figure}[ht]
   \centering
   \includegraphics[width=3in]{images/base-cases}
-  \caption{Representations of the fifteen cases, which are can be rotated to form almost all posible triangulations of a marching cube.}
+  \caption{Representations of the fifteen cases, which are can be rotated to form almost all posible triangulations of a marching cube. In each case, the vertices with black points represent the vertices inside the isosurface, while the others represent vertices on the outside.}
+  \label{img:base-cases}
 \end{figure}
 
-Each triangulation is done by having at most one vertex of a triangle in any given edge of the cube. Using that, we can interpolate the values of $D(x)$ in that edge's vertices to determine whether the triangle should be closer to one vertex or the other. This allows for the triangles to have almost any inclination so that the resulting mesh is considerably smoother. Since this cube's vertices will have the same value of $D(x)$ as the vertices of its neighbors, no holes are created in the mesh by the interpolation.
+Each triangulation is done by having at most one vertex of a triangle in any given edge of the cube. Using that, we can interpolate the values of $D(x)$ in that edge's vertices to determine whether the triangle should be closer to one vertex or the other. This allows for the triangles to have almost any inclination so that the resulting mesh is considerably smoother (Figure \ref{img:interpolation}). Since this cube's vertices will have the same value of $D(x)$ as the vertices of its neighbors, no holes are created in the mesh because of the interpolation.
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[height=1.5in]{images/metaball-non-interpolated}
-  \caption{On the left, a pair of metaballs rendered without interpolation, putting the vertices of the triangles at exactly the middle of the cube's edges. On the right, the same metaballs rendered with interpolation, resulting in a much smoother image.}
+  \includegraphics[height=1.5in]{images/metaball-interpolation-comparison}
+  \caption{On the left, a pair of metaballs rendered by interpolating of the values of $D(x)$ at the cube's vertices; On the right, the same metaballs without interpolation, created by putting the vertices of the triangles at exactly the middle of the cube's edges. The interpolation results in a much smoother image, even when looking at a distance.}
+  \label{img:interpolation}
 \end{figure}
 
 \subsection{Ambiguous cases}
@@ -221,14 +223,16 @@ Each triangulation is done by having at most one vertex of a triangle in any giv
   \centering
   \includegraphics[height=1.5in]{images/metaball-bad1-comparison}
   \caption{On the left, a pair of metaballs rendered without considering the ambiguous cases, which results in an inappropriate triangulation and holes on the mesh; on the right, the same metaballs rendered with the additional triangulations used to cover the ambiguous cases. Both were rendered in ways that remove realism but clarify the problem.}
+  \label{img:interpolation-comparison}
 \end{figure}
 
-Each of the fifteen base cases has an associated \textit{complementary} case, which may be obtained by reversing the vertices' sides - if a vertex is on the inside of a base case it would be on the outside in its complementary, and vice versa. In most cases it is possible to use the same triangulation for the base case and its complementary. However, there are six cases out of the fifteen which require special attention, since using the same triangulation for the complementary case would cause holes to appear in the surface. These six cases are called \textit{ambiguous} and create the need for six additional triangulation possibilities.
+Each of the fifteen base cases has an associated \textit{complementary} case, which may be obtained by reversing the vertices' sides - if a vertex is on the inside of a base case it would be on the outside in its complementary, and vice versa. In most cases it is possible to use the same triangulation for the base case and its complementary. However, there are six cases out of the fifteen which require special attention, since using the same triangulation for the complementary case would cause holes to appear in the surface (Figure \ref{img:interpolation-comparison}). These six cases are called \textit{ambiguous} and create the need for six additional triangulation possibilities, presented in Figure \ref{img:ambiguous-cases}.
 
 \begin{figure}[ht]
   \centering
   \includegraphics[width=3in]{images/ambiguous-cases}
-  \caption{Representations of each of the complementary triangulations used to avoid problems in ambiguous cases.}
+  \caption{Representations of each of the complementary triangulations used to avoid problems in ambiguous cases. Here, the vertices inside the isosurface are red, while the ones on the outside are blue.}
+  \label{img:ambiguous-cases}
 \end{figure}
 
 \section{Analytic intersection}
