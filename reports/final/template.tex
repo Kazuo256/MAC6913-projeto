@@ -37,8 +37,16 @@
 
 \begin{abstract}
 
-Citations can be done this way~\cite{Jobs95} or this more concise 
-way~\shortcite{Jobs95}, depending upon the application.
+Typically, three dimensional geometry is made through meshes, which requires
+either modeling skills or data extraction from real bodies. This is specially
+difficult for more organic or fluid structures, like creatures, liquids or
+gases. Blinn \shortcite{Blinn:1982:GAS:965145.801290} proposes a way of defining
+geometry though a particular type of implicit surface that makes easier the
+representation of such geometries. In this work we strive for a thourough
+renderization of these geometries using the awarded PBRT
+\shortcite{Pharr:2010:PBR:1854996} render system. There are two methods covered:
+one based on Blinn's original concept, and another using the marching cubes
+algorithm \cite{Lorensen:1987:MCH:37402.37422}.
 
 \end{abstract}
 
@@ -64,7 +72,10 @@ way~\shortcite{Jobs95}, depending upon the application.
 
 \subsection{Metaballs}
 
-\subsection{Approaches}
+These representations
+would be later called \textbf{metaballs}.
+
+\subsection{Rendering methods}
 
 \section{Marching cubes algorithm}
 

@@ -1,4 +1,10 @@
-\begin{thebibliography}{\protect\citename{Pellacini et~al\mbox{.} }2005}
+\begin{thebibliography}{\protect\citename{Pharr and Humphreys }2010}
+
+\bibitem[\protect\citename{Blinn }1982]{Blinn:1982:GAS:965145.801290}
+{\sc Blinn, J.~F.}
+\newblock 1982.
+\newblock A generalization of algebraic surface drawing.
+\newblock {\em SIGGRAPH Comput. Graph. 16}, 3 (July), 273--.
 
 \bibitem[\protect\citename{Jobson et~al\mbox{.} }1995]{Jobs95}
 {\sc Jobson, D.~J., Rahman, Z., and Woodell, G.~A.}
@@ -9,24 +15,18 @@
   Color Science, Systems, and Applications}, vol.~4, The Society for Imaging
   Science and Technology, 124--125.
 
-\bibitem[\protect\citename{Landis }2002]{notes2002}
-{\sc Landis, H.}, 2002.
-\newblock Global illumination in production.
-\newblock ACM SIGGRAPH 2002 Course \#16 Notes, July.
+\bibitem[\protect\citename{Lorensen and Cline
+  }1987]{Lorensen:1987:MCH:37402.37422}
+{\sc Lorensen, W.~E., and Cline, H.~E.}
+\newblock 1987.
+\newblock Marching cubes: A high resolution 3d surface construction algorithm.
+\newblock {\em SIGGRAPH Comput. Graph. 21}, 4 (Aug.), 163--169.
 
-\bibitem[\protect\citename{Park et~al\mbox{.} }2006]{Park:2006:DSI}
-{\sc Park, S.~W., Linsen, L., Kreylos, O., Owens, J.~D., and Hamann, B.}
-\newblock 2006.
-\newblock Discrete sibson interpolation.
-\newblock {\em IEEE Transactions on Visualization and Computer Graphics 12}, 2
-  (Mar.\slash Apr.), 243--253.
-
-\bibitem[\protect\citename{Pellacini et~al\mbox{.} }2005]{Pellacini:2005:LAH}
-{\sc Pellacini, F., Vidim{\v{c}}e, K., Lefohn, A., Mohr, A., Leone, M., and
-  Warren, J.}
-\newblock 2005.
-\newblock Lpics: a hybrid hardware-accelerated relighting engine for computer
-  cinematography.
-\newblock {\em ACM Transactions on Graphics 24}, 3 (Aug.), 464--470.
+\bibitem[\protect\citename{Pharr and Humphreys }2010]{Pharr:2010:PBR:1854996}
+{\sc Pharr, M., and Humphreys, G.}
+\newblock 2010.
+\newblock {\em Physically Based Rendering, Second Edition: From Theory To
+  Implementation}, 2nd~ed.
+\newblock Morgan Kaufmann Publishers Inc., San Francisco, CA, USA.
 
 \end{thebibliography}
