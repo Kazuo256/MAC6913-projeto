@@ -16,6 +16,12 @@
 \newblock Openexr.
 \newblock \url{http://www.openexr.com/}.
 
+\bibitem[\protect\citename{Lingrand }]{Lingrand}
+{\sc Lingrand, D.}
+\newblock The marching cubes.
+\newblock
+  \url{http://users.polytech.unice.fr/\~lingrand/MarchingCubes/algo.html}.
+
 \bibitem[\protect\citename{Lorensen and Cline
   }1987]{Lorensen:1987:MCH:37402.37422}
 {\sc Lorensen, W.~E., and Cline, H.~E.}
