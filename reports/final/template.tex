@@ -242,12 +242,13 @@ by solving a quadric equation when there was only a single bump, and applying
 numerical methods when there were more.
 
 This more complex approach is necessary because there is no analytical generic
-solution for equation (1). Blinn's algorithm thus search along the traced ray
+solution for equation (1). Blinn's algorithm thus searches along the traced ray
 for the point of intersection iteratively, that is, given the ray's origin
-$O\in\mathbb{R}^3$ and diretion $D\in\mathbb{R}^3$ it searches for a value
-$t\in\mathbb{R}$ such that $F(O + Dt) = 0$. He starts with two initial guesses
-$t_0$ and $t_1$, and then tries to apply Newton iteration onto it to find
-$t_{next}$ using the better of them, say $t^*$:
+$O\in\mathbb{R}^3$ and its diretion $D\in\mathbb{R}^3$ it searches for a value
+$t\in\mathbb{R}$ such that $F(O+Dt) = 0$. He starts with two initial guesses
+$t_0$ and $t_1$, and chooses the one, say $t^*$, such that $|F(O+Dt^*)|$ is
+closer to zero. Then it tries to apply Newton iteration onto it to find a
+$t_{next}$ using $t^*$:
 
 \begin{equation}
   t_{next} = t^* - \frac{D(t^*) - T}{D'(t^*)}
@@ -261,28 +262,46 @@ it means that the iteration has diverged, and the algorithms falls back to
   t_{next} = \frac{t_0(D(t_1) - T) - t_1(D(t_0) - T)}{D(t_1) - D(t_0)}
 \end{equation}
 
-If $D(t_{next}) < T$ then $t_{next}$ becomes the new $t_0$, else it becomes the
+If $D(t_{next}) < T$ then $t_{next}$ becomes the new $t_0$, or else it becomes the
 new $t_1$. And then the algorithm goes to the next iteration. This procedure
 stops when $|D(t^*) - T| < \varepsilon$, for a given error threshold $\varepsilon$.
 With this, the algorithm provides the point of intersection between the traced ray
 and the metaball's geometry, with a certain margin of error.
 
-The initial guesses are chosen using either local maximums (the bumps maximums),
-or the local solutions (again, the solution in each bump). This candidates are
-ordered along the direction of the ray, and the first pair to ``cross'' the
-surface is chosen for $t_0$ and $t_1$.
+The initial guesses are chosen from candidates ordered along the direction of
+the ray. They are either
+
+\begin{itemize}
+  \item The local maximums, that is, the maximums of each bump's exponential in $t$; or
+  \item The local solutions, which are the first $t$s that makes a bump's
+        exponential be zero
+\end{itemize}
+ 
+The first pair to ``cross'' the surface is chosen for $t_0$ and $t_1$. It is
+important to note that doing it exactly like this does not contemplate ray that
+go out of the surface. They should be considered, for instance, when transparent
+materials are present. So we ideally like to have this improvement in our
+implementation.
 
 \subsection{PBRT limitations}
 
 Unfortunetly, this is not enough to render metaballs in the PBRT system. In its
-\texttt{Shape} interface, it demands that all intersectable shapes provides the
-intersections differential geometry, which consists of point of intersection
+\texttt{Shape} interface, it demands that all intersectable shapes provide the
+intersections differential geometry, which consists of the point of intersection
 itself plus the surface partial derivatives and normal partial derivates along
 some $u$ and $v$ parameters, aswell as the values of $u$ and $v$ themselves. And
-that is the problem: it assumes that the surfaces \textit{has a parametric
+that is the problem: it assumes that the surfaces \textit{have a parametric
 representation}, which is not the general case for metaballs. It \textit{is}
-possible formulate local parametrizations, but we found no reasonable way of
-doing this.
+possible to formulate local parametrizations, but that would mean inside PBRT's
+model that our shape is actually non-intersectable.
+
+This means that PBRT's restrictions on the \texttt{Shape} interface impede us
+from implementing a proper rendering algorithm to metaballs even though it
+allows us to detect the intersection between them and the ray directly. It would
+seem that the system really encourages using a non-intersectable shape instead,
+but since that is what the \textit{marching cubes} actually does (using a
+triangle mesh though), there is not much point in doing the same in a more
+complex way.
 
 \section{Implementation}
 
