@@ -54,7 +54,7 @@ AttributeBegin
   #  "color Kt" [.2 .6 .4]
   Material "matte"
     "color Kd" [.2 .6 .4]
-  Include "geometry/metaball-generated-0.pbrt"
+  Include "geometry/metaball-generated-2.pbrt"
   #Shape "metaballsurface"
   #  "point P" [-1.5 1.5 .0  1.5 -1.5 .0]
   #  "float R" [2.0 2.0]

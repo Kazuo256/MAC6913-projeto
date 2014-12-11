@@ -11,10 +11,10 @@ math.random()
 
 local function rand()
   local r = 0
-  for i=1,10 do
+  for i=1,5 do
     r = r + math.random()
   end
-  return r/10
+  return r/5
 end
 
 for i=1,n do
