@@ -3,51 +3,44 @@ Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: template.aux
 The style file: acmsiggraph.bst
 Database file #1: template.bib
-I was expecting a `,' or a `}'---line 2 of file template.bib
- :  
- :  author = {Blender Foundation},
-(Error may have been on previous line)
-I'm skipping whatever remains of this entry
-Warning--I didn't find a database entry for ""
-You've used 3 entries,
+You've used 4 entries,
             2748 wiz_defined-function locations,
-            619 strings with 4937 characters,
-and the built_in function-call counts, 1108 in all, are:
-= -- 115
-> -- 39
+            624 strings with 5008 characters,
+and the built_in function-call counts, 1382 in all, are:
+= -- 141
+> -- 48
 < -- 0
-+ -- 13
-- -- 15
-* -- 94
-:= -- 192
-add.period$ -- 12
-call.type$ -- 3
-change.case$ -- 17
-chr.to.int$ -- 3
-cite$ -- 3
-duplicate$ -- 40
-empty$ -- 87
-format.name$ -- 17
-if$ -- 221
++ -- 15
+- -- 18
+* -- 109
+:= -- 238
+add.period$ -- 15
+call.type$ -- 4
+change.case$ -- 22
+chr.to.int$ -- 4
+cite$ -- 4
+duplicate$ -- 51
+empty$ -- 114
+format.name$ -- 20
+if$ -- 279
 int.to.chr$ -- 1
 int.to.str$ -- 0
 missing$ -- 4
-newline$ -- 21
-num.names$ -- 9
-pop$ -- 13
+newline$ -- 26
+num.names$ -- 12
+pop$ -- 22
 preamble$ -- 1
-purify$ -- 14
+purify$ -- 18
 quote$ -- 0
-skip$ -- 26
+skip$ -- 35
 stack$ -- 0
-substring$ -- 57
-swap$ -- 9
+substring$ -- 62
+swap$ -- 12
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 20
+type$ -- 28
 warning$ -- 0
-while$ -- 13
-width$ -- 4
-write$ -- 45
-(There was 1 error message)
+while$ -- 16
+width$ -- 6
+write$ -- 57

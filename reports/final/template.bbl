@@ -1,4 +1,9 @@
-\begin{thebibliography}{\protect\citename{Pharr and Humphreys }2010}
+\begin{thebibliography}{\protect\citename{Blender-Foundation }2002--2014}
+
+\bibitem[\protect\citename{Blender-Foundation }2002--2014]{Blender}
+{\sc Blender-Foundation}, 2002--2014.
+\newblock Blender.
+\newblock \url{http://www.blender.org/}.
 
 \bibitem[\protect\citename{Blinn }1982]{Blinn:1982:GAS:965145.801290}
 {\sc Blinn, J.~F.}
