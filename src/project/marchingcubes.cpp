@@ -342,6 +342,24 @@ MAKECASE_NOPARAMS(Case8Z) {
     inds.push_back(helper.GetZIndex(i, j, k));
 }
     
+    MAKECASE_2PARAMS(Case9, bool, di, dj) {
+        log("Case 9\n");
+        // Upper part
+        inds.push_back(helper.GetXIndex(i + int(di), j, k + 1));
+        inds.push_back(helper.GetYIndex(i, j + int(dj), k + 1));
+        inds.push_back(helper.GetZIndex(i + int(!di), j + int(dj), k));
+        inds.push_back(helper.GetZIndex(i + int(!di), j + int(dj), k));
+        inds.push_back(helper.GetZIndex(i + int(di), j + int(!dj), k));
+        inds.push_back(helper.GetXIndex(i + int(di), j, k + 1));
+        // Lower part
+        inds.push_back(helper.GetXIndex(i + int(!di), j, k));
+        inds.push_back(helper.GetYIndex(i, j + int(!dj), k));
+        inds.push_back(helper.GetZIndex(i + int(di), j + int(!dj), k));
+        inds.push_back(helper.GetZIndex(i + int(di), j + int(!dj), k));
+        inds.push_back(helper.GetZIndex(i + int(!di), j + int(dj), k));
+        inds.push_back(helper.GetXIndex(i + int(!di), j, k));
+    }
+    
 MAKECASE_1PARAM(Case10X, bool, di) {
     log("Case 10X\n");
     Case2X( di, false).Generate(inds, helper, i, j, k);
@@ -353,7 +371,7 @@ MAKECASE_1PARAM(Case10Y, bool, dj) {
     Case2Y( dj, false).Generate(inds, helper, i, j, k);
     Case2Y(!dj, true ).Generate(inds, helper, i, j, k);
 }
-
+    
 MAKECASE_1PARAM(Case10Z, bool, di) {
     log("Case 10Z\n");
     Case2Z( di, false).Generate(inds, helper, i, j, k);
