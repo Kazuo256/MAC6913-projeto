@@ -335,16 +335,11 @@ successful.
 
 \section{Conclusion}
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-aliquip ex ea commodo consequat. Duis aute irure dolor in
-reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-culpa qui officia deserunt mollit anim id est laborum.
+Metaballs are a shape that may have a wide variety of uses such as simulating smoke, atoms or fluids. Because of PBRT's popularity and ease of use, a good implementation of metaballs would be very well suited, and that is what we tried to achieve. Though the mathematical properties of metaballs tend to lead to an analytical implementation, the architecture of PBRT made it particularly difficult. However, the approximation obtained through the marching cubes algorithm was satisfactory for most cases.
 
 \subsection{Results}
 
+Figure \ref{img:marching-cubes} shows a complex image generated with our implementation of the marching cubes algorithm for rendering metaballs. It was rendered in 440 seconds on a computer running OSX 10.10 with a 2.3GHz Intel Core i5 processor and 8GB of DDR3 RAM (PBRT renders images using only the CPU, without the help of the GPU, so the graphics card is irrelevant). Figure \ref{img:regula-falsi} was rendered with the analytic intersection algorithm, which only detects intersection but doesn't give enough information for shading. Because of that its rendering is much faster: the same computer takes only 5 seconds.
 
 
 \subsection{Future works}

@@ -518,19 +518,19 @@ TriangleMesh *ImplicitSurfaceToMesh(const Transform *o2w, const Transform *w2o,
                 if (k+1 < depth) {
                     int ind = helper.GetZIndex(i, j, k);
                     Point q = p + step*Vector(0.f, 0.f, 1.f);
-                    float l = 0.5f; //dist/(dist + surface->Distance(q));
+                    float l = dist/(dist + surface->Distance(q));
                     P[ind] = (1.f - l)*p + l*q;
                 }
                 if (i+1 < height) {
                     int ind = helper.GetYIndex(i, j, k);
                     Point q = p + step*Vector(0.f, 1.f, 0.f);
-                    float l = 0.5f; //dist/(dist + surface->Distance(q));
+                    float l = dist/(dist + surface->Distance(q));
                     P[ind] = (1.f - l)*p + l*q;
                 }
                 if (j+1 < width) {
                     int ind = helper.GetXIndex(i, j, k);
                     Point q = p + step*Vector(1.f, 0.f, 0.f);
-                    float l = 0.5f; //dist/(dist + surface->Distance(q));
+                    float l = dist/(dist + surface->Distance(q));
                     P[ind] = (1.f - l)*p + l*q;
                 }
                 int ind = helper.GetVertIndex(i, j, k);
