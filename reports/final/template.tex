@@ -196,9 +196,9 @@ geometry.
 
 \section{Marching cubes algorithm}
 
-The marching cubes algorithm was introduced as an efficient way to render isosurfaces. Its divide-and-conquer approach sections the space that contains the surface into several much smaller cubes, which are then considered individually. As shown earlier, the nature of isosurfaces makes it easy to determine whether a point $x$ is on one side of the surface or the other by simply analysing whether the value of $D(x)$ is smaller or greater than the threshold $T$. Using that fact, the algorithm considers each cube and determines on which side of the isosurface lies each of the cube's 8 vertices.
+The marching cubes algorithm \cite{Lorensen:1987:MCH:37402.37422} was introduced as an efficient way to render isosurfaces. Its divide-and-conquer approach sections the space that contains the surface into several much smaller cubes, which are then considered individually. As shown earlier, the nature of isosurfaces makes it easy to determine whether a point $x$ is on one side of the surface or the other by simply analysing whether the value of $D(x)$ is smaller or greater than the threshold $T$. Using that fact, the algorithm considers each cube and determines on which side of the isosurface lies each of the cube's 8 vertices.
 
-This information is then used to determine which of several possible triangulations would best suit that particular cube. Since each of the 8 vertices has two possible states (one side on the other), there are $2^8 = 256$ possible triangulations, which are stored in a preprocessed table for easy access. Because many triangulations are simply rotated versions of other possibilities, they can be separated into \textit{families} or \textit{cases}, which gives a better understanding of their workings. These cases are divided into fifteen base cases (Figure \ref{img:base-cases}) and six complementary cases (Figure \ref{img:ambiguous-cases}), which we show later. The way the cases are constructed guarantees that there will be no topological artifacts such as accidental holes in the resulting mesh.
+This information is then used to determine which of several possible triangulations would best suit that particular cube. Since each of the 8 vertices has two possible states (one side on the other), there are $2^8 = 256$ possible triangulations, which are stored in a preprocessed table for easy access. Because many triangulations are simply rotated versions of other possibilities, they can be separated into \textit{families} or \textit{cases}, which gives a better understanding of their workings. These cases are divided into fifteen base cases (seen in Figure \ref{img:base-cases}) and six complementary cases \cite{Lingrand}, which we show later. The way the cases are constructed guarantees that there will be no topological artifacts such as accidental holes in the resulting mesh.
 
 \begin{figure}[ht]
   \centering
@@ -216,8 +216,8 @@ Each triangulation is done by having at most one vertex of a triangle in any giv
   \label{img:interpolation}
 \end{figure}
 
-\subsection{Ambiguous cases}
 
+\subsection{Ambiguous cases}
 
 \begin{figure}[ht]
   \centering
