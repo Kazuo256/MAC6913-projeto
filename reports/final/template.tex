@@ -235,7 +235,56 @@ Each of the fifteen base cases has an associated \textit{complementary} case, wh
   \label{img:ambiguous-cases}
 \end{figure}
 
-\section{Analytic intersection}
+\section{Intersection calculation}
+
+In Blinn's \shortcite{Blinn:1982:GAS:965145.801290} original proposal of using
+metaballs to represent geometry he also presented an algorithm for rendering it.
+It used a simplified ray tracing and detected intersection with the metaball
+by solving a quadric equation when there was only a single bump, and applying
+numerical methods when there were more.
+
+This more complex approach is necessary because there is no analytical generic
+solution for equation (1). Blinn's algorithm thus search along the traced ray
+for the point of intersection iteratively, that is, given the ray's origin
+$O\in\mathbb{R}^3$ and diretion $D\in\mathbb{R}^3$ it searches for a value
+$t\in\mathbb{R}$ such that $F(O + Dt) = 0$. He starts with two initial guesses
+$t_0$ and $t_1$, and then tries to apply Newton iteration onto it to find
+$t_{next}$ using the better of them, say $t^*$:
+
+\begin{equation}
+  t_{next} = t^* - \frac{D(t^*) - T}{D'(t^*)}
+\end{equation}
+
+If $t_{next}$ lies within $(t_0, t_1)$, then the iteration proceds. Otherwise,
+it means that the iteration has diverged, and the algorithms falls back to
+\textit{regula falsi} iteration:
+
+\begin{equation}
+  t_{next} = \frac{t_0(D(t_1) - T) - t_1(D(t_0) - T)}{D(t_1) - D(t_0)}
+\end{equation}
+
+If $D(t_{next}) < T$ then $t_{next}$ becomes the new $t_0$, else it becomes the
+new $t_1$. And then the algorithm goes to the next iteration. This procedure
+stops when $|D(t^*) - T| < \varepsilon$, for a given error threshold $\varepsilon$.
+With this, the algorithm provides the point of intersection between the traced ray
+and the metaball's geometry, with a certain margin of error.
+
+The initial guesses are chosen using either local maximums (the bumps maximums),
+or the local solutions (again, the solution in each bump). This candidates are
+ordered along the direction of the ray, and the first pair to ``cross'' the
+surface is chosen for $t_0$ and $t_1$.
+
+\subsection{PBRT limitations}
+
+Unfortunetly, this is not enough to render metaballs in the PBRT system. In its
+\texttt{Shape} interface, it demands that all intersectable shapes provides the
+intersections differential geometry, which consists of point of intersection
+itself plus the surface partial derivatives and normal partial derivates along
+some $u$ and $v$ parameters, aswell as the values of $u$ and $v$ themselves. And
+that is the problem: it assumes that the surfaces \textit{has a parametric
+representation}, which is not the general case for metaballs. It \textit{is}
+possible formulate local parametrizations, but we found no reasonable way of
+doing this.
 
 \section{Implementation}
 
