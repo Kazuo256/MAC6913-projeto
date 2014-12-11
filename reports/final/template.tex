@@ -45,12 +45,12 @@ difficult for more organic or fluid structures, like creatures, liquids or
 gases. Blinn \shortcite{Blinn:1982:GAS:965145.801290} proposes a way of defining
 geometry through a particular type of isosurface that provides a simple
 way of representing such geometries. These surfaces are also known as
-\textit{metaballs}). In this work we strive for a thourough renderization of
+\textit{metaballs}. In this work we strive for a thourough renderization of
 these geometries using the highly awarded PBRT
-\shortcite{Pharr:2010:PBR:1854996} render system. There are two methods covered:
-one based on Blinn's original intersection algorithm, and another using the
-marching cubes algorithm \cite{Lorensen:1987:MCH:37402.37422} to generate a mesh
-that approximates the surface.
+\shortcite{Pharr:2010:PBR:1854996} rendering system. There are two methods 
+covered: one based on Blinn's original intersection algorithm, and another using
+the marching cubes algorithm \cite{Lorensen:1987:MCH:37402.37422} to generate a 
+mesh that approximates the surface.
 
 \end{abstract}
 
@@ -108,8 +108,8 @@ corresponding to an individual bump of the metaball:
 Where $P\in\mathbb{R}^3$ and $b_i,a_i\in\mathbb{R}$ for $i=1,...,n$. The
 exponentials also represent spheres, with $P_i$ being their respective centers
 and $a_i$ and $b_i$ factors that together determine the radius and how much each
-bump clings to each other. Since these two coefficients are not very intuitive,
-Blinn proposes a few change of variables, aswell as using the squared distance
+bump clings to other bumps. Since these two coefficients are not very intuitive,
+Blinn proposes a few change of variables, as well as using the squared distance
 $\|x-P_i\|^2$ for code optimization. The resulting formula is:
 
 \begin{equation}
@@ -154,13 +154,13 @@ using its own scene description file format for input and generating EXR images
 system's features, so that students are able to develop new algorithms as CG
 course projects.
 
-As it names states, the PBRT system is centered on ray tracing algorithms that
+As its name states, the PBRT system is centered on ray tracing algorithms that
 try to render three-dimensional scenes while being as physically real as
 acceptable by modern standards. Simply speaking, many rays are shot from a
 virtual camera, bouncing off or going through the scene objects like real light
 does upon reaching different kinds of materials. This achieves global
-illumination better than classic CG architectures, like OpenGL's pipeline, but
-is otherwise not as fast.
+illumination better than classic CG architectures, such as OpenGL's pipeline, 
+but is otherwise not as fast.
 
 We are particularly interested in PBRT's \texttt{Shape} interface, because
 through it we can provide an implementation for metaball rendering in PBRT.
@@ -192,32 +192,44 @@ geometry.
 
 \section{Marching cubes algorithm}
 
-The marching cubes algorithm was introduced by Lorensen and Cline in 87 as an efficient way to render isosurfaces. The algorithm uses a divide-and-conquer approach by dividing the space that contains the surface into several much smaller cubes and then analysing the way the surface intersects with each cube. The nature of isosurfaces makes it easy to determine if each vertex is on one side or the other of any given cube. Based on the set of vertices that are on one side (ie the inside), the algorithm uses a preprocessed table containing several possible triangulations of the cubes to find the better triangular approximation to the piece of the isosurface contained within that cube. The way the triagulations are chosen guarantees the resulting surface will be topologically correct, even in the complicated ambiguous cases. 
+The marching cubes algorithm was introduced as an efficient way to render isosurfaces. Its divide-and-conquer approach sections the space that contains the surface into several much smaller cubes, which are then considered individually. As shown earlier, the nature of isosurfaces makes it easy to determine whether a point $x$ is on one side of the surface or the other by simply analysing whether the value of $D(x)$ is smaller or greater than the threshold $T$. Using that fact, the algorithm considers each cube and determines on which side of the isosurface lies each of the cube's 8 vertices.
 
+This information is then used to determine which of several possible triangulations would best suit that particular cube. Since each of the 8 vertices has two possible states (one side on the other), there are $2^8 = 256$ possible triangulations, which are stored in a preprocessed table for easy access. Because many triangulations are simply rotated versions of other possibilities, they can be separated into \textit{families} or \textit{cases}, which gives a better understanding of their workings. These cases are divided into fifteen base cases and six complementary cases [http://users.polytech.unice.fr/~lingrand/MarchingCubes/algo.html], which we show later. The way the cases are chosen guarantees that there will be no topological artifacts such as accidental holes in the resulting mesh.
 
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=3in]{images/base-cases}
+  \caption{Representations of the fifteen cases, which are can be rotated to form almost all posible triangulations of a marching cube.}
+\end{figure}
 
+Each triangulation is done by having at most one vertex of a triangle in any given edge of the cube. Using that, we can interpolate the values of $D(x)$ in that edge's vertices to determine whether the triangle should be closer to one vertex or the other. This allows for the triangles to have almost any inclination so that the resulting mesh is considerably smoother. Since this cube's vertices will have the same value of $D(x)$ as the vertices of its neighbors, no holes are created in the mesh by the interpolation.
 
-
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=1.5in]{images/metaball-non-interpolated}
+  \caption{On the left, a pair of metaballs rendered without interpolation, putting the vertices of the triangles at exactly the middle of the cube's edges. On the right, the same metaballs rendered with interpolation, resulting in a much smoother image.}
+\end{figure}
 
 \subsection{Ambiguous cases}
-
-\begin{equation}
- \sum_{j=1}^{z} j = \frac{z(z+1)}{2}
-\end{equation}
-
-\begin{eqnarray}
-x & \ll & y_{1} + \cdots + y_{n} \\
-  & \leq & z
-\end{eqnarray}
-
-\section{Analytic intersection}
 
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=1.5in]{images/samplefigure}
-  \caption{Sample illustration.}
+  \includegraphics[height=1.5in]{images/metaball-bad1-comparison}
+  \caption{On the left, a pair of metaballs rendered without considering the ambiguous cases, which results in an inappropriate triangulation and holes on the mesh; on the right, the same metaballs rendered with the additional triangulations used to cover the ambiguous cases. Both were rendered in ways that remove realism but clarify the problem.}
 \end{figure}
+
+Each of the fifteen base cases has an associated \textit{complementary} case, which may be obtained by reversing the vertices' sides - if a vertex is on the inside of a base case it would be on the outside in its complementary, and vice versa. In most cases it is possible to use the same triangulation for the base case and its complementary. However, there are six cases out of the fifteen which require special attention, since using the same triangulation for the complementary case would cause holes to appear in the surface. These six cases are called \textit{ambiguous} and create the need for six additional triangulation possibilities.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=3in]{images/ambiguous-cases}
+  \caption{Representations of each of the complementary triangulations used to avoid problems in ambiguous cases.}
+\end{figure}
+
+\section{Analytic intersection}
+
+
 
 \section{Implmentation}
 
