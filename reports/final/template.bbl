@@ -6,15 +6,6 @@
 \newblock A generalization of algebraic surface drawing.
 \newblock {\em SIGGRAPH Comput. Graph. 16}, 3 (July), 273--.
 
-\bibitem[\protect\citename{Jobson et~al\mbox{.} }1995]{Jobs95}
-{\sc Jobson, D.~J., Rahman, Z., and Woodell, G.~A.}
-\newblock 1995.
-\newblock Retinex image processing: Improved fidelity to direct visual
-  observation.
-\newblock In {\em Proceedings of the IS\&T Fourth Color Imaging Conference:
-  Color Science, Systems, and Applications}, vol.~4, The Society for Imaging
-  Science and Technology, 124--125.
-
 \bibitem[\protect\citename{Lorensen and Cline
   }1987]{Lorensen:1987:MCH:37402.37422}
 {\sc Lorensen, W.~E., and Cline, H.~E.}
