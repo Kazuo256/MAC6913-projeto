@@ -187,6 +187,62 @@
     \end{frame}    
 
 
+  \section{Marching Cubes}
+  
+    \subsection{}
+    
+    \begin{frame}
+      \frametitle{Marching cubes}
+      \begin{itemize}
+        \item Algoritmo para triangularizar superfícies
+        \item Divide o espaço em cubos
+        \item Cubos classificados pela intersecção com a superfície
+        \item Cada cubo cai em um caso
+        \item Cubos triangularizados
+        \item Vértices interpolados
+      \end{itemize}
+    \end{frame}    
+
+    \begin{frame}
+      \frametitle{Casos Básicos}
+        \begin{itemize}
+          \item Vértices pretos estão dentro da metaball
+        \end{itemize}
+        \begin{columns}
+        \begin{column}{0.48\textwidth}
+          \begin{center}
+            \includegraphics[width=1.0\textwidth]{imgs/base-cases-1.png}
+          \end{center}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+          \begin{center}
+            \includegraphics[width=1.0\textwidth]{imgs/base-cases-2.png}
+          \end{center}
+        \end{column}
+      \end{columns}
+    \end{frame}        
+
+    \begin{frame}
+      \frametitle{Casos complementares}
+        \begin{itemize}
+          \item Ambíguos
+            \begin{center}
+              \includegraphics[width=.6\textwidth]{imgs/ambiguous-cases.png}
+            \end{center}
+        \end{itemize}
+    \end{frame}        
+
+    \begin{frame}
+      \frametitle{Vantagens e desvantagens}
+        \begin{itemize}
+          \item Elimina a parametrização
+          \item Visualmente satisfatório
+          \item Nativo do PBRT
+          \item Normais
+          \item Muita memória
+          \item Lento
+        \end{itemize}
+    \end{frame}        
 
   \section{Gerando uma mesh}
   
