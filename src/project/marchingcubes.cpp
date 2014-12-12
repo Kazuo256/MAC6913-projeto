@@ -573,7 +573,7 @@ TriangleMesh *ImplicitSurfaceToMesh(const Transform *o2w, const Transform *w2o,
                     log("(%.2f, %.2f, %.2f): ", p.x, p.y, p.z);
                     which->Generate(inds, helper, i, j, k);
                 } else if (c != 0 && c != 255)
-                    Warning("Missing marching cubes case %d\n", c);
+                    Warning("Missing marching cubes case %d or %d\n", c, 255-c);
             }
     reporter.Done();
     std::cout << "TRIANGLES: " << inds.size()/3 << std::endl;
