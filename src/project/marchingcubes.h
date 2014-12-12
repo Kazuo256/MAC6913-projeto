@@ -15,7 +15,7 @@ class Vector;
 
 TriangleMesh *ImplicitSurfaceToMesh(const Transform *o2w, const Transform *w2o,
     bool reverseOrientation, const ImplicitSurface *surface,
-    const Vector &space, float step);
+    const Vector &space, float step, bool smooth);
 
 #endif
 

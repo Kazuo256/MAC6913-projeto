@@ -15,9 +15,14 @@ Film "image"
 #	"float cropwindow" [ .34 .49  .67 .8 ]
 
 Sampler "lowdiscrepancy"
-  "integer pixelsamples" [16]
+  "integer pixelsamples" [32]
 
-SurfaceIntegrator "directlighting"
+PixelFilter "gaussian"
+
+SurfaceIntegrator "igi"
+  "integer nsets" [32]
+  "integer nlights" [32]
+  "float glimit" [.1]
 
 WorldBegin
 
@@ -52,8 +57,6 @@ AttributeBegin
   Material "glass"
     "color Kr" [.2 .6 .4]
     "color Kt" [.2 .6 .4]
-  #Material "matte"
-    "color Kd" [.2 .6 .4]
   Include "geometry/metaball-generated-2.pbrt"
 AttributeEnd
 
