@@ -35,9 +35,9 @@ Normal MetaballSurface::Gradient(const Point &p) const {
         float a = B/(R*R);
         float x = a*r2 - B;
         float d = exp(x);
-        dx += -2.f*a*v.x*exp(d);
-        dy += -2.f*a*v.y*exp(d);
-        dz += -2.f*a*v.z*exp(d);
+        dx += -2.f*a*v.x*d;
+        dy += -2.f*a*v.y*d;
+        dz += -2.f*a*v.z*d;
     }
     return -Normal(dx, dy, dz);
 }
