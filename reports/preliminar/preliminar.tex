@@ -176,18 +176,27 @@
 
     \begin{frame}
       \frametitle{Arquitetura do PBRT}
-      \begin{itemize}
-        \item Precisa de geometria diferencial
-        \begin{itemize}
-          \vspace{0.2em}
-          \item $ \frac{\partial P}{\partial u}\text{, }\frac{\partial P}{\partial v}$
-          \vspace{0.2em}
-          \item $ \frac{\partial N}{\partial u}\text{, }\frac{\partial N}{\partial v}$
-          \vspace{0.2em}
-          \item Requer parametrização em $u$ e $v$
-        \end{itemize}
-        \item Metaballs não têm parametrização geral
-      \end{itemize}
+      \begin{columns}
+        \begin{column}{0.5\textwidth}
+          \begin{itemize}
+            \item Precisa de geometria diferencial
+            \begin{itemize}
+              \vspace{0.2em}
+              \item $ \frac{\partial P}{\partial u}\text{, }\frac{\partial P}{\partial v}$
+              \vspace{0.2em}
+              \item $ \frac{\partial N}{\partial u}\text{, }\frac{\partial N}{\partial v}$
+              \vspace{0.2em}
+              \item Requer parametrização em $u$ e $v$
+            \end{itemize}
+            \item Metaballs não têm parametrização geral
+          \end{itemize}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+          \begin{center}
+            \includegraphics[width=\textwidth]{imgs/diffgeom.png}
+          \end{center}
+        \end{column}
+      \end{columns}
     \end{frame}    
 
 
