@@ -386,8 +386,10 @@ store the normals for each vertex.
 A final note about this part of the implemantation is that we actually did not
 cover all of the original \textit{marching cubes}' cases. Regardless, we still
 achieved very good results for basic metaballs, which means that the remaining
-cases are rare. We also do not calculate the vertex normals, which makes the
-shading more faceted.
+cases are rare. We also found out that some pairs of cases and special
+complementary cases specified in the literature are actually equivalent. For
+instance, our implementation considers case \texttt{11} to be the same as case
+\texttt{14}, and case \texttt{6} the same as \texttt{6e}, among a few others.
 
 \subsection{Intersection implementation}
 
@@ -419,8 +421,21 @@ Metaballs are a shape that may have a wide variety of uses such as simulating sm
 
 Figure \ref{img:marching-cubes} shows a complex image generated with our implementation of the marching cubes algorithm for rendering metaballs. It was rendered in 440 seconds on a computer running OSX 10.10 with a 2.3GHz Intel Core i5 processor and 8GB of DDR3 RAM (PBRT renders images using only the CPU, without the help of the GPU, so the graphics card is irrelevant). Figure \ref{img:regula-falsi} was rendered with the analytic intersection algorithm, which only detects intersection but doesn't give enough information for shading. Because of that its rendering is much faster: the same computer takes only 5 seconds.
 
-
 \subsection{Future works}
+
+There is still much we can do to improve our implementation, in both of the
+discussed methods. Some more investigations could be done regarding local
+parametrization of metaballs, so that we can develop a refinable version of
+our metaball shape inside PBRT. Also, there are still some missing cases in
+the \textit{marching cubes} implementation we provide.
+
+But the most interesting change would be to optimize the memory usage when we
+generate the vertices and normals for the \textit{marching cubes} procedure.
+The grand majority of them are left unused but still waste the CPU's memory.
+One possible solution would be to create them \textit{on demand}, while somehow
+keeping track of the indices that come along. Even if we create repeated
+vertices, it will most of the time be much less than keeping \textit{all the
+vertices of the volume}.
 
 \section*{Acknowledgements}
 
