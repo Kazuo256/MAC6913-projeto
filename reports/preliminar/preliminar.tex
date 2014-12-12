@@ -120,8 +120,74 @@
 
     % Efeito dos parâmetros
 
-  
+  \section*{Implementação Analítica}
+    \subsection{}
+    \begin{frame}
+      \frametitle{Algoritmo de Blinn}
+      \begin{itemize}
+        \item A equação das metaballs não tem solução analítica:
+          \vspace{0.5em}
+          \begin{center}
+            $$D(x) = \sum_{i = 1}^n Te^{\frac{B_i}{R_i^2}||x-P_i||^2-B_i} $$
+          \end{center}
+        \item Regula-falsi
+        \item Iteração de Newton
+      \end{itemize}
+    \end{frame}
         
+    %%Faz sentido explicar isso em tanto detalhe?
+
+    \begin{frame}
+      \frametitle{Iteração de Newton}
+      \begin{itemize}
+        \item Achar o $t_{next}$ dado um $t^*$:
+          \vspace{0.5em}
+          \begin{center}
+            $$ t_{next} = t^* - \frac{D(t^*) - T}{D'(t^*)} $$
+          \end{center}        
+        \item $t_{next}$ pode divergir
+        \item É relativamente rápido
+      \end{itemize}
+    \end{frame}
+
+    \begin{frame}
+      \frametitle{Regula-falsi}
+      \begin{itemize}
+        \item Achar o $t_{next}$ entre $t_0$ e $t_1$:
+          \vspace{0.5em}
+          \begin{center}
+            $$ t_{next} = \frac{t_0(D(t_1) - T) - t_1(D(t_0) - T)}{D(t_1) - D(t_0)} $$
+          \end{center}        
+        \item Sempre converge para a solução
+        \item É relativamente lento
+        \item Solução: alternar entre um e outro.
+      \end{itemize}
+    \end{frame}    
+
+    \begin{frame}
+      \frametitle{Arquitetura do PBRT}
+      O que é PBRT (??)
+    \end{frame}    
+
+    \begin{frame}
+      \frametitle{Arquitetura do PBRT}
+      \begin{itemize}
+        \item Intersectable vs. non-intersectable
+        \item Geometria diferencial
+        \begin{itemize}
+          \vspace{0.2em}
+          \item $ \frac{\partial P}{\partial u}\text{, }\frac{\partial P}{\partial v}$
+          \vspace{0.2em}
+          \item $ \frac{\partial N}{\partial u}\text{, }\frac{\partial N}{\partial v}$
+          \vspace{0.2em}
+          \item $u$ e $v$
+        \end{itemize}
+        \item Metaballs não têm parametrização geral
+      \end{itemize}
+    \end{frame}    
+
+
+
   \section{Gerando uma mesh}
   
     \subsection{}
