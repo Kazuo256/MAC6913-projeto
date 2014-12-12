@@ -306,16 +306,19 @@ MAKECASE_3PARAMS(Case5Z, bool, di, dj, dk) {
 }
     
 MAKECASE_3PARAMS(Case6X, bool, di, dj, dk) {
+    log("Case 6X\n");
     Case1(di, dj, dk).Generate(inds, helper, i, j, k);
     Case2X(!di, !dk).Generate(inds, helper, i, j, k);
 }
 
 MAKECASE_3PARAMS(Case6Y, bool, di, dj, dk) {
+    log("Case 6Y\n");
     Case1(di, dj, dk).Generate(inds, helper, i, j, k);
     Case2Y(!dj, !dk).Generate(inds, helper, i, j, k);
 }
 
 MAKECASE_3PARAMS(Case6Z, bool, di, dj, dk) {
+    log("Case 6Z\n");
     Case1(di, dj, dk).Generate(inds, helper, i, j, k);
     Case2Z(!di, !dj).Generate(inds, helper, i, j, k);
 }
