@@ -47,11 +47,11 @@ AttributeEnd
 
 AttributeBegin
   Translate 0 0 -10
-  #Material "glass"
-  #  "color Kr" [.2 .6 .4]
-  #  "color Kt" [.2 .6 .4]
-  Material "matte"
-    "color Kd" [.2 .6 .4]
+  Material "glass"
+    "color Kr" [.2 .6 .4]
+    "color Kt" [.2 .6 .4]
+  #Material "matte"
+  #  "color Kd" [.2 .6 .4]
   Shape "metaballsurface"
     "point P" [-1.5 1.5 .0  1.5 -1.5 .0]
     "float R" [2.0 2.0]

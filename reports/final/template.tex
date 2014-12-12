@@ -354,6 +354,7 @@ parameters:
 \begin{itemize}
   \item \textbf{\texttt{space}}: a vector defining the space analyzed by the algorithm
   \item \textbf{\texttt{step}}: the size of the cubes used in the algorithm
+  \item \textbf{\texttt{smooth}}: enable normals calculation in the algorithm
 \end{itemize}
 
 If the space is not big enough, part of the metaball may be cut out. On the
@@ -369,7 +370,18 @@ means we actually generate \textit{all} possible mesh vertices, and then constru
 the index list (which defines the mesh's triangles) using it, almost always
 leaving unused vertices. In a grid with volume $1000 \times 1000 \times 1000$
 approximately three billion mesh vertices will be created. If each vertex uses
-three floating-point numbers, that results in roughly 12GB of memory space.
+three floating-point numbers, that results in roughly 12GB of memory space. If
+you enable the \texttt{smooth} flag, that memory doubles, because it must also
+store the normals for each vertex.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=3in]{images/glass-blob-comparison}
+  \caption{In these images, we rendered the same metaball using the glass
+           material from PBRT. To the left is the standard version, and to the
+           right is the result when the \texttt{smooth} flag is active.}
+  \label{img:glass-comp}
+\end{figure}
 
 A final note about this part of the implemantation is that we actually did not
 cover all of the original \textit{marching cubes}' cases. Regardless, we still

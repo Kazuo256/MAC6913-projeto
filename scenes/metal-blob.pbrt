@@ -14,18 +14,18 @@ Film "image"
 # "integer xresolution" [1500] "integer yresolution" [1500]
 #	"float cropwindow" [ .34 .49  .67 .8 ]
 
-Renderer "metropolis"
-  "integer samplesperpixel" [128]
+#Renderer "metropolis"
+#  "integer samplesperpixel" [128]
 
 Sampler "lowdiscrepancy"
   "integer pixelsamples" [16]
 
 PixelFilter "gaussian"
 
-#SurfaceIntegrator "igi"
-#  "integer nsets" [16]
-#  "integer nlights" [32]
-#  "float glimit" [.1]
+SurfaceIntegrator "igi"
+  "integer nsets" [16]
+  "integer nlights" [32]
+  "float glimit" [.1]
 
 WorldBegin
 

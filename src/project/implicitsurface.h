@@ -13,8 +13,9 @@ class ImplicitSurface {
   public:
     ImplicitSurface() {}
     virtual ~ImplicitSurface() {}
-    virtual bool Inside(const Point& p) const = 0;
-    virtual float Distance(const Point& p) const = 0;
+    virtual bool Inside(const Point &p) const = 0;
+    virtual float Distance(const Point &p) const = 0;
+    virtual Normal Gradient(const Point &p) const = 0;
 };
 
 #endif
