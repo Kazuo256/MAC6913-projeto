@@ -360,8 +360,9 @@ Reference<Shape> MakeShape(const string &name,
         MetaballSurface *mb = CreateMetaballSurface(paramSet);
         Vector space = paramSet.FindOneVector("space", Vector(100.0f, 100.0f, 100.0f));
         float step = paramSet.FindOneFloat("step", .5f);
+        bool smooth = paramSet.FindOneBool("smooth", false);
         s = ImplicitSurfaceToMesh(object2world, world2object,
-                                  reverseOrientation, mb, space, step);
+                                  reverseOrientation, mb, space, step, smooth);
         delete mb;
     }
     else

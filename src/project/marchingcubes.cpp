@@ -501,13 +501,15 @@ Cases cases;
 
 TriangleMesh *ImplicitSurfaceToMesh(const Transform *o2w, const Transform *w2o,
         bool reverseOrientation, const ImplicitSurface *surface,
-        const Vector &space, float step) {
+        const Vector &space, float step, bool smooth) {
     int width = space.x/step;
     int height = space.y/step;
     int depth = space.z/step;
     VoxelHelper helper(width, height, depth);
     Point *P = new Point[helper.GetNEdges()];
-    Normal *N = new Normal[helper.GetNEdges()];
+    Normal *N = NULL;
+    if (smooth)
+        N = new Normal[helper.GetNEdges()];
     vector<bool> inside(helper.GetNVerts(), false);
     Point o = Point(0,0,0) - space/2;
     ProgressReporter reporter(2*depth-1, "Marching cubes");
@@ -521,21 +523,24 @@ TriangleMesh *ImplicitSurfaceToMesh(const Transform *o2w, const Transform *w2o,
                     Point q = p + step*Vector(0.f, 0.f, 1.f);
                     float l = dist/(dist + surface->Distance(q));
                     P[ind] = (1.f - l)*p + l*q;
-                    N[ind] = surface->Gradient(P[ind]);
+                    if (smooth)
+                        N[ind] = surface->Gradient(P[ind]);
                 }
                 if (i+1 < height) {
                     int ind = helper.GetYIndex(i, j, k);
                     Point q = p + step*Vector(0.f, 1.f, 0.f);
                     float l = dist/(dist + surface->Distance(q));
                     P[ind] = (1.f - l)*p + l*q;
-                    N[ind] = surface->Gradient(P[ind]);
+                    if (smooth)
+                        N[ind] = surface->Gradient(P[ind]);
                 }
                 if (j+1 < width) {
                     int ind = helper.GetXIndex(i, j, k);
                     Point q = p + step*Vector(1.f, 0.f, 0.f);
                     float l = dist/(dist + surface->Distance(q));
                     P[ind] = (1.f - l)*p + l*q;
-                    N[ind] = surface->Gradient(P[ind]);
+                    if (smooth)
+                        N[ind] = surface->Gradient(P[ind]);
                 }
                 int ind = helper.GetVertIndex(i, j, k);
                 inside[ind] = surface->Inside(o + step*Vector(j, i, k));
@@ -560,7 +565,8 @@ TriangleMesh *ImplicitSurfaceToMesh(const Transform *o2w, const Transform *w2o,
     std::copy(inds.begin(), inds.end(), vi);
     ParamSet params;
     params.AddPoint("P", P, helper.GetNEdges());
-    params.AddNormal("N", N, helper.GetNEdges());
+    if (smooth)
+        params.AddNormal("N", N, helper.GetNEdges());
     params.AddInt("indices", vi, inds.size());
     TriangleMesh *mesh = CreateTriangleMeshShape(o2w, w2o, reverseOrientation,
                                                  params, NULL);
