@@ -57,143 +57,74 @@
   \section{Introdução}
   
     \subsection{}
-    
-      \begin{frame}
-        \frametitle{Revisando definição}
-        \begin{itemize}
-          \pause
-          \item
-            Dado um threshold $T$ e $N$ elementos com
-            \begin{itemize}
-              \item Posição $P_i \in \mathbb{R}^3$
-              \item Raio $R_i > 0$
-              \item Fator de aglomeração $B_i < 0$
-            \end{itemize}
-          \pause
-          \item A contribuição de cada elemento é dado por
-                \vspace{.5em}
-                \begin{center}
-                  $D_i(x) = Te^{\frac{B}{R^2}*r_i(x)^2 - B}$ \\
-                  onde \\
-                  $r_i(x) = \| x - P_i \| $
-                \end{center}
-                \vspace{.5em}
-          \pause
-          \item A função implícita de uma metaball fica
-                \vspace{.5em}
-                \begin{center}
-                  $F(x) = \sum\limits_{i} D_i(x) - T$
-                \end{center}
-        \end{itemize}
-      \end{frame}
-      
-      % Efeito dos parâmetros
-      
-      \begin{frame}
-        \frametitle{Duas possibilidades}
-        \begin{enumerate}
-          \item
-            Calcular intersecção do raio com o objeto
-            \begin{itemize}
-              \item Mais fiel à definição
-              \item Não tem solução explícita
-              \item Restrições no PBRT
-            \end{itemize}
-          \vspace{1em}
-          \pause
-          \item Gerar um mesh
-            \begin{itemize}
-              \item Método dos \textit{marching cubes}
-              \item Depende da granularidade dos voxels usados
-            \end{itemize}
-        \end{enumerate}
-      \end{frame}
-      
-  \section{Calculando intersecção}
-  
-    \subsection{}
-    
-      \begin{frame}
-        \frametitle{Algoritmo proposto por Blinn}
-          Converge para a intersecção usando uma margem de erro
+    \begin{frame}
+      \frametitle{Metaballs}
+      \begin{columns}
+        \begin{column}{0.58\textwidth}
           \begin{itemize}
-            \vspace{1em}
-            \pause
-            \item
-              Método híbrido
-              \begin{itemize}
-                \item Iteração de Newton
-                \item \textit{Regula falsi}
-              \end{itemize}
-            \vspace{1em}
-            \pause
-            \item
-              Itera até que $| D(ray(t)) - T | < \varepsilon $, para algum $\varepsilon$ determinado
-            \vspace{1em}
-            \pause
-            \item Adaptado para considerar raios que ``saem'' do objeto também
+            \item Objetos de aparência orgânica
+            \item Difícil de modelar manualmente e de extrair da natureza
+            \item Comumente usadas para fluidos, fumaça, eletrosferas e imagens médicas
           \end{itemize}
-      \end{frame}
-      
-      \begin{frame}
-        \frametitle{Dificuldades}
-        Não há uma forma paramétrica geral para metaballs
+        \end{column}
+        \begin{column}{0.4\textwidth}
+          \begin{center}
+            \includegraphics[width=1.0\textwidth]{imgs/metaball-preview.png}
+          \end{center}
+        \end{column}
+      \end{columns}
+    \end{frame}
+
+    \begin{frame}
+      \frametitle{Metaballs}
+      \begin{itemize}
+        \item Definidas de forma geral no $\mathbb{R}^n$
+        \item Aqui com $F:\mathbb{R}^3 \to \mathbb{R}$
+        \vspace{.5em}
+        \begin{center}
+          $F(x) = D(x) - T$
+        \end{center}
         \begin{itemize}
-          \vspace{1em}
-          \pause
-          \item
-            Restrições do PBRT
-            \begin{itemize}
-              \item Intersecção com raio deve fornecer
-                    $\frac{\partial p}{\partial u}$,
-                    $\frac{\partial p}{\partial v}$,
-                    $\frac{\partial n}{\partial u}$ e
-                    $\frac{\partial n}{\partial v}$
-              \item Também precisa implementar os métodos
-                    \textbf{Area()}, \textbf{Pdf()} e \textbf{Sample()}
-            \end{itemize}
-          \vspace{1em}
-          \pause
-          \item
-            Como contornar?
-            \begin{itemize}
-              \item Tangentes: sabemos como fornecer o valor em si, mas não
-                    haveria $u$ e $v$ associados (sempre zero, por exemplo)
-              \item Area, pdf e amostragem: ?
-            \end{itemize}
+          \item $D(x)$: soma das exponenciais
+            \vspace{-1.0em}
+            \begin{center}
+              $$D(x) = \sum_{i = 1}^n Te^{\frac{B_i}{R_i^2}||x-P_i||^2-B_i} $$
+            \end{center}
+          \item $T$ - threshold
+          \item $B_i$ - Blobbiness
+          \item $R_i$ - Raio
         \end{itemize}
-      \end{frame}
+      \end{itemize}
+    \end{frame}
       
-      %Permite calcular as normais
+    \begin{frame}
+      \frametitle{Metaballs}
+        \begin{center}
+          \includegraphics[width=.7\textwidth]{imgs/metaball-2d-1.png}
+        \end{center}
+    \end{frame}
+
+    \begin{frame}
+      \frametitle{Metaballs}
+        \begin{center}
+          \includegraphics[width=.7\textwidth]{imgs/metaball-2d-2.png}
+        \end{center}
+    \end{frame}
+
+    \begin{frame}
+      \frametitle{Metaballs}
+        \begin{center}
+          \includegraphics[width=.7\textwidth]{imgs/metaball-2d-3.png}
+        \end{center}
+    \end{frame}
+
+    % Efeito dos parâmetros
+
   
+        
   \section{Gerando uma mesh}
   
     \subsection{}
-    
-      \begin{frame}
-        \frametitle{Algoritmo dos \textit{marching cubes}}
-        Divide o espaço em um cubo de voxels
-        \begin{itemize}
-          \vspace{1em}
-          \item
-            Em cada posição do cubo, verifica quais vértices $v$ satisfazem
-            \vspace{1em}
-            \begin{center}
-              $F(v) > 0$
-            \end{center}
-          \pause
-          \vspace{1em}
-          \item
-            256 casos
-            \begin{itemize}
-              \item Usa uma máscara de 8 bits para indexar uma tabela
-              \item Pode ser reduzido a 15 casos
-            \end{itemize}
-          \vspace{1em}
-          \pause
-          \item Gera uma malha de triângulos que aproxima o objeto
-        \end{itemize}
-      \end{frame}
     
       \begin{frame}
         \frametitle{Resultado parcial}
