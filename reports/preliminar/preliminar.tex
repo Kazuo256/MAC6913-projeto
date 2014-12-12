@@ -206,13 +206,20 @@
     
     \begin{frame}
       \frametitle{Marching cubes}
+      \begin{center}
+        \includegraphics[width=.35\textwidth]{imgs/marching-cubes.png}
+      \end{center}
+      \vspace{-1em}
       \begin{itemize}
         \item Algoritmo para triangularizar superfícies
-        \item Divide o espaço em cubos
-        \item Cubos classificados pela intersecção com a superfície
-        \item Cada cubo cai em um caso
-        \item Cubos triangularizados
-        \item Vértices interpolados
+        \item Divisão e conquista
+        \begin{itemize}
+          \item Particiona o espaço em cubos
+          \item Classifica-os pela intersecção com a superfície
+          \item Total de $2^8 = 255$ casos
+          \item Cubos triangularizados individualmente
+        \end{itemize}
+        \item Normais suavizadas interpolando vértices
       \end{itemize}
     \end{frame}    
 
