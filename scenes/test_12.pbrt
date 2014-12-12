@@ -1,0 +1,76 @@
+
+LookAt 20 0 -10   0 0 -10   0 0 1
+#Rotate -5 0 0 1
+Camera "perspective"
+  "float fov" [39]
+Film "image"
+  "integer xresolution" [700]
+  "integer yresolution" [700]
+  "string filename"     "metaball.exr"
+
+# zoom in by feet
+# "integer xresolution" [1500] "integer yresolution" [1500]
+#	"float cropwindow" [ .34 .49  .67 .8 ]
+
+Sampler "lowdiscrepancy"
+  "integer pixelsamples" [16]
+
+SurfaceIntegrator "directlighting"
+
+WorldBegin
+
+AttributeBegin
+  Material "matte"
+    "color Kd" [0 0 0]
+  Translate 15 0   2
+  Translate 0   12 0
+  AreaLightSource "area"
+    "color L" [20 20 20]
+    "integer nsamples" [8]
+  Shape "sphere"
+    "float radius" [3]
+AttributeEnd
+
+
+AttributeBegin
+  Material "matte" "color Kd" [.5 .5 .8]
+  Translate 0 0 -14
+  Shape "trianglemesh"
+    "point P" [ -20 -20 0  20 -20 0  20 20 0  -20 20 0 ]
+    "float uv" [ 0 0 5 0 5 5 0 5 ]
+	  "integer indices" [ 0 1 2 2 3 0]
+  Shape "trianglemesh"
+    "point P" [ -20 -20 -10  -20 20 -10  -20 20 20  -20 -20 20 ]
+    "float uv" [ 0 0 5 0 5 5 0 5 ]
+    "integer indices" [ 0 1 2 2 3 0]
+AttributeEnd
+
+AttributeBegin
+  Translate 0 0 -10
+  Material "matte"
+    "color Kd" [.2 .6 .4]
+  Shape "metaballsurface"
+    "point P" [
+      0 0 1
+      0 1 1
+      1 1 1
+      1 0 0
+    ]
+    "float R" [
+      .3
+      .3
+      .3
+      .3
+    ]
+    "float B" [
+      1
+      1
+      1
+      1
+    ]
+    "vector space" [10.0 10.0 10.0]
+    "float step" [1.0]
+AttributeEnd
+
+WorldEnd
+
