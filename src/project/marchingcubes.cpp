@@ -274,7 +274,7 @@ MAKECASE_3PARAMS(Case5X, bool, di, dj, dk) {
     inds.push_back(helper.GetXIndex(i + int(!di), j, k + int(dk)));
     inds.push_back(helper.GetXIndex(i + int(di), j, k + int(!dk)));
 }
-
+    
 MAKECASE_3PARAMS(Case5Y, bool, di, dj, dk) {
     log("Case 5Y\n");
     // Middle triangle
@@ -303,6 +303,21 @@ MAKECASE_3PARAMS(Case5Z, bool, di, dj, dk) {
     inds.push_back(helper.GetXIndex(i + int(!di), j, k + int(dk)));
     inds.push_back(helper.GetZIndex(i + int(!di), j + int(dj), k));
     inds.push_back(helper.GetZIndex(i + int(di), j + int(!dj), k));
+}
+    
+MAKECASE_3PARAMS(Case6X, bool, di, dj, dk) {
+    Case1(di, dj, dk).Generate(inds, helper, i, j, k);
+    Case2X(!di, !dk).Generate(inds, helper, i, j, k);
+}
+
+MAKECASE_3PARAMS(Case6Y, bool, di, dj, dk) {
+    Case1(di, dj, dk).Generate(inds, helper, i, j, k);
+    Case2Y(!dj, !dk).Generate(inds, helper, i, j, k);
+}
+
+MAKECASE_3PARAMS(Case6Z, bool, di, dj, dk) {
+    Case1(di, dj, dk).Generate(inds, helper, i, j, k);
+    Case2Z(!di, !dj).Generate(inds, helper, i, j, k);
 }
     
 MAKECASE_3PARAMS(Case7, bool, di, dj, dk) {
@@ -342,23 +357,23 @@ MAKECASE_NOPARAMS(Case8Z) {
     inds.push_back(helper.GetZIndex(i, j, k));
 }
     
-    MAKECASE_2PARAMS(Case9, bool, di, dj) {
-        log("Case 9\n");
-        // Upper part
-        inds.push_back(helper.GetXIndex(i + int(di), j, k + 1));
-        inds.push_back(helper.GetYIndex(i, j + int(dj), k + 1));
-        inds.push_back(helper.GetZIndex(i + int(!di), j + int(dj), k));
-        inds.push_back(helper.GetZIndex(i + int(!di), j + int(dj), k));
-        inds.push_back(helper.GetZIndex(i + int(di), j + int(!dj), k));
-        inds.push_back(helper.GetXIndex(i + int(di), j, k + 1));
-        // Lower part
-        inds.push_back(helper.GetXIndex(i + int(!di), j, k));
-        inds.push_back(helper.GetYIndex(i, j + int(!dj), k));
-        inds.push_back(helper.GetZIndex(i + int(di), j + int(!dj), k));
-        inds.push_back(helper.GetZIndex(i + int(di), j + int(!dj), k));
-        inds.push_back(helper.GetZIndex(i + int(!di), j + int(dj), k));
-        inds.push_back(helper.GetXIndex(i + int(!di), j, k));
-    }
+MAKECASE_2PARAMS(Case9, bool, di, dj) {
+    log("Case 9\n");
+    // Upper part
+    inds.push_back(helper.GetXIndex(i + int(di), j, k + 1));
+    inds.push_back(helper.GetYIndex(i, j + int(dj), k + 1));
+    inds.push_back(helper.GetZIndex(i + int(!di), j + int(dj), k));
+    inds.push_back(helper.GetZIndex(i + int(!di), j + int(dj), k));
+    inds.push_back(helper.GetZIndex(i + int(di), j + int(!dj), k));
+    inds.push_back(helper.GetXIndex(i + int(di), j, k + 1));
+    // Lower part
+    inds.push_back(helper.GetXIndex(i + int(!di), j, k));
+    inds.push_back(helper.GetYIndex(i, j + int(!dj), k));
+    inds.push_back(helper.GetZIndex(i + int(di), j + int(!dj), k));
+    inds.push_back(helper.GetZIndex(i + int(di), j + int(!dj), k));
+    inds.push_back(helper.GetZIndex(i + int(!di), j + int(dj), k));
+    inds.push_back(helper.GetXIndex(i + int(!di), j, k));
+}
     
 MAKECASE_1PARAM(Case10X, bool, di) {
     log("Case 10X\n");
