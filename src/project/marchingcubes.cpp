@@ -261,7 +261,8 @@ MAKECASE_3PARAMS(Case4, bool, di, dj, dk) {
 }
 
 MAKECASE_3PARAMS(Case5X, bool, di, dj, dk) {
-    log("Case 5X\n");
+    log("Case 5X");
+    printf(" %d %d %d\n", di, dj, dk);
     // Middle triangle
     inds.push_back(helper.GetXIndex(i + int(di), j, k + int(dk)));
     inds.push_back(helper.GetXIndex(i + int(di), j, k + int(!dk)));
@@ -276,7 +277,8 @@ MAKECASE_3PARAMS(Case5X, bool, di, dj, dk) {
 }
     
 MAKECASE_3PARAMS(Case5Y, bool, di, dj, dk) {
-    log("Case 5Y\n");
+    log("Case 5Y");
+    printf(" %d %d %d\n", di, dj, dk);
     // Middle triangle
     inds.push_back(helper.GetYIndex(i, j + int(dj), k + int(dk)));
     inds.push_back(helper.GetYIndex(i, j + int(!dj), k + int(dk)));
@@ -291,7 +293,8 @@ MAKECASE_3PARAMS(Case5Y, bool, di, dj, dk) {
 }
 
 MAKECASE_3PARAMS(Case5Z, bool, di, dj, dk) {
-    log("Case 5Z\n");
+    log("Case 5Z");
+    printf(" %d %d %d\n", di, dj, dk);
     // Middle triangle
     inds.push_back(helper.GetZIndex(i + int(di), j + int(dj), k));
     inds.push_back(helper.GetZIndex(i + int(di), j + int(!dj), k));
@@ -396,6 +399,26 @@ MAKECASE_1PARAM(Case10Z, bool, di) {
     Case2Z(!di, true ).Generate(inds, helper, i, j, k);
 }
     
+MAKECASE_3PARAMS(Case12X, bool, di, dj, dk) {
+    log("Case 12X");
+    printf(" %d %d %d\n", di, dj, dk);
+    Case5X(dj, di, dk).Generate(inds, helper, i, j, k);
+    Case1(!dj, !di, !dk).Generate(inds, helper, i, j, k);
+}
+
+MAKECASE_3PARAMS(Case12Y, bool, di, dj, dk) {
+    log("Case 12Y");
+    printf(" %d %d %d\n", di, dj, dk);
+    Case5Y(dj, di, dk).Generate(inds, helper, i, j, k);
+    Case1(!dj, !di, !dk).Generate(inds, helper, i, j, k);
+}
+
+MAKECASE_3PARAMS(Case12Z, bool, di, dj, dk) {
+    log("Case 12Z");
+    printf(" %d %d %d\n", di, dj, dk);
+    Case5Z(dj, di, dk).Generate(inds, helper, i, j, k);
+    Case1(!dj, !di, !dk).Generate(inds, helper, i, j, k);
+}
     
 class Cases {
   public:
@@ -437,6 +460,7 @@ class Cases {
         cases[25]   = new Case6Y(true, false, true);      // 1+8+16
         cases[26]   = new Case6X(false, true, false);     // 2+8+16
         cases[28]   = new Case6Z(false, true, false);     // 4+8+16
+        cases[30]   = new Case12Y(true, false, true);     // 16+2+8+4
         cases[32]   = new Case1(true, false, true);
         cases[33]   = new Case3(1, false, false, false);  // 1+32
         cases[34]   = new Case2Y(false, true);            // 2+32
@@ -448,12 +472,15 @@ class Cases {
         cases[41]   = new Case7(false, false, true);      // 1+8+32
         cases[42]   = new Case5Z(false, false, true);     // 32+2+8
         cases[44]   = new Case6Z(false, true, true);      // 4+8+32
+        cases[45]   = new Case12Y(true, false, false);    // 32+8+4+1
         cases[48]   = new Case2Z(true, false);            // 16+32
         cases[49]   = new Case5X(true, false, false);     // 1+16+32
         cases[50]   = new Case5X(true, false, true);      // 16+32+2
         cases[51]   = new Case8X;                         // 1+2+16+32
         cases[52]   = new Case6Z(true, false, false);     // 16+32+4
+        cases[54]   = new Case12X(false, true, true);     // 4+2+32+16
         cases[56]   = new Case6Z(true, false, true);      // 16+32+8
+        cases[57]   = new Case12X(false, true, false);    // 8+1+16+32
         cases[60]   = new Case10Z(false);                 // 4+8+16+32
         cases[64]   = new Case1(true, true, false);
         cases[65]   = new Case3(2, false, false, false);  // 1+64
@@ -465,6 +492,7 @@ class Cases {
         cases[72]   = new Case3(1, false, true, true);    // 8+64
         cases[73]   = new Case7(true, false, false);      // 1+8+64
         cases[74]   = new Case6X(true, true, false);      // 2+8+64
+        cases[74]   = new Case12Y(false, false, true);    // 64+1+2+8
         cases[76]   = new Case5X(false, true, false);     // 8+4+64
         cases[77]   = new Case9(false, true);             // 4+1+8+64
         cases[80]   = new Case2X(true, false);            // 16+64
@@ -472,16 +500,23 @@ class Cases {
         cases[82]   = new Case6X(false, false, true);     // 16+64+2
         cases[84]   = new Case5Z(true, true, false);      // 4+64+16
         cases[85]   = new Case8Z;                         // 1+4+16+64
+        cases[86]   = new Case12Z(true, true, false);     // 2+4+64+16
         cases[88]   = new Case6X(true, false, true);      // 16+64+8
+        cases[89]   = new Case12Z(false, true, false);    // 8+16+64+1
         cases[90]   = new Case10X(false);                 // 2+8+16+64
         cases[96]   = new Case3(0, true, false, true);    // 32+64
         cases[97]   = new Case7(false, true, false);      // 1+32+64
         cases[98]   = new Case6Y(true, true, false);      // 2+32+64
+        cases[99]   = new Case12X(false, false, true);    // 64+1+2+32
         cases[100]  = new Case6Y(false, true, true);      // 4+64+32
         cases[102]  = new Case10Y(false);                 // 2+4+32+64
         cases[104]  = new Case7(true, true, true);        // 8+32+64
+        cases[106]  = new Case12Z(false, false, true);    // 64+2+8+32
+        cases[108]  = new Case12X(true, false, false);    // 32+4+8+64
+        cases[111]  = new Case12Z(true, false, false);    // 32+1+4+64
         cases[112]  = new Case5Y(true, false, false);     // 32+16+64
         cases[113]  = new Case9(true, false);             // 16+1+32+64
+        cases[120]  = new Case12Y(false, true, false);    // 8+32+16+64
         cases[128]  = new Case1(true, true, true);
         cases[129]  = new Case4(false, false, false);     // 1+128
         cases[130]  = new Case3(2, false, false, true);   // 2+128
@@ -489,6 +524,7 @@ class Cases {
         cases[132]  = new Case3(1, false, true, false);   // 4+128
         cases[133]  = new Case6X(true, true, true);       // 1+4+128
         cases[134]  = new Case7(true, false, true);       // 2+4+128
+        cases[135]  = new Case12Y(false, false, false);   // 128+2+1+4
         cases[136]  = new Case2Y(true, true);             // 8+128
         cases[137]  = new Case6Y(false, false, false);    // 8+128+1
         cases[138]  = new Case5Z(false, true, true);      // 2+8+128
@@ -496,25 +532,36 @@ class Cases {
         cases[144]  = new Case3(0, true, false, false);   // 16+128
         cases[145]  = new Case6Y(true, true, true);       // 1+16+128
         cases[146]  = new Case7(false, true, true);       // 2+16+128
+        cases[147]  = new Case12X(false, false, false);   // 128+1+2+16
         cases[148]  = new Case7(true, true, false);       // 4+16+128
+        cases[149]  = new Case12Z(false, false, false);   // 128+1+4+16
         cases[152]  = new Case6Y(false, true, false);     // 8+128+16
         cases[153]  = new Case10Y(true);                  // 1+16+8+128
+        cases[154]  = new Case12Z(true, false, true);     // 16+8+2+128
+        cases[156]  = new Case12X(true, false, true);     // 16+8+4+128
         cases[160]  = new Case2X(true, true);             // 32+128
         cases[161]  = new Case6X(false, false, false);    // 32+128+1
         cases[162]  = new Case5Z(true, false, true);      // 128+32+2
         cases[164]  = new Case6X(true, false, false);     // 128+32+4
         cases[165]  = new Case10X(true);                  // 1+4+32+128
+        cases[166]  = new Case12Z(false, true, true);     // 4+32+128+2
         cases[168]  = new Case5Z(true, true, true);       // 8+128+32
+        cases[169]  = new Case12Z(true, true, true);      // 1+128+8+32
         cases[176]  = new Case5Y(true, false, true);      // 128+32+16
+        cases[180]  = new Case12Y(false, true, true);     // 4+16+32+128
         cases[192]  = new Case2Z(true, true);             // 64+128
         cases[193]  = new Case6Z(false, false, false);    // 64+128+1
         cases[194]  = new Case6Z(false, false, true);     // 64+128+2
         cases[195]  = new Case10Z(false);                 // 1+2+64+128
         cases[196]  = new Case5X(true, true, false);      // 4+64+128
+        cases[198]  = new Case12X(true, true, false);     // 2+4+128+64
         cases[200]  = new Case5X(true, true, true);       // 64+128+8
+        cases[201]  = new Case12X(true, true, true);      // 1+8+128+64
         cases[208]  = new Case5Y(true, true, false);      // 16+64+128
+        cases[210]  = new Case12Y(true, true, false);     // 2+16+64+128
         cases[212]  = new Case9(true, true);              // 64+4+16+128
         cases[224]  = new Case5Y(true, true, true);       // 64+128+32
+        cases[225]  = new Case12Y(true, true, true);      // 1+128+32+64
         cases[255]  = NULL;
         // Special complementary cases
         cases[255-6]    = new Case3e(0, false, false, true);
