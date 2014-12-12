@@ -224,7 +224,7 @@ Each triangulation is done by having triangle's possible vertices in any given e
   \label{img:interpolation-comparison}
 \end{figure}
 
-Each of the fifteen base cases has an associated \textit{complementary} case, which may be obtained by reversing the vertices' sides - if a vertex is on the inside of a base case it would be on the outside in its complementary, and vice versa. In most cases it is possible to use the same triangulation for the base case and its complementary. However, there are six cases out of the fifteen which require special attention, since using the same triangulation for the complementary case would cause holes to appear in the surface (Figure \ref{img:interpolation-comparison}). These six cases are called \textit{ambiguous} and create the need for six additional triangulation possibilities, presented in Figure \ref{img:ambiguous-cases}.
+Each of the fifteen base cases has an associated \textit{complementary} case, which may be obtained by reversing the vertices' sides - if a vertex is on the inside of a base case it would be on the outside in its complementary, and vice versa. In most cases it is possible to use other base triangulations for the complementary. However, there are six cases out of the fifteen which require special attention, since using the base triangulations for the complementary case would cause holes to appear in the surface (Figure \ref{img:interpolation-comparison}). These six cases are called \textit{ambiguous} and create the need for six additional triangulation possibilities, presented in Figure \ref{img:ambiguous-cases}.
 
 \begin{figure}[ht]
   \centering
